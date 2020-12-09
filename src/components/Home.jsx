@@ -42,7 +42,7 @@ const Home = ()=> {
                     type="search"
                     value = {searchValue}
                     onChange={handleChange}
-                    placeholder = "Search your location"
+                    placeholder = "Search your city"
                     required
                     />
                     <button onClick = {mySubmitHandler}>

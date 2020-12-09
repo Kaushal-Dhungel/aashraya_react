@@ -85,7 +85,14 @@ code {
 
 @media screen and (max-width: 780px) {
 
-	.landing,.create_listing_room {
+	.landing{
+		height: 650px;
+	}
+
+	.landing {
+		flex-direction: column-reverse;
+	}
+	.create_listing_room {
 		flex-direction: column-reverse;
 	}
 	.text_part {
@@ -93,6 +100,7 @@ code {
 	}
 	.logo_part img {
 		width: 300px;
+		height: 300px;
 	}
 
 	.testi {
@@ -360,4 +368,42 @@ form {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+/* ------ Edit Pages----------- */
+.img_update {
+	margin : 4vh 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.img_update h4 {
+	color:rgb(223, 85, 108);
+}
+
+.pics {
+	display: flex;
+	justify-content: space-between;
+	
+}
+
+.pics img {
+	height: 200px;
+	width: 200px;
+	/* border: 2px solid black; */
+	padding: 0 1vh;
+}
+
+@media screen and (max-width: 780px) {
+
+	.pics {
+		flex-direction: column;
+	}
+
+	.pics img {
+		padding: 1vh 0;
+		width: 300px;
+	}
+
 }

@@ -12,6 +12,7 @@ const ProfileEdit =() => {
     const[update,setUpdate] = useState(false);
 
     const[formloading,isFormloading] = useState(false);
+    const[fetching,setFetching] = useState(true)
     const [done,setDone] = useState({
         imgsUpload : false,
         imgDelete : false,    
@@ -38,8 +39,10 @@ const ProfileEdit =() => {
                 const res = await axios.get(`https://aashraya.herokuapp.com/profile/`,config);
                 // console.log(res.data)
                 setItem(res.data);
+                setFetching(false);
   
             } catch (error) {
+                setFetching(false);
                 // console.log(error)
             }
         }
@@ -172,12 +175,19 @@ const ProfileEdit =() => {
         return source.map((photo) => {
             // console.log(photo);
             return (
-            <img src={photo} key = {photo} alt=""  width= "100px" height = "100px" />
+            <img src={photo} key = {photo} alt=""  />
             )
         })
     }
 
     return (
+        <>
+        {
+            fetching ? 
+            <div className="loading_loading">
+                <Default color = "rgb(230, 43, 83)" size = {200} />
+            </div>
+            :
         <>
         {
             item === undefined ?
@@ -276,6 +286,8 @@ const ProfileEdit =() => {
             <br/> <br/> <br/> <br/> <br/> <br/>
 
         </div>
+    </>
+    }
     </>
     }
     </>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import {Home,Item,ItemDetail,Profile,Additem,Login,MainNav,UserProfile,
-    Logout,ProfileEdit,DetailsEdit,Utils,Footer,Registration} from './components';
+import {Home,Item,ItemDetail,Profile,Additem,MainNav,UserProfile,
+    Logout,ProfileEdit,DetailsEdit,Footer,Registration} from './components';
 
 import {Rnav,Rdetail,RDetailsEdit,addRoomie} from './roommates';
 import { BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
@@ -28,11 +28,10 @@ const App = ({onTryAutoSignup}) => {
             <Route exact path = '/items/details/:id' component = {ItemDetail}/>
             <Route exact path = '/items/profile/:id' component = {Profile}/>
             <Route exact path = '/additem' component = {Additem}/>
-            <Route exact path = '/login' component = {Login}/>
+            {/* <Route exact path = '/login' component = {Login}/> */}
             <Route exact path = '/register' component = {Registration}/>
             <Route exact path = '/profile' component = {UserProfile}/>
             <Route exact path = '/logout' component = {Logout}/>
-            <Route exact path = '/utils' component = {Utils}/>
             <Route exact path = '/profile/edit' component = {ProfileEdit}/>
             <Route exact path = '/details/edit/:id' component = {DetailsEdit}/>
 

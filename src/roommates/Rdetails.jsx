@@ -6,10 +6,13 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import mapImg from '../imgs/gmap.png';
 
+import { Default } from 'react-spinners-css';
+
 const Rdetail = (props)=> {
 
     const[item,setItem] = useState({});
     const[id,setId] = useState();
+    const[fetching,setFetching] = useState(true);
     const slug = props.match.params.id 
 
     useEffect( () => {
@@ -18,8 +21,10 @@ const Rdetail = (props)=> {
                 const res = await axios.get(`https://aashraya.herokuapp.com/mates/details/${slug}`);
                 // console.log(res.data)
                 setItem(res.data);
+                setFetching(false);
   
             } catch (error) {
+                setFetching(false);
                 // console.log(error)
             }
         }
@@ -53,6 +58,13 @@ const Rdetail = (props)=> {
 
 
     return (
+        <>
+        {
+            fetching ? 
+            <div className="loading_loading">
+                <Default color = "rgb(230, 43, 83)" size = {200} />
+            </div>
+            :
         <>
         {
           
@@ -139,6 +151,8 @@ const Rdetail = (props)=> {
                 }
                 
         </>
+    }
+    </>
     )
 }
 

@@ -9,6 +9,7 @@ import {Link} from "react-router-dom";
 const RDetailsEdit = (props) => {
     const[item,setItem] = useState({});
     const [imgs,setImgs] = useState([]);
+    const[fetching,setFetching] = useState(true);
     const [done, setDone] = useState({
         imgsUpload : false,
         imgDelete : false,    
@@ -37,8 +38,10 @@ const RDetailsEdit = (props) => {
                 const res = await axios.get(`https://aashraya.herokuapp.com/mates/details/${slug}`,config);
                 // console.log(res.data)
                 setItem(res.data);
+                setFetching(false);
   
             } catch (error) {
+                setFetching(false);
                 // console.log(error)
             }
         }
@@ -240,13 +243,19 @@ const RDetailsEdit = (props) => {
         return source.map((photo) => {
             // console.log(photo);
             return (
-            <img src={photo} key = {photo} alt=""  width= "100px" height = "100px" />
+            <img src={photo} key = {photo} alt=""  />
             )
         })
     }
 
     return (
- 
+        <>
+        {
+            fetching ? 
+            <div className="loading_loading">
+                <Default color = "rgb(230, 43, 83)" size = {200} />
+            </div>
+            :
         <>
         {
             item === undefined ?
@@ -273,7 +282,7 @@ const RDetailsEdit = (props) => {
                     <option value="land">Land</option>
                 </select>
                 <input name = 'headline' className = "form_input" type="text" value = {item.headline} onChange = {myFunc} placeholder="Headline" autoComplete = 'off' />
-                <input name = 'location' className = "form_input" type="text" value = {item.location} onChange = {myFunc} placeholder="Location" autoComplete = 'off' />
+                <input name = 'location' className = "form_input" type="text" value = {item.location} onChange = {myFunc} placeholder="District" autoComplete = 'off' />
                 <input name = 'city' className = "form_input" type="text" value = {item.city} onChange = {myFunc} placeholder="City" autoComplete = 'off'/>
                 
                 <select name="price_range" className = "form_input" value = {item.price_range} onChange = {myFunc} >
@@ -329,9 +338,9 @@ const RDetailsEdit = (props) => {
                                 </div>
 
                                 <form onSubmit={(e) => { e.preventDefault();  deleteFunc(e,img.id,img.roomie)}} className = "contact_form" action="#">
-                                    {
+                                    {/* {
                                         done.isDelLoading? <Default color = "rgb(230, 43, 83)" size = {70} /> : null
-                                    }
+                                    } */}
                                     <input type="text" hidden/> 
                                 
                                 {
@@ -378,6 +387,8 @@ const RDetailsEdit = (props) => {
         </div>
         }        
         </>
+    }
+    </>
     )
 }
 

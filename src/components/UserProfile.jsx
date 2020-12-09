@@ -9,11 +9,14 @@ import InstagramIcon from '@material-ui/icons/Instagram';
 import PhoneIcon from '@material-ui/icons/Phone';
 import EmailIcon from '@material-ui/icons/Email';
 
+import { Default } from 'react-spinners-css';
+
 const UserProfile = ()=> {
 
     const[item,setItem] = useState({});
     const[roomiePost,setRoomiePost] = useState();
     const[condn,setCondn] = useState(false)
+    const[fetching,setFetching] = useState(true)
 
     useEffect( () => {
         const fetchData = async () => {
@@ -31,8 +34,11 @@ const UserProfile = ()=> {
                 const res = await axios.get(`https://aashraya.herokuapp.com/profile/`,config);
                 // console.log(res.data)
                 setItem(res.data);
+                setFetching(false);
+
   
             } catch (error) {
+                setFetching(false);
                 // console.log(error)
             }
         }
@@ -76,6 +82,13 @@ const UserProfile = ()=> {
 
 
     return (
+        <>
+        {
+        fetching ? 
+        <div className="loading_loading">
+            <Default color = "rgb(230, 43, 83)" size = {150} />
+        </div>
+        :
         <>
             {
                 item === undefined ?
@@ -136,17 +149,17 @@ const UserProfile = ()=> {
                                         </span>
 
                                         <span className="contact_info_social">
-                                            <Link to = {item.facebook_link? item.facebook_link : `#`} > 
+                                            <a href = {item.facebook_link? item.facebook_link : `#`} > 
                                             <FacebookIcon fontSize="large" style={{ color: '#d8223b', }} />
-                                            </Link>
+                                            </a>
 
-                                            <Link to = {item.twitter_link? item.twitter_link : `#`} > 
+                                            <a href = {item.twitter_link? item.twitter_link : `#`} > 
                                             <TwitterIcon fontSize="large" style={{ color: '#d8223b', }} />
-                                            </Link>
+                                            </a>
 
-                                            <Link to = {item.instagram_link? item.instagram_link : '#'} > 
+                                            <a href = {item.instagram_link? item.instagram_link : '#'} > 
                                             <InstagramIcon fontSize="large" style={{ color: '#d8223b', }}/>
-                                            </Link>
+                                            </a>
 
                                         </span>
 
@@ -189,6 +202,8 @@ const UserProfile = ()=> {
 
 
         </>
+    }
+    </>
     )
 }
 

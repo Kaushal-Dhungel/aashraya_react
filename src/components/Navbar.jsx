@@ -5,11 +5,13 @@ import axios from 'axios';
 import HomeIcon from '@material-ui/icons/Home';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import { Default } from 'react-spinners-css';
 
 const Navbar = ({city}) => {
 
     const[items,setItems] = useState([]);
     const[cat,setCat] = useState('room')
+    const[fetching,setFetching] = useState(true)
 
     useEffect( () => {
         const fetchData = async () => {
@@ -21,8 +23,10 @@ const Navbar = ({city}) => {
                   });
                 // console.log(res.data)
                 setItems(res.data);
+                setFetching(false)
   
             } catch (error) {
+            setFetching(false)
                 // console.log(error)
             }
         }
@@ -59,10 +63,17 @@ const Navbar = ({city}) => {
         </div>
         </div>
         
-
-        <Results items = {items} 
-        linkSlug = {`items/details`}
-        />       
+        {
+            fetching ? 
+            <div className="loading_loading">
+                <Default color = "rgb(230, 43, 83)" size = {150} />
+            </div>
+            :
+            <Results items = {items} 
+            linkSlug = {`items/details`}
+            />    
+        }
+   
         
         </>
     )

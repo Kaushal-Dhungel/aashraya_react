@@ -105,7 +105,7 @@ export const Updateitem =({actionFunc,url}) => {
         return source.map((photo) => {
             // console.log(photo);
             return (
-            <img src={photo} key = {photo} alt=""  width= "200px" height = "200px" />
+            <img src={photo} key = {photo} alt=""  />
             )
         })
     }
@@ -145,7 +145,7 @@ export const Updateitem =({actionFunc,url}) => {
                     <option value="land">Land</option>
                 </select>
                 <input name = 'headline' className = "form_input" type="text" placeholder="Headline" autoComplete = 'off' />
-                <input name = 'location' className = "form_input" type="text" placeholder="Location" autoComplete = 'off' />
+                <input name = 'location' className = "form_input" type="text" placeholder="District" autoComplete = 'off' />
                 <input name = 'city' className = "form_input" type="text" placeholder="City" autoComplete = 'off'/>
                 <input name = 'price' className = "form_input" type="number" placeholder="Price" autoComplete = 'off'/>
                 <textarea name="details" className = "form_input" cols="30" rows="10" placeholder ="Details"></textarea>
@@ -182,7 +182,9 @@ const AddItem = ({isAuthenticated}) => {
             url = {`https://aashraya.herokuapp.com/items/`}
             />
             : 
+            <div className="container logout_page">
             <h3> You need to be logged in to perform this operation </h3>
+            </div>
         }
         </>
         

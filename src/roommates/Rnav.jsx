@@ -1,12 +1,14 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import {Results} from '../components/Navbar';
+import { Default } from 'react-spinners-css';
 
 const Rnav = (props) => {
 
     const city = props.match.params.id 
     const[items,setItems] = useState([]);
     const[cat,setCat] = useState('room')
+    const[fetching,setFetching] = useState(true)
 
     useEffect( () => {
         const fetchData = async () => {
@@ -18,8 +20,10 @@ const Rnav = (props) => {
                   });
                 // console.log(res.data)
                 setItems(res.data);
-  
-            } catch (error) {
+                  setFetching(false)
+            } 
+            catch (error) {
+                    setFetching(false)
                 // console.log(error)
             }
         }
@@ -52,11 +56,18 @@ const Rnav = (props) => {
         </div>
         </div>
         
+        {
+            fetching ? 
+            <div className="loading_loading">
+                <Default color = "rgb(230, 43, 83)" size = {150} />
+            </div>
+            :
+            <Results items = {items} 
+            linkSlug = {`rdetails`}
+            />    
+        }
 
         {/* <RoomieResults items = {items} />        */}
-        <Results items = {items} 
-        linkSlug = {`rdetails`}
-        />
         
         </>
     )
