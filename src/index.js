@@ -4,9 +4,31 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// Redux part
+import { createStore,applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+
+// two reducers
+// import Reducer from './redux_ecom/Reducer';
+import AuthReducer from './store/reducers/auth'
+
+import thunk from 'redux-thunk';
+
+//  combine the reducers here
+// const newReducer = combineReducers({Reducer,AuthReducer})
+
+const store = createStore(AuthReducer,applyMiddleware(thunk)); 
+
+
+const ReduxApp = (
+  <Provider store={store}>
+      <App />
+  </Provider>
+)
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {ReduxApp }
   </React.StrictMode>,
   document.getElementById('root')
 );

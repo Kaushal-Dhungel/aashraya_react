@@ -1,5 +1,7 @@
 body {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -10,4 +12,352 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+/* ------------ Home ------------------------ */
+.landing {
+	height: 80vh;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	background-color: rgb(230, 43, 83);
+}
+/* .text_part {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+} */
+
+.create_listing_room {
+	margin-top: 20vh;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.testimonial_section {
+	margin-top: 30vh;
+}
+
+.testi_heading {
+	/* align-items: center; */
+	text-align: center;
+}
+
+.testi {
+	display: flex;
+	margin: 5% 10%;
+}
+
+
+.top {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.bottom p{
+	padding: 0 5%;
+}
+
+.top img {
+
+	height: 100px;
+	width: 100px;
+	border-radius: 50px;
+}
+
+.footer {
+	height: 20vh;
+	background-color: rgb(29, 27, 27);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.footer p {
+	text-align: center;
+	color: white;
+}
+
+@media screen and (max-width: 780px) {
+
+	.landing,.create_listing_room {
+		flex-direction: column-reverse;
+	}
+	.text_part {
+		margin: 0 5%;
+	}
+	.logo_part img {
+		width: 300px;
+	}
+
+	.testi {
+		flex-direction: column;
+	}
+
+	.testi_box {
+		margin-top: 4vh;
+	}
+}
+
+/* .custom_column {
+	margin: 0 3%;
+} */
+
+/* ------ Items and Navbar------------------------- */
+
+.categories {
+	margin-top: 20vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.custom_row {
+	display: flex;
+	margin: 5% 5%;
+	justify-content: space-evenly;
+	/* align-items: center; */
+}
+.card {
+	width: 33%;
+}
+.card-body {
+	display: flex;
+	flex-direction: column;
+}
+.card_location {
+	display: flex;
+	/* align-items: center;
+	justify-content: center; */
+}
+
+@media screen and (max-width: 780px) {
+	.custom_row {
+		flex-direction: column;
+	}
+	.card {
+		width: 100%;
+	}
+}
+
+/* --------- Item Details -------------------------- */
+
+.details_carousel {
+	margin-top: 10vh;
+}
+
+.details_of_items {
+	margin-top: 10vh;
+	display: flex;
+	justify-content: space-between;
+}
+.details_left {
+	flex: 2;
+}
+.details_right {
+	margin-top: 5vh;
+	padding-left: 3%;
+	flex: 1;
+}
+
+.above_map {
+	display: flex;
+	justify-content: space-around;
+}
+
+.map_area {
+	margin: 5vh 0;
+}
+
+.details_of_items h3 {
+	text-align: center;
+}
+
+.location_icon {
+	display: flex;
+}
+
+@media screen and (max-width: 780px) {
+	.details_of_items {
+		flex-direction: column;
+	}
+
+	.details_right {
+		display: flex;
+		flex-direction: column-reverse;
+	}
+
+	.above_map {
+		margin: 4vh 0;
+	}
+
+	.d-block {
+		height: 400px;
+	}
+}
+/* -------------- Profile------------------------ */
+
+.profile-head {
+  transform: translateY(5rem)
+}
+
+.cover {
+  /* background-image: url(https://images.unsplash.com/photo-1530305408560-82d13781b33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1352&q=80); */
+  background: linear-gradient(to right, #e96443, #904e95);
+  background-size: cover;
+  background-repeat: no-repeat
+}
+
+body {
+  /* background: #654ea3; */
+  /* background: linear-gradient(to right, #e96443, #904e95); */
+  min-height: 100vh
+}
+
+.contact_info {
+	display: flex;
+}
+
+.contact_info_social {
+	margin-top: 3vh;
+	display: flex;
+	/* justify-content: space-around */
+}
+
+.categories_profile {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@media screen and (max-width: 780px) {
+
+
+}
+
+/* -------------- Profile Ends Here------------------------ */
+
+/* ----------- Registration ----------------------- */
+
+.register_area {
+	height: 70vh;
+}
+
+.social_login {
+	margin-top: 5vh;
+}
+
+.register_messages {
+	margin: 5vh 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.register_messages p {
+	text-align: center;
+	color: #e96443;
+	font-size: 18px;
+}
+
+/* ---------------------Login starts ---------------------------*/
+
+/* --------------- login--------------- */
+
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+
+.a {
+	color: #333;
+	font-size: 14px;
+	text-decoration: none;
+	margin: 15px 0;
+}
+
+button {
+	border-radius: 20px;
+	border: 1px solid #FF4B2B;
+	background-color: #FF4B2B;
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 40px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+}
+
+button:active {
+	transform: scale(0.95);
+}
+
+button:focus {
+	outline: none;
+}
+
+button.ghost {
+	background-color: transparent;
+	border-color: #FFFFFF;
+}
+
+form {
+	background-color: #FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 0 50px;
+	height: 100%;
+	text-align: center;
+}
+
+.form_input {
+	background-color: #eee;
+	border: none;
+	padding: 12px 15px;
+	margin: 8px 0;
+	width: 100%;
+}
+
+@media screen and (max-width: 780px) {
+
+	form {
+		padding: 0 10px;
+	}
+
+}
+
+/* ---------- login ends here----------------------------------- */
+
+/* ---------- Profile Edit ------------------------ */
+.pp {
+	margin: 3vh 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
+/* ------- LogOut Page --------- */
+.logout_page {
+	/* margin-top: 10vh; */
+	height: 70vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+/* ----- Loading----------------- */
+.loading_loading {
+	height: 70vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
