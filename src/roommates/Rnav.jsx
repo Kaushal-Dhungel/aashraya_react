@@ -13,7 +13,7 @@ const Rnav = (props) => {
     useEffect( () => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`https://aashraya.herokuapp.com/mates/${cat}`,{
+                const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/mates/${cat}`,{
                     params: {
                       city
                     }

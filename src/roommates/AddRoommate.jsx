@@ -194,7 +194,7 @@ const addRoomie = ({isAuthenticated}) => {
         {
             isAuthenticated?
             <UpdateRoomie 
-            url = {`https://aashraya.herokuapp.com/mates/`}
+            url = {`${process.env.REACT_APP_HEROKU_URL}/mates/`}
             />
             :
             <div className="container logout_page">

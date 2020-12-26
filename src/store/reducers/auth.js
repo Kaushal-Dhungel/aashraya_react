@@ -17,7 +17,8 @@ const updateObject = (oldObject,updatedProperties) => {
 const initialState = {
     token: null,
     error: '', 
-    loading: false
+    loading: false,
+    showModal: true
 }
 
 const authStart = (state, action) => {
@@ -54,6 +55,12 @@ const clrErr = (state,action) => {
     })
 }
 
+const closeModal = (state,action) => {
+    return updateObject(state,{
+        showModal : false
+    })
+}
+
 const AuthReducer = (state=initialState, action) => {
     switch (action.type) {
         case actionTypes.AUTH_START: return authStart(state, action);
@@ -61,6 +68,7 @@ const AuthReducer = (state=initialState, action) => {
         case actionTypes.AUTH_FAIL: return authFail(state, action);
         case actionTypes.AUTH_LOGOUT: return authLogout(state, action);
         case actionTypes.CLEAR_ERROR: return clrErr(state,action);
+        case actionTypes.CLOSE_MODAL: return closeModal(state,action);
         default:
             return state;
     }

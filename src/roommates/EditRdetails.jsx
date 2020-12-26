@@ -35,7 +35,7 @@ const RDetailsEdit = (props) => {
         }
         
             try {
-                const res = await axios.get(`https://aashraya.herokuapp.com/mates/details/${slug}`,config);
+                const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}`,config);
                 // console.log(res.data)
                 setItem(res.data);
                 setFetching(false);
@@ -64,7 +64,7 @@ const RDetailsEdit = (props) => {
         }
         }
     
-            axios.put(`https://aashraya.herokuapp.com/mates/details/${slug}/`,form,config)
+            axios.put(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,form,config)
 
             .then(res => {
                 // console.log('updated')
@@ -124,7 +124,7 @@ const RDetailsEdit = (props) => {
         }
         }
     
-            axios.post(`https://aashraya.herokuapp.com/mates/details/${slug}/`,form,config)
+            axios.post(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,form,config)
 
             .then(res => {
                 // console.log('deleted')
@@ -188,7 +188,7 @@ const RDetailsEdit = (props) => {
         }
         }
     
-            axios.post(`https://aashraya.herokuapp.com/mates/details/${slug}/`,form,config)
+            axios.post(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,form,config)
 
             .then(res => {
                 // console.log('deleted')
@@ -334,7 +334,7 @@ const RDetailsEdit = (props) => {
                             return(
                                 <div key = {index}>
                                 <div className="pp">
-                                <img  src={`https://aashraya.herokuapp.com${img.image}`} alt="img" srcSet="" height = '300px' width = '300px'/>
+                                <img  src={`${process.env.REACT_APP_HEROKU_URL}${img.image}`} alt="img" srcSet="" height = '300px' width = '300px'/>
                                 </div>
 
                                 <form onSubmit={(e) => { e.preventDefault();  deleteFunc(e,img.id,img.roomie)}} className = "contact_form" action="#">

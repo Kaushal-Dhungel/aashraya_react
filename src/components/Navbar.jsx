@@ -16,7 +16,7 @@ const Navbar = ({city}) => {
     useEffect( () => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`https://aashraya.herokuapp.com/items/${cat}`,{
+                const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/items/${cat}`,{
                     params: {
                       city
                     }
@@ -96,7 +96,7 @@ export const Results = ({items,linkSlug}) => {
                     item.images.length === 0 ?
                 <img className="card-img-top" src={`https://images.unsplash.com/photo-1606474165573-2fa973b42c21?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80`} alt = "" />
                     :
-                <img className="card-img-top" src={`https://aashraya.herokuapp.com${item.images[0].image}`} alt = "" height = "300px"  />
+                <img className="card-img-top" src={`${process.env.REACT_APP_HEROKU_URL}${item.images[0].image}`} alt = "" height = "300px"  />
                 }
                 <div className="card-body">
                     <span className="card_location">

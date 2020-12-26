@@ -22,7 +22,7 @@ const Profile = (props)=> {
     useEffect( () => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`https://aashraya.herokuapp.com/profile/${slug}`);
+                const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/profile/${slug}`);
                 // console.log(res.data)
                 setItem(res.data);
                 setFetching(false);
@@ -39,7 +39,7 @@ const Profile = (props)=> {
     const fetchRoomie = async() => {
     
         try {
-            const res = await axios.get(`https://aashraya.herokuapp.com/mates/roomie/${slug}`);
+            const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/mates/roomie/${slug}`);
             // console.log(res.data)
             setRoomiePost(res.data);
 
@@ -83,7 +83,7 @@ const Profile = (props)=> {
                                 <div className="px-4 pt-0 pb-4 cover">
                                     <div className="media align-items-end profile-head">
                                         <div className="profile mr-3">
-                                            <img src={`https://aashraya.herokuapp.com${item.avatar}`} alt="..." width="130" className="rounded mb-2 img-thumbnail"/>
+                                            <img src={`${process.env.REACT_APP_HEROKU_URL}${item.avatar}`} alt="..." width="130" className="rounded mb-2 img-thumbnail"/>
                                             </div>
                                         <div className="media-body mb-5 text-white">
                                             <h4 className="mt-0 mb-0"> 

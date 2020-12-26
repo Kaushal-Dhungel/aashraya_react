@@ -37,7 +37,7 @@ const DetailsEdit = (props) => {
             }
         
             try {
-                const res = await axios.get(`https://aashraya.herokuapp.com/items/details/${slug}`,config);
+                const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}`,config);
                 // console.log(res.data)
                 setItem(res.data);
                 setFetching(false);
@@ -67,7 +67,7 @@ const DetailsEdit = (props) => {
         }
         }
     
-            axios.put(`https://aashraya.herokuapp.com/items/details/${slug}/`,form,config)
+            axios.put(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}/`,form,config)
 
             .then(res => {
                 // console.log('updated')
@@ -128,7 +128,7 @@ const DetailsEdit = (props) => {
         }
         }
     
-            axios.post(`https://aashraya.herokuapp.com/items/details/${slug}/`,form,config)
+            axios.post(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}/`,form,config)
 
             .then(res => {
                 // console.log('deleted')
@@ -192,7 +192,7 @@ const DetailsEdit = (props) => {
         }
         }
     
-            axios.post(`https://aashraya.herokuapp.com/items/details/${slug}/`,form,config)
+            axios.post(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}/`,form,config)
 
             .then(res => {
                 // console.log('deleted')
@@ -318,7 +318,7 @@ const DetailsEdit = (props) => {
                             return(
                                 <div key = {index}>
                                     <div className="pp">
-                                    <img  src={`https://aashraya.herokuapp.com${img.image}`} alt="img" srcSet="" height = '300px' width = '300px'/>
+                                    <img  src={`${process.env.REACT_APP_HEROKU_URL}${img.image}`} alt="img" srcSet="" height = '300px' width = '300px'/>
                                     </div>
 
                                 <form onSubmit={(e) => { e.preventDefault();  deleteFunc(e,img.id,img.item)}} className = "contact_form" action="#">

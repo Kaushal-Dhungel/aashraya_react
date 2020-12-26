@@ -8,14 +8,10 @@ import reportWebVitals from './reportWebVitals';
 import { createStore,applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
-// two reducers
-// import Reducer from './redux_ecom/Reducer';
 import AuthReducer from './store/reducers/auth'
 
 import thunk from 'redux-thunk';
 
-//  combine the reducers here
-// const newReducer = combineReducers({Reducer,AuthReducer})
 
 const store = createStore(AuthReducer,applyMiddleware(thunk)); 
 

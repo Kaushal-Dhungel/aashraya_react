@@ -18,7 +18,7 @@ const Rdetail = (props)=> {
     useEffect( () => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`https://aashraya.herokuapp.com/mates/details/${slug}`);
+                const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}`);
                 // console.log(res.data)
                 setItem(res.data);
                 setFetching(false);
@@ -41,7 +41,7 @@ const Rdetail = (props)=> {
             }
         
             try {
-                const res = await axios.get(`https://aashraya.herokuapp.com/profile/`,config);
+                const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/profile/`,config);
                 // console.log(res.data)
                setId(res.data.id)
     
@@ -80,7 +80,7 @@ const Rdetail = (props)=> {
                             return(
                                 <div key = {index} className={`carousel-item ${index===0 ?'active': '' }`}>
                                 <img style = {{height:'600px',}}
-                                className="d-block w-100" src={`https://aashraya.herokuapp.com${imgs.image}`} alt="First slide"/>
+                                className="d-block w-100" src={`${process.env.REACT_APP_HEROKU_URL}${imgs.image}`} alt="First slide"/>
                                 </div>
                             )
                         })

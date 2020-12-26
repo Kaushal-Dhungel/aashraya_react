@@ -29,6 +29,12 @@ export const removeError = () => {
     }
 }
 
+export const hideModal = () => {
+    return {
+        type: actions.CLOSE_MODAL
+    }
+}
+
 export const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
@@ -59,11 +65,11 @@ const repeatedFunc = res => {
 const reLogin = () => {
 return dispatch => 
    { 
-       axios.post('https://aashraya.herokuapp.com/auth/token', {
+       axios.post( `${process.env.REACT_APP_HEROKU_URL}/auth/token`, {
        refresh_token : localStorage.getItem('refresh_token'),
        grant_type : 'refresh_token',
-       client_id : 'O8aqPqGWAGKxLeoLW2JM5YCXOuoV9NLamTPjolvB',
-       client_secret : 'KDHuLiAtkVFsC3H2iic74o5LweZsayMJmns8k55XGsJ64PVBvmc6iWp2HDIwksKK1gW71J5RCQJF4amvFYKltF5c0yarPLIDluKON8upX6Rc6fMej3iOGzA0ekpwGfTc',
+       client_id : `${process.env.REACT_APP_CLIENT_ID}`,
+       client_secret : `${process.env.REACT_APP_CLIENT_SECRET}`,
 
        })
        .then(res => {
@@ -93,12 +99,12 @@ export const checkAuthTimeout = expirationTime => {
 export const authLogin = (username, password) => {
     return dispatch => {
         dispatch(authStart());
-        axios.post('https://aashraya.herokuapp.com/auth/token/', {
+        axios.post(`${process.env.REACT_APP_HEROKU_URL}/auth/token/`, {
             grant_type : 'password',
             username: username,
             password: password,
-            client_id : 'O8aqPqGWAGKxLeoLW2JM5YCXOuoV9NLamTPjolvB',
-            client_secret : 'KDHuLiAtkVFsC3H2iic74o5LweZsayMJmns8k55XGsJ64PVBvmc6iWp2HDIwksKK1gW71J5RCQJF4amvFYKltF5c0yarPLIDluKON8upX6Rc6fMej3iOGzA0ekpwGfTc',
+            client_id : `${process.env.REACT_APP_CLIENT_ID}`,
+            client_secret : `${process.env.REACT_APP_CLIENT_SECRET}`,
         })
         .then(res => {
             // console.log('LOGIN SUCCESSFUL')
@@ -123,21 +129,14 @@ export const authSignup = (username, email, password1,password2) => {
 
         dispatch(authStart());
 
-        // const csrftoken = getCookie('_xsrf');
-        // console.log(csrftoken);
-        // const axiosConfig = {
-        //     headers: {
-        //         // "X-CSRFToken": csrftoken
-        //     }
-        //   };
           
-        axios.post('https://aashraya.herokuapp.com/registeruser/', {
+        axios.post(`${process.env.REACT_APP_HEROKU_URL}/registeruser/`, {
                 username: username,
                 email: email,
                 password1: password1,
                 password2: password2,
-                client_id : 'O8aqPqGWAGKxLeoLW2JM5YCXOuoV9NLamTPjolvB',
-                client_secret : 'KDHuLiAtkVFsC3H2iic74o5LweZsayMJmns8k55XGsJ64PVBvmc6iWp2HDIwksKK1gW71J5RCQJF4amvFYKltF5c0yarPLIDluKON8upX6Rc6fMej3iOGzA0ekpwGfTc',    
+                client_id : `${process.env.REACT_APP_CLIENT_ID}`,
+                client_secret : `${process.env.REACT_APP_CLIENT_SECRET}`,    
             },)
     
             .then(res => {
@@ -175,12 +174,12 @@ export const authCheckState = () => {
 export const FbLogin = (accesstoken) => {
 
 return dispatch =>{    
-        axios.post('https://aashraya.herokuapp.com/auth/convert-token', {
+        axios.post(`${process.env.REACT_APP_HEROKU_URL}/auth/convert-token`, {
         token : accesstoken,
         backend : 'facebook',
         grant_type : 'convert_token',
-        client_id : 'O8aqPqGWAGKxLeoLW2JM5YCXOuoV9NLamTPjolvB',
-        client_secret : 'KDHuLiAtkVFsC3H2iic74o5LweZsayMJmns8k55XGsJ64PVBvmc6iWp2HDIwksKK1gW71J5RCQJF4amvFYKltF5c0yarPLIDluKON8upX6Rc6fMej3iOGzA0ekpwGfTc',
+        client_id : `${process.env.REACT_APP_CLIENT_ID}`,
+        client_secret : `${process.env.REACT_APP_CLIENT_SECRET}`,
 
         })
         .then(res => {

@@ -179,7 +179,7 @@ const AddItem = ({isAuthenticated}) => {
             isAuthenticated ?
             <Updateitem 
             actionFunc = {addItemFunc}
-            url = {`https://aashraya.herokuapp.com/items/`}
+            url = {`${process.env.REACT_APP_HEROKU_URL}/items/`}
             />
             : 
             <div className="container logout_page">
