@@ -68,8 +68,8 @@ return dispatch =>
        axios.post( `${process.env.REACT_APP_HEROKU_URL}/auth/token`, {
        refresh_token : localStorage.getItem('refresh_token'),
        grant_type : 'refresh_token',
-       client_id : `${process.env.REACT_APP_CLIENT_ID_LOCAL}`,
-       client_secret : `${process.env.REACT_APP_CLIENT_SECRET_LOCAL}`,
+       client_id : `${process.env.REACT_APP_CLIENT_ID}`,
+       client_secret : `${process.env.REACT_APP_CLIENT_SECRET}`,
 
        })
        .then(res => {
@@ -103,8 +103,8 @@ export const authLogin = (username, password) => {
             grant_type : 'password',
             username: username,
             password: password,
-            client_id : `${process.env.REACT_APP_CLIENT_ID_LOCAL}`,
-            client_secret : `${process.env.REACT_APP_CLIENT_SECRET_LOCAL}`,
+            client_id : `${process.env.REACT_APP_CLIENT_ID}`,
+            client_secret : `${process.env.REACT_APP_CLIENT_SECRET}`,
         })
         .then(res => {
             // console.log('LOGIN SUCCESSFUL')
@@ -135,8 +135,8 @@ export const authSignup = (username, email, password1,password2) => {
                 email: email,
                 password1: password1,
                 password2: password2,
-                client_id : `${process.env.REACT_APP_CLIENT_ID_LOCAL}`,
-                client_secret : `${process.env.REACT_APP_CLIENT_SECRET_LOCAL}`,    
+                client_id : `${process.env.REACT_APP_CLIENT_ID}`,
+                client_secret : `${process.env.REACT_APP_CLIENT_SECRET}`,    
             },)
     
             .then(res => {
@@ -178,8 +178,8 @@ return dispatch =>{
         token : accesstoken,
         backend : 'facebook',
         grant_type : 'convert_token',
-        client_id : `${process.env.REACT_APP_CLIENT_ID_LOCAL}`,
-        client_secret : `${process.env.REACT_APP_CLIENT_SECRET_LOCAL}`,
+        client_id : `${process.env.REACT_APP_CLIENT_ID}`,
+        client_secret : `${process.env.REACT_APP_CLIENT_SECRET}`,
 
         })
         .then(res => {
