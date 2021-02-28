@@ -7,6 +7,8 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import PhoneIcon from '@material-ui/icons/Phone';
 import EmailIcon from '@material-ui/icons/Email';
+import HouseIcon from '@material-ui/icons/House';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 
 import { Default } from 'react-spinners-css';
 
@@ -78,14 +80,14 @@ const Profile = (props)=> {
                 <>
                 <div className="container">
                 <div className="row py-5 px-4">
-                        <div className="col-md-5 mx-auto">
+                        <div className="col-md-12 mx-auto">
                             <div className="bg-white shadow rounded overflow-hidden">
                                 <div className="px-4 pt-0 pb-4 cover">
-                                    <div className="media align-items-end profile-head">
+                                    <div className="media profile-head">
                                         <div className="profile mr-3">
-                                            <img src={`${process.env.REACT_APP_HEROKU_URL}${item.avatar}`} alt="..." width="130" className="rounded mb-2 img-thumbnail"/>
+                                            <img src={`${item.avatar}`} alt="..." width="180" className="rounded mb-5 img-thumbnail"/>
                                             </div>
-                                        <div className="media-body mb-5 text-white">
+                                        <div className="media-body text-white">
                                             <h4 className="mt-0 mb-0"> 
                                             {
                                                    item.first_name && item.last_name? `${item.first_name} ${item.last_name}`: 
@@ -97,20 +99,21 @@ const Profile = (props)=> {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="bg-light p-4 d-flex justify-content-end text-center">
-                                </div>
 
-                                <div className="px-4 py-3">
+                                {/* do not remove this div */}
+                                <div className="bg-light p-4 d-flex justify-content-end text-center"></div>
+
+                                <div className="px-4 my-3">
                                     <h5 className="mb-0">Contact</h5>
-                                    <div className="p-4 rounded shadow-sm bg-light">
+                                    <div className="py-4 rounded shadow-sm bg-light">
                                     <span className = "contact_info">
                                             <PhoneIcon fontSize="large" style={{ color: '#d8223b' }} /> 
-                                            <p className="font-italic mb-0"> - {item.phone? item.phone : `not provided`} </p>
+                                            <p> - {item.phone? item.phone : `not provided`} </p>
                                         </span>
 
                                         <span className = "contact_info">
                                             <EmailIcon fontSize="large" style={{ color: '#d8223b' }} /> 
-                                            <p className="font-italic mb-0"> - {item.email} </p>
+                                            <p className = "profile_email"> - {item.email} </p>
                                         </span>
 
                                         <span className="contact_info_social">
@@ -140,10 +143,10 @@ const Profile = (props)=> {
                     <div className="categories">
                         <div className="btn-group btn-group-toggle" data-toggle="buttons">
                             <label className="btn btn-outline-dark active">
-                                <input type="radio" name="options" id="room" checked data-action = "items" onClick = {showPosts} readOnly /> Items
+                                <input type="radio" name="options" id="room" checked data-action = "items" onClick = {showPosts} readOnly /> Items <HouseIcon />
                             </label>
                             <label className="btn btn-outline-dark">
-                                <input type="radio" name="options" id="flat" data-action = "roomie" onClick = {showPosts} readOnly /> Roomie
+                                <input type="radio" name="options" id="flat" data-action = "roomie" onClick = {showPosts} readOnly /> Roomie <PeopleAltIcon />
                             </label>
                         </div>
                     </div>
@@ -152,10 +155,12 @@ const Profile = (props)=> {
                         condn ? 
                         <Results items = {roomiePost} 
                         linkSlug = {`rdetails`}
+                        btnText = "Add To"
                         />
                         :
                         <Results items = { item.item_model}
                         linkSlug = {`items/details`}
+                        btnText = "Add To"
                         />
                     }
 
@@ -163,7 +168,6 @@ const Profile = (props)=> {
 
                 </>
             }
-
 
         </>
     }

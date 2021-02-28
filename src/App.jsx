@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {Home,Item,ItemDetail,Profile,Additem,MainNav,UserProfile,
-    Logout,ProfileEdit,DetailsEdit,Footer,Registration} from './components';
+    Logout,ProfileEdit,DetailsEdit,Footer,Registration, CartView} from './components';
 
 import {Rnav,Rdetail,RDetailsEdit,addRoomie} from './roommates';
 import { BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
@@ -39,6 +39,9 @@ const App = ({onTryAutoSignup}) => {
             <Route exact path = '/rdetails/:id' component = {Rdetail}/>
             <Route exact path = '/rdetails/edit/:id' component = {RDetailsEdit}/>
             <Route exact path = '/addroomie' component = {addRoomie}/>
+
+            <Route exact path = '/cart' component = {CartView}/>
+
 
 
             <Redirect to  ="/" />

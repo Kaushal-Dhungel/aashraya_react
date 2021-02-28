@@ -10,6 +10,7 @@ import Logout from './LogOut';
 import ProfileEdit from './ProfileEdit';
 import DetailsEdit from './DetailsEdit';
 import Registration from './SignUp';
+import CartView from './CartView';
 
 export {
     MainNav,
@@ -24,5 +25,6 @@ export {
     Logout,
     ProfileEdit,
     DetailsEdit,
-    Registration
+    Registration,
+    CartView
 }

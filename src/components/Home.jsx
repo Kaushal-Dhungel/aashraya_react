@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import {Link} from "react-router-dom";
 import homeImg from '../imgs/home2.png';
@@ -8,6 +8,8 @@ import Modal from 'react-modal';
 import {hideModal} from '../store/actions/auth';
 import { connect } from "react-redux";
 import CancelIcon from '@material-ui/icons/Cancel';
+import axios from 'axios'
+import SearchIcon from '@material-ui/icons/Search';
 
 export function Footer(){
     return (
@@ -17,20 +19,91 @@ export function Footer(){
     )
 }
 
+const Belowlanding = ({popular}) => {
+    return (
+        <div className = "container mt-5 ">
+            <div className="row team-area">
+                {
+                    popular.map((item,index)=>{
+                        return(
+                            <div key = {index} className="col-6 col-sm-4 col-md-3 mt-5">
+                                <div className="single-team">
+                                    <img src={`${item.image}`} alt=""/>
+                                    <div className="team-text">
+                                        <h2>{item.city.split(",")[0]}</h2>
+                                        {/* <p> Look Cool In Summer</p> */}
+                                        <Link className="btn btn-outline-secondary small-btn" to={`/items/${item.city_slug}`}>See Items</Link>
+                                    </div>
+                                </div>
+                            </div>
+ 
+                        )
+                    })
+                }
+
+            </div>
+        </div>
+    )}
+
 Modal.setAppElement('#root');
+
 const Home = ({showModal,hidemodal})=> {
     const [searchValue,setSearchValue] = useState('');
+    const [popular,setPopular] = useState([]);
+    const [testi,setTesti] = useState([]);
+    const [suggestions,setSuggestions] = useState([]);
     const history = useHistory()
     // const[modalIsOpen,setModalIsOpen] = useState(true);
 
+    useEffect( () => {
+        const fetchPopular = async () => {
+            try {
+                const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/core/popular/`);
+                setPopular(res.data);
+            } catch (error) {
+                console.log(error)
+            }
+        }
 
+        const fetchTesti = async () => {
+            try {
+                const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/core/testimonial/`);
+                setTesti(res.data);
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchPopular();
+        fetchTesti();
+    },[])
+
+    const searchPlaces = (value) => {
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/`;
+        const token = `pk.eyJ1Ijoia2F1c2hhbDAyMyIsImEiOiJja2w4N2c4YWIyeTNzMnBxbzVtZGQwZGpyIn0.wneZVDJgjz_WlJQ40guy_Q`;
+
+        const fullUrl = url + value + '.json?access_token=' + token;
+
+        axios.get(fullUrl)
+        .then((res) => {
+            setSuggestions(res.data.features)
+        })
+        .catch((err)=> {
+            console.log(err)
+        })
+    }
     const handleChange = (e)=> {
+        searchPlaces(e.target.value)
+
         setSearchValue(e.target.value);
     }
 
     const mySubmitHandler = (e)=> {
         e.preventDefault();
-        history.push(`/items/${searchValue}`)
+        let firstStr = ""
+        let finalStr = ""
+        searchValue.split(",").map(item => firstStr += item.trim())
+        firstStr.split(" ").map(item => finalStr += item.trim())
+        history.push(`/items/${finalStr}`)
         
     }
 
@@ -83,11 +156,21 @@ const Home = ({showModal,hidemodal})=> {
                     type="search"
                     value = {searchValue}
                     onChange={handleChange}
+                    list="cityname"
                     placeholder = "Search your city. Example:- Haldibari "
                     required
                     />
+                    <datalist id="cityname">
+                        {
+                            suggestions.map((item,index) => {
+                                return(
+                                    <option key = {index} value={item.place_name} />
+                                )
+                            })
+                        }
+                    </datalist>
                     <button onClick = {mySubmitHandler}>
-                        search
+                        search <SearchIcon />
                     </button>
 
                 </div>
@@ -105,7 +188,7 @@ const Home = ({showModal,hidemodal})=> {
 
                 <div className="listing_part">
                     <h4> List Your Room So Others Can Rent It </h4>
-                    <Link to = '/additem' className="btn btn-primary">Add new Item</Link>
+                    <Link to = '/additem' className="btn btn-primary">Add new Item </Link>
 
                 </div>
         </div>
@@ -114,7 +197,7 @@ const Home = ({showModal,hidemodal})=> {
                 
                 <div className="listing_part">
                     <h4> Make Yourself Available As A Roomie </h4>
-                    <Link to = '/addroomie' className="btn btn-primary">List yourself</Link>
+                    <Link to = '/addroomie' className="btn btn-primary">List yourself </Link>
                 </div>
 
                 <div className="img_part">
@@ -122,55 +205,31 @@ const Home = ({showModal,hidemodal})=> {
                 </div>
         </div>
 
+        <div className="popular_places" style = {{marginTop:"40vh"}}>
+            <h4 className = "testi_heading"> Popular Places </h4>
+            <Belowlanding popular = {popular} />
+        </div>
+
         <div className="testimonial_section">
             <h4 className = "testi_heading"> What Users Are Saying </h4>
 
             <div className="testi">
-
-                <div className="testi_box">
-                    <span className="top">
-                        <img src={roomieImg} alt=""/>
-                        <h4> Mark Zuckerberg </h4>
-                        <p> New York </p>
-                    </span>
-                    <span className="bottom">
-                        <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                            Laborum, ut sed incidunt recusandae repellendus autem dolor impedit iusto molestias amet 
-                            quaerat molestiae? Ut adipisci eveniet placeat, 
-                            laboriosam animi voluptate corporis.
-                        </p>
-                    </span>
-                </div>
-
-                <div className="testi_box">
-                    <span className="top">
-                        <img src={roomieImg} alt=""/>
-                        <h4> Mark Zuckerberg </h4>
-                        <p> New York </p>
-                    </span>
-                    <span className="bottom">
-                        <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                            Laborum, ut sed incidunt recusandae repellendus autem dolor impedit iusto molestias amet 
-                            quaerat molestiae? Ut adipisci eveniet placeat, 
-                            laboriosam animi voluptate corporis.
-                        </p>
-                    </span>
-                </div>
-
-                <div className="testi_box">
-                    <span className="top">
-                        <img src={roomieImg} alt=""/>
-                        <h4> Mark Zuckerberg </h4>
-                        <p> New York </p>
-                    </span>
-                    <span className="bottom">
-                        <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                            Laborum, ut sed incidunt recusandae repellendus autem dolor impedit iusto molestias amet 
-                            quaerat molestiae? Ut adipisci eveniet placeat, 
-                            laboriosam animi voluptate corporis.
-                        </p>
-                    </span>
-                </div>
+                {
+                    testi.map((item,index)=> {
+                        return (
+                            <div className="testi_box" key = {index}>
+                                <span className="top">
+                                    <img src={`${item.pic}`} alt=""/>
+                                    <h4> {item.name} </h4>
+                                    <p> {item.position} </p>
+                                </span>
+                                <span className="bottom">
+                                    <p>{item.words}</p>
+                                </span>
+                            </div>
+                        )
+                    })
+                }
 
             </div>
         </div>

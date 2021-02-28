@@ -6,6 +6,7 @@ import { Facebook, Default } from "react-spinners-css";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
+
 const ProfileEdit = ( {isAuthenticated}) => {
   const [item, setItem] = useState({});
   const [imgs, setImgs] = useState([]);
@@ -162,197 +163,161 @@ const ProfileEdit = ( {isAuthenticated}) => {
 
   return (
     <>
-    {
+      {
         isAuthenticated !== true ? 
         <Redirect to = "/" />
         :
-    <>
-      {fetching ? (
-        <div className="loading_loading">
-          <Default color="rgb(230, 43, 83)" size={200} />
-        </div>
-      ) : (
         <>
-          {item === undefined ? (
+          {
+            fetching ? 
             <div className="loading_loading">
-              <Facebook color="rgb(230, 43, 83)" size={200} />
+              <Default color="rgb(230, 43, 83)" size={200} />
             </div>
-          ) : (
+            : 
             <>
-              {item.phone ? null : (
-                <h4
-                  style={{
-                    margin: "4vh 0",
-                    textAlign: "center",
-                    color: "#e96443",
-                  }}
-                >
-                  {" "}
-                  || Please update your phone so that it'd be easier for your
-                  potential client to contact you ||{" "}
-                </h4>
-              )}
-
-              <div className="container">
-                {formloading ? (
+              {
+                item === undefined ? 
                   <div className="loading_loading">
-                    <Default color="rgb(230, 43, 83)" size={200} />
+                    <Facebook color="rgb(230, 43, 83)" size={200} />
                   </div>
-                ) : (
-                  <>
-                    <form
-                      onSubmit={handleSubmit}
-                      className="contact_form"
-                      action="#"
-                    >
-                      <input
-                        name="first_name"
-                        className="form_input"
-                        type="text"
-                        value={item.first_name}
-                        onChange={changeFn}
-                        placeholder="First Name"
-                        autoComplete="off"
-                      />
-                      <input
-                        name="last_name"
-                        className="form_input"
-                        type="text"
-                        value={item.last_name}
-                        onChange={changeFn}
-                        placeholder="Last Name"
-                        autoComplete="off"
-                      />
-                      <input
-                        name="email"
-                        className="form_input"
-                        type="text"
-                        value={item.get_email}
-                        onChange={changeFn}
-                        placeholder="email"
-                        autoComplete="off"
-                      />
-                      <input
-                        name="phone"
-                        className="form_input"
-                        type="number"
-                        value={item.phone}
-                        onChange={changeFn}
-                        placeholder="phone"
-                        autoComplete="off"
-                      />
-                      <input
-                        name="facebook_link"
-                        className="form_input"
-                        type="text"
-                        value={item.facebook_link}
-                        onChange={changeFn}
-                        placeholder="Faccebook Link"
-                        autoComplete="off"
-                      />
-                      <input
-                        name="twitter_link"
-                        className="form_input"
-                        type="text"
-                        value={item.twitter_link}
-                        onChange={changeFn}
-                        placeholder="Twitter Link"
-                        autoComplete="off"
-                      />
-                      <input
-                        name="instagram_link"
-                        className="form_input"
-                        type="text"
-                        value={item.instagram_link}
-                        onChange={changeFn}
-                        placeholder="Instagram Link"
-                        autoComplete="off"
-                      />
+                : 
+                <>
+                  {item.phone ? null : 
 
-                      <button className="contact_button">Update</button>
-                    </form>
-                  </>
-                )}
-                <div className="profile_img">
-                  {update ? <h3> Profile pic updated </h3> : null}
-                  <div className="pp">
-                    {item.avatar === undefined ? (
-                      <Default color="rgb(230, 43, 83)" size={100} />
-                    ) : (
-                      <img
-                        src={`${process.env.REACT_APP_HEROKU_URL}${item.avatar}`}
-                        alt="avatar"
-                        srcSet=""
-                        height="200px"
-                        width="200px"
-                      />
-                    )}
+                    <div className="container" style = {{marginTop : "10vh"}}>
+                      <div className="roomie_link_wrapper">
+                          <div className="roomie_link_inside">
+                              <h5> PLease update your phone so that it'd be easier for the potential client to contact you .</h5>
+                          </div>
+                      </div>
+                    </div>
+                  }
+
+
+                  <div className="container">
+                    {formloading ? 
+                      <div className="loading_loading">
+                        <Default color="rgb(230, 43, 83)" size={200} />
+                      </div>
+                    :
+                      <>
+                        <form
+                          onSubmit={handleSubmit}
+                          className="contact_form"
+                          action="#"
+                        >
+                          <input name="first_name" className="form_input" type="text"
+                            value={item.first_name} onChange={changeFn} placeholder="First Name"autoComplete="off"/>
+
+                          <input name="last_name" className="form_input" type="text"
+                          value={item.last_name} onChange={changeFn} placeholder="Last Name" autoComplete="off"/>
+
+                          <input name="email" className="form_input"type="text"
+                            value={item.get_email} onChange={changeFn} placeholder="email" autoComplete="off"/>
+
+                          <input name="phone" className="form_input" type="number"
+                            value={item.phone} onChange={changeFn} placeholder="phone" autoComplete="off"/>
+
+                          <input name="facebook_link" className="form_input" type="text"
+                            value={item.facebook_link} onChange={changeFn} placeholder="Faccebook Link" autoComplete="off"/>
+
+                          <input name="twitter_link" className="form_input" type="text"
+                            value={item.twitter_link} onChange={changeFn} placeholder="Twitter Link" autoComplete="off"/>
+
+                          <input name="instagram_link" className="form_input" type="text"
+                            value={item.instagram_link} onChange={changeFn} placeholder="Instagram Link" autoComplete="off"/>
+
+                          <button className="contact_button">Update</button>
+                        </form>
+                      </>
+                    }
+                    <div className="profile_img">
+                      {update ? <h3 style = {{textAlign:"center", margin:"3vh"}}> Profile pic updated </h3> : null}
+                      <div className="pp">
+                        {
+                          item.avatar === undefined ? 
+                            <Default color="rgb(230, 43, 83)" size={100} />
+                          :
+                            <img
+                              src={`${item.avatar}`}
+                              alt="avatar"
+                              srcSet=""
+                              height="200px"
+                              width="200px"
+                            />
+                        }
+                      </div>
+
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          deleteFunc(e, "remove_pic");
+                        }}
+                        className="contact_form"
+                        action="#"
+                      >
+                        {
+                        done.isDelLoading ? 
+                          <Default color="rgb(230, 43, 83)" size={70} />
+                        : null
+                        }
+
+                        <input type="text" hidden />
+                          {
+                            done.isDelLoading ?
+                              <button className="contact_button" disabled>
+                                
+                                <DeleteIcon />
+                              </button>
+                            : 
+                              <button className="contact_button">
+                                
+                                <DeleteIcon />
+                              </button>
+                          }
+                      </form>
+
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          deleteFunc(e, "change_pic");
+                        }}
+                        className="contact_form"
+                        action="#"
+                      >
+                        {
+                          done.isAddLoading ?
+                          <Default color="rgb(230, 43, 83)" size={70} />
+                          : null
+                        }
+                        <input
+                          name="avatar"
+                          type="file"
+                          className="form_input"
+                          onChange={imgChange}
+                        />
+                        <div className="pics">{renderImgs(imgs)}</div>
+                        {
+                          done.isAddLoading || imgs.length === 0 ?
+                          <button className="contact_button mt-3" disabled>
+                            Change Pic
+                          </button>
+                          :
+                          <button className="contact_button mt-3">
+                            Change Pic
+                          </button>
+                        }
+                      </form>
+                    </div>
+                    <br />
+                    <br /> <br /> <br /> <br /> <br /> <br />
                   </div>
-
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      deleteFunc(e, "remove_pic");
-                    }}
-                    className="contact_form"
-                    action="#"
-                  >
-                    {done.isDelLoading ? (
-                      <Default color="rgb(230, 43, 83)" size={70} />
-                    ) : null}
-
-                    <input type="text" hidden />
-                    {done.isDelLoading ? (
-                      <button className="contact_button" disabled>
-                        {" "}
-                        <DeleteIcon />{" "}
-                      </button>
-                    ) : (
-                      <button className="contact_button">
-                        {" "}
-                        <DeleteIcon />{" "}
-                      </button>
-                    )}
-                  </form>
-
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      deleteFunc(e, "change_pic");
-                    }}
-                    className="contact_form"
-                    action="#"
-                  >
-                    {done.isAddLoading ? (
-                      <Default color="rgb(230, 43, 83)" size={70} />
-                    ) : null}
-                    <input
-                      name="avatar"
-                      type="file"
-                      className="form_input"
-                      onChange={imgChange}
-                    />
-                    <div className="pics">{renderImgs(imgs)}</div>
-                    {done.isAddLoading || imgs.length === 0 ? (
-                      <button className="contact_button mt-3" disabled>
-                        Change Pic
-                      </button>
-                    ) : (
-                      <button className="contact_button mt-3">
-                        Change Pic
-                      </button>
-                    )}
-                  </form>
-                </div>
-                <br />
-                <br /> <br /> <br /> <br /> <br /> <br />
-              </div>
+                </>
+              }
             </>
-          )}
+          }
         </>
-      )}
-    </>
-    }
+        }
     </>
   );
 };

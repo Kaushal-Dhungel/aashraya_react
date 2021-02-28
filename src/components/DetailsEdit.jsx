@@ -4,12 +4,13 @@ import { useHistory } from "react-router-dom";
 import {Link} from "react-router-dom";
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Facebook,Default } from 'react-spinners-css';
-
+import swal from 'sweetalert';
 
 const DetailsEdit = (props) => {
     const[item,setItem] = useState({});
     const [imgs,setImgs] = useState([]);
     const[fetching,setFetching] = useState(true);
+    const [suggestions,setSuggestions] = useState([]);
     const [done, setDone] = useState({
         imgsUpload : false,
         imgDelete : false,    
@@ -38,13 +39,11 @@ const DetailsEdit = (props) => {
         
             try {
                 const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}`,config);
-                // console.log(res.data)
                 setItem(res.data);
                 setFetching(false);
   
             } catch (error) {
                 setFetching(false);
-                // console.log(error)
             }
         }
   
@@ -53,12 +52,16 @@ const DetailsEdit = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // console.log('submitted');
 
         isFormloading(true);
 
         const form = new FormData(e.target);
         const token = localStorage.getItem('token');
+        
+        const coordinates = suggestions.filter(itm => itm.place_name === item.location)
+
+        form.append("latitude",coordinates[0].center[0])
+        form.append("longitude",coordinates[0].center[1])
 
         const config = {
             headers: {
@@ -70,8 +73,6 @@ const DetailsEdit = (props) => {
             axios.put(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}/`,form,config)
 
             .then(res => {
-                // console.log('updated')
-                // console.log(res.data)
                 isFormloading(false)
                 history.push(`/items/details/${res.data.slug}`)
     
@@ -79,8 +80,6 @@ const DetailsEdit = (props) => {
             })
             .catch(err => {
                 isFormloading(false)
-                // console.log("sorry no update")
-                // console.log(err)
             })
 
 
@@ -100,8 +99,6 @@ const DetailsEdit = (props) => {
     }
 
     const deleteFunc = (e,img_id,item_id) => {
-        // const id = e.target.dataset.id;
-        // const item_id = e.target.dataset.item;
         
         setDone(()=> {
             return {
@@ -117,7 +114,6 @@ const DetailsEdit = (props) => {
         form.append('img_id',img_id)
         form.append('item_id',item_id)
 
-        // const action = 'remove_img';
 
         const token = localStorage.getItem('token');
 
@@ -131,8 +127,7 @@ const DetailsEdit = (props) => {
             axios.post(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}/`,form,config)
 
             .then(res => {
-                // console.log('deleted')
-                // console.log(res.data)
+
                 setItem(res.data)
                 setDone (() => {
                     return {
@@ -142,13 +137,12 @@ const DetailsEdit = (props) => {
                         isDelLoading: false
                     }
                 })
-                // history.push(`/items/details/${res.data.slug}`)
+                swal("Deleted!", "The picture has been deleted", "success")
     
         
             })
             .catch(err => {
-                // console.log("sorry no delete")
-                // console.log(err)
+
                 setDone (() => {
                     return {
                         imgsUpload: false,
@@ -157,6 +151,7 @@ const DetailsEdit = (props) => {
                         isDelLoading : false
                     }
                 })
+                swal("Failed!", "Can't delete this right now. Try again!!", "error")
             })
 
 
@@ -173,15 +168,10 @@ const DetailsEdit = (props) => {
                 isDelLoading : false,
             }
         })
-        // e.preventDefault();
         const form = new FormData(e.target);
         form.append('action','add_img');
         form.append('item_id',item_id);
-        // const img = form.get('photos');
-        // console.log(img);
-
  
-        // form.append('action','add_img');
         const token = localStorage.getItem('token');
 
         const config = {
@@ -195,8 +185,6 @@ const DetailsEdit = (props) => {
             axios.post(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}/`,form,config)
 
             .then(res => {
-                // console.log('deleted')
-                // console.log(res.data)
                 setItem(res.data)
                 e.target.reset();
                 setImgs([]);
@@ -208,13 +196,9 @@ const DetailsEdit = (props) => {
                         isDelLoading : false,
                     }
                 })
-                // history.push(`/items/details/${res.data.slug}`)
-    
         
             })
             .catch(err => {
-                // console.log("sorry no delete")
-                // console.log(err)
                 setDone (() => {
                     return {
                         imgsUpload: false,
@@ -246,138 +230,203 @@ const DetailsEdit = (props) => {
 
     const renderImgs = (source) => {
         return source.map((photo) => {
-            // console.log(photo);
             return (
             <img src={photo} key = {photo} alt=""   />
             )
         })
     }
 
+    const searchPlaces = (value) => {
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/`;
+        const token = `pk.eyJ1Ijoia2F1c2hhbDAyMyIsImEiOiJja2w4N2c4YWIyeTNzMnBxbzVtZGQwZGpyIn0.wneZVDJgjz_WlJQ40guy_Q`;
+
+        const fullUrl = url + value + '.json?access_token=' + token;
+
+        axios.get(fullUrl)
+        .then((res) => {
+            console.log(res)
+            setSuggestions(res.data.features)
+        })
+        .catch((err)=> {
+            console.log(err)
+        })
+    }
+
+    const getLocation = (e) => {
+        searchPlaces(e.target.value)
+        setItem((prevValue) => {
+            return {
+                ...prevValue,
+                location:e.target.value
+            }
+        })
+    }
+
+
     return (
         <>
         {
-            fetching ? 
+        fetching ? 
             <div className="loading_loading">
                 <Default color = "rgb(230, 43, 83)" size = {200} />
             </div>
             :
-        <>
-        {
-            item === undefined ?
-            <div className="loading_loading">
-           <Facebook color = "rgb(230, 43, 83)" size = {200} />
-            </div>
-            :
-
-        <div className="container">
-            {
-                formloading? 
-                <div className="loading_loading">
-                    <Default color = "rgb(230, 43, 83)" size = {200} />
-                </div>:
             <>
-                <Link className = "btn btn-danger" to = {`/items/details/${item.slug}`}>Go back to the post</Link>
-                <form onSubmit={handleSubmit} className = "contact_form" action="#">
-                    <select name="category" className = "form_input" value = {item.category} onChange = {myFunc} >
-                        <option value="room">Room</option>
-                        <option value="flat">Flat</option>
-                        <option value="house">House</option>
-                        <option value="hostel">Hostel</option>
-                        <option value="land">Land</option>
-                    </select>
-                    <input name = 'headline' className = "form_input" type="text" value = {item.headline} onChange = {myFunc} placeholder="Headline" autoComplete = 'off' />
-                    <input name = 'location' className = "form_input" type="text" value = {item.location} onChange = {myFunc} placeholder="District" autoComplete = 'off' />
-                    <input name = 'city' className = "form_input" type="text" value = {item.city} onChange = {myFunc} placeholder="City" autoComplete = 'off'/>
-                    <input name = 'price' className = "form_input" type="number" value = {item.price} onChange = {myFunc} placeholder="Price" autoComplete = 'off'/>
-                    <textarea name="details" className = "form_input" cols="30" rows="10" value = {item.details} onChange = {myFunc} placeholder ="Details"></textarea>
-                    {/* <label htmlFor="photos">Add Pictures:</label>
-                    <input type="file" name="photos" className = "form_input" value = {item.} multiple /> */}
-                    <button className = "contact_button">Add</button>
-                </form>
-                </>
-            }
-
-            <div className="img_update">
-                    {   
-
-                        done.imgsUpload ? <h4> Pic updated successfully </h4> : null
-                    }
-
+            {
+                item === undefined ?
+                    <div className="loading_loading">
+                    <Facebook color = "rgb(230, 43, 83)" size = {200} />
+                    </div>
+                :
+                <div className="container">
                     {
-                        done.imgDelete? <h4> Pic deleted successfully</h4> : null
-                    }
-            </div>
-
-                <div className="image_area">
-
-                    {
-                        item.images === undefined ?
-                        <Default color = "rgb(230, 43, 83)" size = {100} />
+                        formloading? 
+                        <div className="loading_loading">
+                            <Default color = "rgb(230, 43, 83)" size = {200} />
+                        </div>
                         :
-                        item.images.map((img,index) => {
-                            return(
-                                <div key = {index}>
-                                    <div className="pp">
-                                    <img  src={`${process.env.REACT_APP_HEROKU_URL}${img.image}`} alt="img" srcSet="" height = '300px' width = '300px'/>
-                                    </div>
+                        <>
+                            <Link className = "btn btn-danger" to = {`/items/details/${item.slug}`}>Go back to the post</Link>
+                            <form onSubmit={handleSubmit} className = "contact_form" action="#">
+                                <select name="category" className = "form_input" value = {item.category} onChange = {myFunc} >
+                                    <option value="room">Room</option>
+                                    <option value="flat">Flat</option>
+                                    <option value="house">House</option>
+                                    <option value="hostel">Hostel</option>
+                                    <option value="land">Land</option>
+                                </select>
+                                <input name = 'headline'
+                                className = "form_input" type="text" value = {item.headline} 
+                                onChange = {myFunc} placeholder="Headline" autoComplete = 'off' />
 
-                                <form onSubmit={(e) => { e.preventDefault();  deleteFunc(e,img.id,img.item)}} className = "contact_form" action="#">
-                                    {/* {
-                                        done.isDelLoading? <Default color = "rgb(230, 43, 83)" size = {70} /> : null
-                                    } */}
-                                    <input type="text" hidden/> 
-                                
+                                <input name = 'location' 
+                                className = "form_input" 
+                                type="text" 
+                                placeholder="District" 
+                                value = {item.location}
+                                onChange = {getLocation}
+                                list = "location"
+                                autoComplete = 'off' />
+                                    <datalist id="location">
+                                        {
+                                            suggestions.map((item,index) => {
+                                                return(
+                                                    <option key = {index} value={item.place_name} />
+                                                )
+                                            })
+                                        }
+                                    </datalist>
+
+                                <input name = 'price' className = "form_input" type="number" 
+                                value = {item.price} onChange = {myFunc} placeholder="Price" autoComplete = 'off'/>
+
+                                <textarea name="details" className = "form_input" cols="30" rows="10" 
+                                value = {item.details} onChange = {myFunc} placeholder ="Details"></textarea>
+                                <button className = "contact_button">Add</button>
+                            </form>
+                        </>
+                    }
+
+                    <div className="img_update">
+                            {   
+
+                                done.imgsUpload ? <h4> Pic updated successfully </h4> : null
+                            }
+
+                            {
+                                // done.imgDelete? <h4> Pic deleted successfully</h4> : null
+                            }
+                    </div>
+
+                        <div className="image_area">
+
+                            <div className="image_area_backend">
+
                                 {
-                                done.isDelLoading ? 
-                                <button className = "contact_button" disabled> <DeleteIcon /> </button>
-                                :
-                                <button className = "contact_button" > <DeleteIcon /> </button>
+                                    item.images === undefined ?
+                                    <Default color = "rgb(230, 43, 83)" size = {100} />
+                                    :
+                                    item.images.map((img,index) => {
+                                        return(
+                                            <div key = {index}>
+                                                <div className="pp">
+                                                    <img  src={`${img.image}`} alt="img" srcSet="" height = '300px' width = '300px'/>
+                                                </div>
+
+                                                <form onSubmit={(e) => 
+                                                    {   
+                                                        e.preventDefault();
+                                                        swal({
+                                                            title: "Are you sure?",
+                                                            text: "Are you sure that you want to delete this?",
+                                                            icon: "warning",
+                                                            dangerMode: true,
+                                                        })
+                                                        .then(willLogOut => {
+                                                            if (willLogOut) {
+                                                                deleteFunc(e,img.id,img.item)
+                                                            }
+                                                        })
+                                                    
+                                                    }} 
+                                                
+                                                    className = "contact_form" action="#" style ={{height:"10%"}}>
+
+                                                    <input type="text" hidden/> 
+                                                
+                                                    {
+                                                    done.isDelLoading ? 
+                                                    <button className = "contact_button" disabled> <DeleteIcon /> </button>
+                                                    :
+                                                    <button className = "contact_button" > <DeleteIcon /> </button>
+                                                    }
+
+                                                </form>
+                                        
+                                            </div>
+                                        )
+                                    })
+                                
                                 }
 
-                                </form>
-                                {/* <button className = 'btn btn-primary' data-id = {img.id} data-item = {img.item}  onClick ={deleteFunc} >delete</button> */}
-                              
+
+                            </div>
+
+                            <form onSubmit={(e)=>{e.preventDefault(); addFunc(e,item.id)}} className = "contact_form" action="#">
+                                {
+                                    done.isAddLoading? <Default color = "rgb(230, 43, 83)" size = {70} /> : null
+                                }
+                                <input type="file" name="photos" 
+                                className = "form_input" 
+                                // accept="image/png, image/jpeg"
+                                multiple 
+                                onChange = {imgChange}/> 
+                                
+                                <div className="pics">
+                                    {
+                                        renderImgs(imgs)
+                                    }
                                 </div>
-                            )
-                        })
-                       
-                    }
+                                    {
+                                        done.isAddLoading || imgs.length === 0 ? 
+                                        <button className = "contact_button mt-3" disabled >Add</button>
+                                        :
+                                        <button className = "contact_button mt-3"  >Add</button>
+                                    }
+                            </form>
 
-                    <form onSubmit={(e)=>{e.preventDefault(); addFunc(e,item.id)}} className = "contact_form" action="#">
-                        {
-                            done.isAddLoading? <Default color = "rgb(230, 43, 83)" size = {70} /> : null
-                        }
-                        <input type="file" name="photos" 
-                        className = "form_input" 
-                        // accept="image/png, image/jpeg"
-                        multiple 
-                        onChange = {imgChange}/> 
                         
-                        <div className="pics">
-                            {
-                                renderImgs(imgs)
-                            }
                         </div>
-                            {
-                                done.isAddLoading || imgs.length === 0 ? 
-                                <button className = "contact_button mt-3" disabled >Add</button>
-                                :
-                                <button className = "contact_button mt-3"  >Add</button>
-                            }
-                    </form>
 
-                   
+                    <br/>
+                    <br/> <br/> <br/> <br/> <br/> <br/>
+
                 </div>
 
-            <br/>
-            <br/> <br/> <br/> <br/> <br/> <br/>
-
-        </div>
-
-        }        
+            }        
+            </>
+        }
         </>
-    }
-    </>
     )
 }
 

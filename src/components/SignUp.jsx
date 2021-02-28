@@ -23,34 +23,18 @@ function Signup({ onAuthSignup }) {
     <>
       <div className="container">
         <form onSubmit={handleSubmit} className="contact_form" action="#">
-          <input
-            name="username"
-            className="form_input"
-            type="text"
-            placeholder="Username"
-            autoComplete="off"
-          />
-          <input
-            name="email"
-            className="form_input"
-            type="email"
-            placeholder="Email"
-            autoComplete="off"
-          />
-          <input
-            name="password1"
-            className="form_input"
-            type="password"
-            placeholder="Password"
-            autoComplete="off"
-          />
-          <input
-            name="password2"
-            className="form_input"
-            type="password"
-            placeholder="Confirm Password"
-            autoComplete="off"
-          />
+
+          <input name="username" className="form_input" type="text"
+            placeholder="Username" autoComplete="off"/>
+
+          <input name="email" className="form_input" type="email"
+            placeholder="Email" autoComplete="off"/>
+
+          <input name="password1" className="form_input" type="password"
+            placeholder="Password" autoComplete="off"/>
+          <input name="password2" className="form_input" type="password"
+            placeholder="Confirm Password" autoComplete="off"/>
+
           <button className="contact_button">Signup</button>
         </form>
       </div>
@@ -72,20 +56,12 @@ function Login({ onAuthLogin }) {
     <>
       <div className="container">
         <form onSubmit={handleSubmit} className="contact_form" action="#">
-          <input
-            name="username"
-            className="form_input"
-            type="text"
-            placeholder="Username"
-            autoComplete="off"
-          />
-          <input
-            name="password"
-            className="form_input"
-            type="password"
-            placeholder="Password"
-            autoComplete="off"
-          />
+          <input name="username" className="form_input" type="text"
+            placeholder="Username" autoComplete="off"/>
+
+          <input name="password" className="form_input" type="password"
+            placeholder="Password" autoComplete="off"/>
+
           <button className="contact_button">Sign In</button>
         </form>
       </div>
@@ -132,58 +108,52 @@ const Register = ({
         <div className="categories_profile">
           <div className="btn-group btn-group-toggle" data-toggle="buttons">
             <label className="btn btn-outline-dark active">
-              <input
-                type="radio"
-                name="options"
-                checked
+              <input type="radio" name="options" checked
                 onClick={() => {
                   setWhichRender("signup");
                   clearError();
                 }}
-                readOnly
-              />{" "}
-              Signup
-            </label>
+                readOnly/> Signup </label>
+
             <label className="btn btn-outline-dark">
-              <input
-                type="radio"
-                name="options"
+              <input type="radio" name="options"
                 onClick={() => {
                   setWhichRender("login");
                   clearError();
                 }}
-                readOnly
-              />{" "}
-              Login
-            </label>
+                readOnly/> Login </label>
           </div>
         </div>
       </div>
-      {isLoading ? (
+
+      {isLoading ?
         <div className="loading_loading">
           <Facebook color="rgb(230, 43, 83)" size={200} />
         </div>
-      ) : (
+      :
         <>
           <div className="register_messages ">
-            {errormsg !== null ? (
-              <p>{errormsg}</p>
-            ) : (
-              <>
-                <p>
-                  {" "}
-                  Registration Successful. Please visit your profile to provide
-                  some informations.{" "}
-                </p>
-                <Link to="/profile" className="btn btn-primary">
-                  Visit Profile{" "}
-                </Link>
-              </>
-            )}
+              {
+                errormsg !== null ?
+                <p>{errormsg}</p>
+                :
+                <>
+                  <p>
+                    Registration Successful. Please visit your profile to provide
+                    some informations.
+                  </p>
+
+                  <Link to="/profile" className="btn btn-primary">
+                    Visit Profile
+                  </Link>
+                </>
+              }
           </div>
 
           <div className="register_area container">
-            {whichRender === "signup" ? <NewSignup /> : <NewLogin />}
+            {
+              whichRender === "signup" ? <NewSignup /> : <NewLogin />
+            }
             <div className="social_login">
               <FacebookLogin
                 appId="710285926273589"
@@ -193,7 +163,7 @@ const Register = ({
             </div>
           </div>
         </>
-      )}
+      }
     </>
 }
 </>

@@ -14,11 +14,20 @@ import { Default } from "react-spinners-css";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-const UserProfilee = ({ isAuthenticated }) => {
+import swal from 'sweetalert';
+
+import { useHistory } from "react-router-dom";
+import * as actions from '../store/actions/auth';
+
+import HouseIcon from '@material-ui/icons/House';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+
+const UserProfilee = ({ isAuthenticated, onAuthLogout }) => {
   const [item, setItem] = useState({});
   const [roomiePost, setRoomiePost] = useState();
   const [condn, setCondn] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const history = useHistory();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,14 +41,16 @@ const UserProfilee = ({ isAuthenticated }) => {
       };
 
       try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_HEROKU_URL}/profile/`,
-          config
-        );
-        setItem(res.data);
-        setFetching(false);
-      } catch (error) {
-        setFetching(false);
+          const res = await axios.get(
+            `${process.env.REACT_APP_HEROKU_URL}/profile/`,
+            config
+          );
+          setItem(res.data);
+          console.log(res.data)
+          setFetching(false);
+        } 
+        catch (error) {
+          setFetching(false);
       }
     };
 
@@ -64,7 +75,7 @@ const UserProfilee = ({ isAuthenticated }) => {
       setRoomiePost(res.data);
       // setItem(res.data);
     } catch (error) {
-      // console.log(error)
+      console.log(error)
     }
   };
 
@@ -78,189 +89,185 @@ const UserProfilee = ({ isAuthenticated }) => {
     }
   };
 
+  const logoutFunc = () => {
+    swal({
+      title: "Are you sure?",
+      text: "Are you sure that you want to log out?",
+      icon: "warning",
+      dangerMode: true,
+    })
+    .then(willLogOut => {
+      if (willLogOut) {
+        swal("Logged Out!", "You have been logged out!", "success")
+        .then(okay => {
+          onAuthLogout();
+          history.push('/');
+        })
+      }
+    })
+}
+
   return (
-      <>
-    {
-      isAuthenticated !== true?
-      <Redirect to = "/"/>
-      :
     <>
-      {fetching ? (
-        <div className="loading_loading">
-          <Default color="rgb(230, 43, 83)" size={150} />
-        </div>
-      ) : (
+      {
+        isAuthenticated !== true?
+        <Redirect to = "/"/>
+        :
         <>
-          {item === undefined ? (
-            <h2> Loading </h2>
-          ) : (
+          {
+            fetching ? 
+              <div className="loading_loading">
+                <Default color="rgb(230, 43, 83)" size={150} />
+              </div>
+            : 
             <>
-              {item.phone ? null : (
-                <h4
-                  style={{
-                    marginTop: "5vh",
-                    textAlign: "center",
-                    color: "#e96443",
-                  }}
-                >
-                  {" "}
-                  || Please edit your profile to provide some required
-                  informations ||{" "}
-                </h4>
-              )}
-              <div className="container ">
-                <div className="row py-5 px-4">
-                  <div className="col-md-5 mx-auto">
-                    <div className="bg-white shadow rounded overflow-hidden">
-                      <div className="px-4 pt-0 pb-4 cover">
-                        <div className="media align-items-end profile-head">
-                          <div className="profile mr-3">
-                            <img
-                              src={`${process.env.REACT_APP_HEROKU_URL}${item.avatar}`}
-                              alt="..."
-                              width="130"
-                              className="rounded mb-2 img-thumbnail"
-                            />
-                            <Link
-                              to="/profile/edit"
-                              className="btn btn-outline-dark btn-sm btn-block"
-                            >
-                              Edit profile
-                            </Link>
+              { item === undefined ?
+                <h2> Loading </h2>
+                :
+                <>
+                  {item.phone ? null :
+
+                    <div className="container" style = {{marginTop : "10vh"}}>
+                      <div className="roomie_link_wrapper">
+                          <div className="roomie_link_inside">
+                              <h5> PLease update your profile to provide some required informations .</h5>
+                              <Link to = {`/profile/edit`} className = "btn btn-primary" > Update Profile </Link>
                           </div>
-                          <div className="media-body mb-5 text-white">
-                            <h4 className="mt-0 mb-0">
-                              {" "}
-                              {item.first_name && item.last_name
-                                ? `${item.first_name} ${item.last_name}`
-                                : item.get_username}
-                            </h4>
-                            <p className="small mb-4">
-                              {" "}
-                              <i className="fas fa-map-marker-alt mr-2"></i> @
-                              {item.get_username}{" "}
-                            </p>
-                          </div>
-                        </div>
                       </div>
+                    </div>
 
-                      {/* do not remove this div */}
-                      <div className="bg-light p-4 d-flex justify-content-end text-center"></div>
+                  }
+                  <div className="container ">
+                    <div className="row py-5 px-4">
+                      <div className="col-md-12 mx-auto">
+                        <div className="bg-white shadow rounded overflow-hidden">
+                          <div className="px-4 pt-0 pb-4 cover">
+                            <div className="media profile-head">
+                              <div className="profile">
+                                <img
+                                  src={`${item.avatar}`}
+                                  alt="..."
+                                  width="180"
+                                  className="rounded mb-2 img-thumbnail"
+                                />
+                                <div className="btnssss" style = {{display:"flex",gap:"1rem"}}>
+                                  <Link
+                                    to="/profile/edit"
+                                    className="btn btn-outline-dark "
+                                  > Edit profile</Link>
 
-                      <div className="px-4 py-3">
-                        <Link
-                          to="/logout"
-                          className="btn btn-outline-dark btn-sm btn-block"
-                        >
-                          Logout
-                        </Link>
+                                  <button className="btn btn-outline-dark " onClick = {logoutFunc}> Logout </button>
 
-                        <h5 className="mb-0">Contact</h5>
+                                </div>
+                              </div>
 
-                        <div className="p-4 rounded shadow-sm bg-light">
-                          <span className="contact_info">
-                            <PhoneIcon
-                              fontSize="large"
-                              style={{ color: "#d8223b" }}
-                            />
-                            <p className="font-italic mb-0">
-                              {" "}
-                              - {item.phone ? item.phone : `not provided`}{" "}
-                            </p>
-                          </span>
+                              <div className="media-body text-white">
+                                <h4 className="mt-0 mb-0">
+                                  {item.first_name && item.last_name
+                                    ? `${item.first_name} ${item.last_name}`
+                                    : item.get_username}
+                                </h4>
 
-                          <span className="contact_info">
-                            <EmailIcon
-                              fontSize="large"
-                              style={{ color: "#d8223b" }}
-                            />
-                            <p className="font-italic mb-0"> - {item.email} </p>
-                          </span>
+                                <p className="small">
+                                  <i className="fas fa-map-marker-alt mr-2"></i> @
+                                  {item.get_username}
+                                </p>
 
-                          <span className="contact_info_social">
-                            <a
-                              href={
-                                item.facebook_link ? item.facebook_link : `#`
-                              }
-                            >
-                              <FacebookIcon
-                                fontSize="large"
-                                style={{ color: "#d8223b" }}
-                              />
-                            </a>
+                              </div>
+                            </div>
+                          </div>
 
-                            <a
-                              href={item.twitter_link ? item.twitter_link : `#`}
-                            >
-                              <TwitterIcon
-                                fontSize="large"
-                                style={{ color: "#d8223b" }}
-                              />
-                            </a>
+                          {/* do not remove this div */}
+                          <div className="bg-light p-4 d-flex justify-content-end text-center"></div>
 
-                            <a
-                              href={
-                                item.instagram_link ? item.instagram_link : "#"
-                              }
-                            >
-                              <InstagramIcon
-                                fontSize="large"
-                                style={{ color: "#d8223b" }}
-                              />
-                            </a>
-                          </span>
+                          <div className="px-4 my-5">
+                            <h5 className="mb-0">Contact</h5>
+
+                            <div className="py-4 rounded shadow-sm bg-light">
+                              <span className="contact_info">
+                                <PhoneIcon
+                                  fontSize="large"
+                                  style={{ color: "#d8223b" }}
+                                />
+                                <p >
+                                  - {item.phone ? item.phone : `not provided`}
+                                </p>
+                              </span>
+
+                              <span className="contact_info">
+                                <EmailIcon
+                                  fontSize="large"
+                                  style={{ color: "#d8223b" }}
+                                />
+                                <p className = "profile_email"> - {item.email} </p>
+                              </span>
+
+                              <span className="contact_info_social">
+                                <a href={ item.facebook_link ? item.facebook_link : `#`}>
+                                  <FacebookIcon
+                                    fontSize="large"
+                                    style={{ color: "#d8223b" }}
+                                  />
+                                </a>
+
+                                <a href={item.twitter_link ? item.twitter_link : `#`}>
+                                  <TwitterIcon
+                                    fontSize="large"
+                                    style={{ color: "#d8223b" }}
+                                  />
+                                </a>
+
+                                <a href={item.instagram_link ? item.instagram_link : "#"}>
+                                  <InstagramIcon
+                                    fontSize="large"
+                                    style={{ color: "#d8223b" }}
+                                  />
+                                </a>
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              <div className=" container">
-                <div className="categories_profile">
-                  <div
-                    className="btn-group btn-group-toggle"
-                    data-toggle="buttons"
-                  >
-                    <label className="btn btn-outline-dark active">
-                      <input
-                        type="radio"
-                        name="options"
-                        id="room"
-                        checked
-                        data-action="items"
-                        onClick={showPosts}
-                        readOnly
-                      />{" "}
-                      Items
-                    </label>
-                    <label className="btn btn-outline-dark">
-                      <input
-                        type="radio"
-                        name="options"
-                        id="flat"
-                        data-action="roomie"
-                        onClick={showPosts}
-                        readOnly
-                      />{" "}
-                      Roomie
-                    </label>
+                  <div className=" container">
+                    <div className="categories_profile">
+                      <div className="btn-group btn-group-toggle" data-toggle="buttons">
+
+                        <label className="btn btn-outline-dark active">
+                          <input type="radio" name="options" id="room" checked
+                            data-action="items" onClick={showPosts} readOnly
+                          /> Items <HouseIcon />
+                        </label>
+                        
+                        <label className="btn btn-outline-dark">
+                          <input type="radio" name="options" id="flat"
+                            data-action="roomie" onClick={showPosts} readOnly
+                          /> Roomie <PeopleAltIcon />
+                        </label>
+                        
+                      </div>
+                    </div>
+
+                      {
+                        condn ? 
+                        <Results items={roomiePost} linkSlug={`rdetails`} 
+                        btnText = "Add To"
+                        />
+                        : 
+                        <Results items={item.item_model} linkSlug={`items/details`} 
+                        btnText = "Add To"
+                        />
+                      }
                   </div>
-                </div>
-
-                {condn ? (
-                  <Results items={roomiePost} linkSlug={`rdetails`} />
-                ) : (
-                  <Results items={item.item_model} linkSlug={`items/details`} />
-                )}
-              </div>
+                </>
+              }
             </>
-          )}
+          }
         </>
-      )}
+      }
     </>
-}
-</>
   );
 };
 
@@ -270,6 +277,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-const UserProfile = connect(mapStateToProps, null)(UserProfilee);
+const mapDispatchToProps =(dispatch) => {
+  return {
+      onAuthLogout: () => dispatch(actions.logout()),
+      
+  }
+}
+
+const UserProfile = connect(mapStateToProps, mapDispatchToProps)(UserProfilee);
 
 export default UserProfile;

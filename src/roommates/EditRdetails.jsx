@@ -4,12 +4,14 @@ import { useHistory } from "react-router-dom";
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Facebook,Default } from 'react-spinners-css';
 import {Link} from "react-router-dom";
-
+import swal from 'sweetalert';
 
 const RDetailsEdit = (props) => {
     const[item,setItem] = useState({});
     const [imgs,setImgs] = useState([]);
     const[fetching,setFetching] = useState(true);
+    const [suggestions,setSuggestions] = useState([]);
+
     const [done, setDone] = useState({
         imgsUpload : false,
         imgDelete : false,    
@@ -31,18 +33,16 @@ const RDetailsEdit = (props) => {
                 headers: {
                     "Content-Type" : "application/json",
                     Authorization : `Bearer ${token}`
+                }
             }
-        }
         
             try {
                 const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}`,config);
-                // console.log(res.data)
                 setItem(res.data);
                 setFetching(false);
   
             } catch (error) {
                 setFetching(false);
-                // console.log(error)
             }
         }
   
@@ -57,6 +57,11 @@ const RDetailsEdit = (props) => {
         const form = new FormData(e.target);
         const token = localStorage.getItem('token');
 
+        const coordinates = suggestions.filter(itm => itm.place_name === item.location)
+
+        form.append("latitude",coordinates[0].center[0])
+        form.append("longitude",coordinates[0].center[1])
+
         const config = {
             headers: {
                 "Content-Type" : "application/json",
@@ -67,17 +72,11 @@ const RDetailsEdit = (props) => {
             axios.put(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,form,config)
 
             .then(res => {
-                // console.log('updated')
-                // console.log(res.data)
                 isFormloading(false)
                 history.push(`/rdetails/${res.data.slug}`);
-    
-        
             })
             .catch(err => {
                 isFormloading(false)
-                // console.log("sorry no update")
-                // console.log(err)
             })
 
 
@@ -97,8 +96,6 @@ const RDetailsEdit = (props) => {
     }
 
     const deleteFunc = (e,img_id,item_id) => {
-        // const id = e.target.dataset.id;
-        // const item_id = e.target.dataset.item;
         setDone(()=> {
             return {
                 imgsUpload : false,
@@ -113,8 +110,6 @@ const RDetailsEdit = (props) => {
         form.append('img_id',img_id)
         form.append('item_id',item_id)
 
-        // const action = 'remove_img';
-
         const token = localStorage.getItem('token');
 
         const config = {
@@ -127,8 +122,6 @@ const RDetailsEdit = (props) => {
             axios.post(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,form,config)
 
             .then(res => {
-                // console.log('deleted')
-                // console.log(res.data)
                 setItem(res.data)
                 setDone(()=> {
                     return {
@@ -138,9 +131,8 @@ const RDetailsEdit = (props) => {
                         isDelLoading: false,
                     }
                 })
-                // history.push(`/items/details/${res.data.slug}`)
+                swal("Deleted!", "The picture has been deleted", "success")
     
-        
             })
             .catch(err => {
                 setDone(()=> {
@@ -151,16 +143,12 @@ const RDetailsEdit = (props) => {
                         isDelLoading: false,
                     }
                 })
-                // console.log("sorry no delete")
-                // console.log(err)
+                swal("Failed!", "Can't delete this right now. Try again!!", "error")
             })
-
-
     }
 
 
     const addFunc = (e,item_id) => {
-        // e.preventDefault();
 
         setDone(()=> {
             return {
@@ -173,11 +161,7 @@ const RDetailsEdit = (props) => {
         const form = new FormData(e.target);
         form.append('action','add_img');
         form.append('item_id',item_id);
-        // const img = form.get('photos');
-        // console.log(img);
 
- 
-        // form.append('action','add_img');
         const token = localStorage.getItem('token');
 
         const config = {
@@ -187,12 +171,10 @@ const RDetailsEdit = (props) => {
                 Authorization : `Bearer ${token}`
         }
         }
-    
             axios.post(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,form,config)
 
             .then(res => {
-                // console.log('deleted')
-                // console.log(res.data)
+
                 setItem(res.data)
                 e.target.reset();
                 setImgs([]);
@@ -204,9 +186,6 @@ const RDetailsEdit = (props) => {
                         isDelLoading: false,
                     }
                 })
-                // history.push(`/items/details/${res.data.slug}`)
-    
-        
             })
             .catch(err => {
                 setDone(()=> {
@@ -217,14 +196,11 @@ const RDetailsEdit = (props) => {
                         isDelLoading: false,
                     }
                 })
-                // console.log("sorry no delete")
-                // console.log(err)
             })
 
     }
 
     const imgChange = (e) => {
-        // console.log(e.target.files);
 
         setImgs([]);  // this clears the previously selected imgs
 
@@ -248,148 +224,207 @@ const RDetailsEdit = (props) => {
         })
     }
 
+    const searchPlaces = (value) => {
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/`;
+        const token = `pk.eyJ1Ijoia2F1c2hhbDAyMyIsImEiOiJja2w4N2c4YWIyeTNzMnBxbzVtZGQwZGpyIn0.wneZVDJgjz_WlJQ40guy_Q`;
+
+        const fullUrl = url + value + '.json?access_token=' + token;
+
+        axios.get(fullUrl)
+        .then((res) => {
+            console.log(res)
+            setSuggestions(res.data.features)
+        })
+        .catch((err)=> {
+            console.log(err)
+        })
+    }
+
+    const getLocation = (e) => {
+        searchPlaces(e.target.value)
+        // setLocation(e.target.value);
+        setItem((prevValue) => {
+            return {
+                ...prevValue,
+                location:e.target.value
+            }
+        })
+    }
+
     return (
         <>
-        {
-            fetching ? 
-            <div className="loading_loading">
-                <Default color = "rgb(230, 43, 83)" size = {200} />
-            </div>
-            :
-        <>
-        {
-            item === undefined ?
-            <div className="loading_loading">
-                <Facebook color = "rgb(230, 43, 83)" size = {200} />
-            </div>
-            :
-            <div className="container">
-
-            {     
-               formloading? 
-               <div className="loading_loading">
-                   <Default color = "rgb(230, 43, 83)" size = {200} />
-               </div>
-               :
-            <>  
-            <Link className = "btn btn-danger" to = {`/rdetails/${item.slug}`}>Go back to the post</Link>
-            <form onSubmit={handleSubmit} className = "contact_form" action="#">
-                <select name="category" className = "form_input" value = {item.category} onChange = {myFunc} >
-                    <option value="room">Room</option>
-                    <option value="flat">Flat</option>
-                    <option value="house">House</option>
-                    <option value="hostel">Hostel</option>
-                    <option value="land">Land</option>
-                </select>
-                <input name = 'headline' className = "form_input" type="text" value = {item.headline} onChange = {myFunc} placeholder="Headline" autoComplete = 'off' />
-                <input name = 'location' className = "form_input" type="text" value = {item.location} onChange = {myFunc} placeholder="District" autoComplete = 'off' />
-                <input name = 'city' className = "form_input" type="text" value = {item.city} onChange = {myFunc} placeholder="City" autoComplete = 'off'/>
-                
-                <select name="price_range" className = "form_input" value = {item.price_range} onChange = {myFunc} >
-                    <option value="0-5000">0-5000</option>
-                    <option value="5001-10,000">5001-10,000</option>
-                    <option value="10001-15000">10001-15000</option>
-                    <option value="15001-20000">15001-20000</option>
-                    <option value="20000+">20000+</option>
-                </select>
-
-                <select name="sex_pref" className = "form_input" value = {item.sex_pref} onChange = {myFunc} >
-                    <option value="male">male</option>
-                    <option value="female">female</option>
-                    <option value="male/female">male/female</option>
-                </select>
-
-                <select name="age_pref" className = "form_input" value = {item.age_pref} onChange = {myFunc} >
-                    <option value="15-20">15-20</option>
-                    <option value="21-25">21-25</option>
-                    <option value="26-30">26-30</option>
-                    <option value="31-35">31-35</option>
-                    <option value="36-40">36-40</option>
-                    <option value="40+">40+</option>
-                </select>
-
-                <textarea name="details" className = "form_input" cols="30" rows="10" value = {item.details} onChange = {myFunc} placeholder ="Details"></textarea>
-                <button className = "contact_button">Add</button>
-            </form>
-            </>
-            }
-
-            <div className="img_update">
-                    {   
-
-                        done.imgsUpload ? <h4> Pic updated successfully </h4> : null
-                    }
-
-                    {
-                        done.imgDelete? <h4> Pic deleted successfully</h4> : null
-                    }
-            </div>
-
-                <div className="image_area">
-                    {
-                        item.images === undefined ?
-                        <Default color = "rgb(230, 43, 83)" size = {100} />
-                        :
-                        item.images.map((img,index) => {
-                            return(
-                                <div key = {index}>
-                                <div className="pp">
-                                <img  src={`${process.env.REACT_APP_HEROKU_URL}${img.image}`} alt="img" srcSet="" height = '300px' width = '300px'/>
-                                </div>
-
-                                <form onSubmit={(e) => { e.preventDefault();  deleteFunc(e,img.id,img.roomie)}} className = "contact_form" action="#">
-                                    {/* {
-                                        done.isDelLoading? <Default color = "rgb(230, 43, 83)" size = {70} /> : null
-                                    } */}
-                                    <input type="text" hidden/> 
-                                
-                                {
-                                    done.isDelLoading ? 
-                                    <button className = "contact_button" disabled> <DeleteIcon /> </button>
-                                    :
-                                    <button className = "contact_button" > <DeleteIcon /> </button>
-                                }
-
-                                </form>
-                                {/* <button className = 'btn btn-primary' data-id = {img.id} data-item = {img.item}  onClick ={deleteFunc} >delete</button> */}
-                                </div>
-                            )
-                        })
-                    }
-
-                    <form onSubmit={(e)=>{e.preventDefault(); addFunc(e,item.id)}} className = "contact_form" action="#">
-                        {
-                            done.isAddLoading? <Default color = "rgb(230, 43, 83)" size = {70} /> : null
-                        }
-                        <input type="file" name="photos" 
-                        className = "form_input" 
-                        // accept="image/png, image/jpeg"
-                        multiple 
-                        onChange = {imgChange}/> 
-
-                        <div className="pics">
-                            {
-                                renderImgs(imgs)
-                            }
-                        </div>
-                        {
-                                done.isAddLoading || imgs.length === 0 ? 
-                                <button className = "contact_button mt-3" disabled >Add</button>
-                                :
-                                <button className = "contact_button mt-3"  >Add</button>
-                        }
-                    </form>
+            {
+                fetching ? 
+                <div className="loading_loading">
+                    <Default color = "rgb(230, 43, 83)" size = {200} />
                 </div>
+                :
+                <>
+                {
+                    item === undefined ?
+                        <div className="loading_loading">
+                            <Facebook color = "rgb(230, 43, 83)" size = {200} />
+                        </div>
+                    :
+                    <div className="container">
+                    {     
+                        formloading? 
+                        
+                        <div className="loading_loading">
+                            <Default color = "rgb(230, 43, 83)" size = {200} />
+                        </div>
+                    :
+                    <>  
+                        <Link className = "btn btn-danger" to = {`/rdetails/${item.slug}`}>Go back to the post</Link>
+                        <form onSubmit={handleSubmit} className = "contact_form" action="#">
+                            <select name="category" className = "form_input" value = {item.category} onChange = {myFunc} >
+                                <option value="room">Room</option>
+                                <option value="flat">Flat</option>
+                                <option value="house">House</option>
+                                <option value="hostel">Hostel</option>
+                                <option value="land">Land</option>
+                            </select>
+                            <input name = 'headline' className = "form_input" type="text" value = {item.headline} onChange = {myFunc} placeholder="Headline" autoComplete = 'off' />
+                            <input name = 'location' 
+                                className = "form_input" 
+                                type="text" 
+                                placeholder="District" 
+                                value = {item.location}
+                                onChange = {getLocation}
+                                list = "location"
+                                autoComplete = 'off' />
+                                    <datalist id="location">
+                                        {
+                                            suggestions.map((item,index) => {
+                                                return(
+                                                    <option key = {index} value={item.place_name} />
+                                                )
+                                            })
+                                        }
+                                    </datalist>
 
-            <br/>
-            <br/> <br/> <br/> <br/> <br/> <br/>
+                            
+                            <select name="price_range" className = "form_input" value = {item.price_range} onChange = {myFunc} >
+                                <option value="0-5000">0-5000</option>
+                                <option value="5001-10,000">5001-10,000</option>
+                                <option value="10001-15000">10001-15000</option>
+                                <option value="15001-20000">15001-20000</option>
+                                <option value="20000+">20000+</option>
+                            </select>
 
-        </div>
-        }        
+                            <select name="sex_pref" className = "form_input" value = {item.sex_pref} onChange = {myFunc} >
+                                <option value="male">male</option>
+                                <option value="female">female</option>
+                                <option value="male/female">male/female</option>
+                            </select>
+
+                            <select name="age_pref" className = "form_input" value = {item.age_pref} onChange = {myFunc} >
+                                <option value="15-20">15-20</option>
+                                <option value="21-25">21-25</option>
+                                <option value="26-30">26-30</option>
+                                <option value="31-35">31-35</option>
+                                <option value="36-40">36-40</option>
+                                <option value="40+">40+</option>
+                            </select>
+
+                            <textarea name="details" className = "form_input" cols="30" rows="10" value = {item.details} onChange = {myFunc} placeholder ="Details"></textarea>
+                            <button className = "contact_button">Add</button>
+                        </form>
+                    </>
+                    }
+
+                    <div className="img_update">
+                            {   
+
+                                done.imgsUpload ? <h4> Pic updated successfully </h4> : null
+                            }
+
+                            {
+                                // done.imgDelete? <h4> Pic deleted successfully</h4> : null
+                            }
+                    </div>
+
+                        <div className="image_area">
+                            <div className="image_area_backend">
+                            {
+                                item.images === undefined ?
+                                <Default color = "rgb(230, 43, 83)" size = {100} />
+                                :
+                                item.images.map((img,index) => {
+                                    return(
+                                        <div key = {index}>
+                                            <div className="pp">
+                                            <img  src={`${img.image}`} alt="img" srcSet="" height = '300px' width = '300px'/>
+                                        </div>
+
+                                        <form onSubmit={(e) => 
+                                        { e.preventDefault();  
+                                            swal({
+                                                title: "Are you sure?",
+                                                text: "Are you sure that you want to delete this?",
+                                                icon: "warning",
+                                                dangerMode: true,
+                                            })
+                                            .then(willLogOut => {
+                                                if (willLogOut) {
+                                                    deleteFunc(e,img.id,img.roomie)
+                                                }
+                                            })
+                                            // deleteFunc(e,img.id,img.roomie)
+                                        }} 
+                                        className = "contact_form" action="#" style ={{height:"10%"}}>
+                                            {/* {
+                                                done.isDelLoading? <Default color = "rgb(230, 43, 83)" size = {70} /> : null
+                                            } */}
+                                            <input type="text" hidden/> 
+                                        
+                                        {
+                                            done.isDelLoading ? 
+                                            <button className = "contact_button" disabled> <DeleteIcon /> </button>
+                                            :
+                                            <button className = "contact_button" > <DeleteIcon /> </button>
+                                        }
+
+                                        </form>
+                                        {/* <button className = 'btn btn-primary' data-id = {img.id} data-item = {img.item}  onClick ={deleteFunc} >delete</button> */}
+                                        </div>
+                                    )
+                                })
+                            }
+                            </div>
+
+
+                            <form onSubmit={(e)=>{e.preventDefault(); addFunc(e,item.id)}} className = "contact_form" action="#">
+                                {
+                                    done.isAddLoading? <Default color = "rgb(230, 43, 83)" size = {70} /> : null
+                                }
+                                <input type="file" name="photos" 
+                                className = "form_input" 
+                                // accept="image/png, image/jpeg"
+                                multiple 
+                                onChange = {imgChange}/> 
+
+                                <div className="pics">
+                                    {
+                                        renderImgs(imgs)
+                                    }
+                                </div>
+                                {
+                                        done.isAddLoading || imgs.length === 0 ? 
+                                        <button className = "contact_button mt-3" disabled >Add</button>
+                                        :
+                                        <button className = "contact_button mt-3"  >Add</button>
+                                }
+                            </form>
+                        </div>
+
+                    <br/> <br/> <br/> <br/> <br/> <br/> <br/>
+
+                </div>
+                }        
+                </>
+            }
         </>
-    }
-    </>
-    )
-}
+)}
 
 export default RDetailsEdit;

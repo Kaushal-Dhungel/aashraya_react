@@ -5,9 +5,17 @@ import axios from 'axios';
 import HomeIcon from '@material-ui/icons/Home';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import RoomIcon from '@material-ui/icons/Room';
+import HotelIcon from '@material-ui/icons/Hotel';
+import HouseIcon from '@material-ui/icons/House';
+import LandscapeIcon from '@material-ui/icons/Landscape';
+import SchoolIcon from '@material-ui/icons/School';
+
 import { Default } from 'react-spinners-css';
 
-const Navbar = ({city}) => {
+import {addCart} from './Auth';
+
+const Navbar = ({city,minPrice,maxPrice}) => {
 
     const[items,setItems] = useState([]);
     const[cat,setCat] = useState('room')
@@ -18,69 +26,73 @@ const Navbar = ({city}) => {
             try {
                 const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/items/${cat}`,{
                     params: {
-                      city
+                      city,
+                      minPrice,
+                      maxPrice
                     }
                   });
-                // console.log(res.data)
                 setItems(res.data);
                 setFetching(false)
   
             } catch (error) {
             setFetching(false)
-                // console.log(error)
             }
         }
   
         fetchData();
-    },[cat,city]);
+    },[cat,city,minPrice,maxPrice]);
  
 
     const categories = (e) => {
-        // console.log(e.target.dataset.action);
-        // setItems(e.target.dataset.action);
         setCat(e.target.dataset.action)
+
     }
 
     return (
         <>
-        <div className="categories">
-        <div className="btn-group btn-group-toggle" data-toggle="buttons">
-            <label className="btn btn-outline-dark active">
-                <input type="radio" name="options" id="room" checked data-action = "room" onClick = {categories} readOnly /> Rooms
-            </label>
-            <label className="btn btn-outline-dark">
-                <input type="radio" name="options" id="flat" data-action = "flat" onClick = {categories} readOnly /> Flats
-            </label>
-            <label className="btn btn-outline-dark">
-                <input type="radio" name="options" id="house" data-action = "house" onClick = {categories} readOnly /> Homes
-            </label>
-            <label className="btn btn-outline-dark">
-                <input type="radio" name="options" id="hostel" data-action = "hostel" onClick = {categories} readOnly /> Hostels
-            </label>
-            <label className="btn btn-outline-dark">
-                <input type="radio" name="options" id="land" data-action = "land" onClick = {categories} readOnly /> Lands
-            </label>
-        </div>
-        </div>
-        
-        {
-            fetching ? 
-            <div className="loading_loading">
-                <Default color = "rgb(230, 43, 83)" size = {150} />
+            <div className="categories">
+                <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label className="btn btn-outline-dark active">
+                        <input type="radio" name="options" id="room" checked data-action = "room" onClick = {categories} readOnly /> Rooms <HotelIcon />
+                    </label>
+
+                    <label className="btn btn-outline-dark">
+                        <input type="radio" name="options" id="flat" data-action = "flat" onClick = {categories} readOnly /> Flats <RoomIcon />
+                    </label>
+
+                    <label className="btn btn-outline-dark">
+                        <input type="radio" name="options" id="house" data-action = "house" onClick = {categories} readOnly /> Homes <HouseIcon />
+                    </label>
+
+                    <label className="btn btn-outline-dark">
+                        <input type="radio" name="options" id="hostel" data-action = "hostel" onClick = {categories} readOnly /> Hostels <SchoolIcon />
+                    </label>
+                    
+                    <label className="btn btn-outline-dark">
+                        <input type="radio" name="options" id="land" data-action = "land" onClick = {categories} readOnly /> Lands <LandscapeIcon />
+                    </label>
+                </div>
             </div>
-            :
-            <Results items = {items} 
-            linkSlug = {`items/details`}
-            />    
-        }
-   
+        
+            {
+                fetching ? 
+                <div className="loading_loading">
+                    <Default color = "rgb(230, 43, 83)" size = {150} />
+                </div>
+                :
+                <Results items = {items} 
+                linkSlug = {`items/details`}
+                btnText = "Add To"
+                />    
+            }
+    
         
         </>
     )
 }
 
-export const Results = ({items,linkSlug}) => {
-   
+export const Results = ({items,linkSlug,btnText}) => {
+
 
     const GetBlogs = () => {
         let list = [];
@@ -92,30 +104,43 @@ export const Results = ({items,linkSlug}) => {
         items.map(item => {
             return list.push(
                 <div className="card" >
-                {
-                    item.images.length === 0 ?
-                <img className="card-img-top" src={`https://images.unsplash.com/photo-1606474165573-2fa973b42c21?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80`} alt = "" />
-                    :
-                <img className="card-img-top" src={`${process.env.REACT_APP_HEROKU_URL}${item.images[0].image}`} alt = "" height = "300px"  />
-                }
-                <div className="card-body">
-                    <span className="card_location">
-                        <LocationOnIcon />
-                       <p>{item.city}</p> 
-                    </span>
+                    {
+                        item.images.length === 0 ?
+                    <img className="card-img-top" src={`https://images.unsplash.com/photo-1606474165573-2fa973b42c21?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80`} alt = "" />
+                        :
+                    <img className="card-img-top" src={`${item.images[0].image}`} alt = "" height = "300px"  />
+                    }
+                    <div className="card-body">
+                        <span className="card_location">
+                            <LocationOnIcon />
+                        <p>{item.location.split(",")[0]}</p> 
+                        </span>
 
-                    <span className="card_location">
-                        <HomeIcon />
-                        <p>{item.category}</p>
-                    </span>
+                        <span className="card_location">
+                            <HomeIcon />
+                            <p>{item.category}</p>
+                        </span>
 
-                    <span className="card_location">
-                        <AttachMoneyIcon />
-                        <p>{item.price? item.price : item.price_range}</p>
-                    </span>
-                    <h4 className="card-title"> {item.headline} </h4>
-                    <Link to= {`/${linkSlug}/${item.slug}`} className="btn btn-primary">See Details</Link>
-                </div>
+                        <span className="card_location">
+                            <AttachMoneyIcon />
+                            <p>{item.price? item.price : item.price_range}</p>
+                        </span>
+                        <h4 className="card-title"> {item.headline} </h4>
+
+                        <div className="card_buttons"
+                        style = {{
+                            display :"flex",
+                            gap : "1rem"
+                        }}
+                        >
+                            <Link to= {`/${linkSlug}/${item.slug}`} className="btn btn-primary">See Details</Link>
+                            <button onClick = {addCart} className="btn btn-secondary"
+                            data-set={linkSlug === "items/details"? "items" : "roomie"}
+                            data-id = {`${item.id}`}
+                            data-action = "add"
+                            >{btnText} Cart</button>
+                        </div>
+                    </div>
             </div>
             );
         });
@@ -132,23 +157,20 @@ export const Results = ({items,linkSlug}) => {
             )
         }
         return result.length === 0 ? 
-        <div className="not_available" style = {{height: "40vh"}}>
-        <h2 style = {{marginTop: "10vh",textAlign : "center"}}> No items posted</h2>
+        <div className="not_available" style = {{minHeight: "60vh"}}>
+            <h2 style = {{marginTop: "10vh",textAlign : "center"}}> No items posted</h2>
         </div> :
         result
-        // return list
         
     }
 
 
     return (
         <>
-
-    {
-        
-        GetBlogs()
-    }
-    </>
+            {
+                GetBlogs()
+            }
+        </>
     )
     
 }

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { addItemFunc} from './Auth';
-// import { useHistory } from "react-router-dom";
 import {Link} from "react-router-dom";
 import { connect } from 'react-redux';
 import { Facebook } from 'react-spinners-css';
@@ -10,7 +9,8 @@ import { Facebook } from 'react-spinners-css';
 export const Updateitem =({actionFunc,url}) => {
 
     const [imgs,setImgs] = useState([]);
-    // const history = useHistory();
+    const [location,setLocation] = useState('');
+    const [suggestions,setSuggestions] = useState([]);
     const [done, setDone] = useState({
         isSuccess : false,
         slug : "",
@@ -32,6 +32,16 @@ export const Updateitem =({actionFunc,url}) => {
 
         const form = new FormData(e.target);
 
+        const coordinates = suggestions.filter(item => item.place_name === location)
+
+        form.append("latitude",coordinates[0].center[0])
+        form.append("longitude",coordinates[0].center[1])
+
+        const abc = location.split(",")
+        const bcd = abc.map(item => item.trim())
+        const val = bcd.join(",")
+
+        form.append("location", val)
         const token = localStorage.getItem('token');
 
         const config = {
@@ -45,9 +55,6 @@ export const Updateitem =({actionFunc,url}) => {
         axios.post(url, form,config)
     
         .then(res => {
-            // console.log('Added')
-            // console.log(res)
-            // console.log(res.data.slug);
             e.target.reset();
 
             setImgs([]);
@@ -60,8 +67,6 @@ export const Updateitem =({actionFunc,url}) => {
                 }
 
             } );
-
-            // history.push(res.data.slug)
             
         })
         .catch(err => {
@@ -73,8 +78,6 @@ export const Updateitem =({actionFunc,url}) => {
                     isError: true
                 }
             } )
-            // console.log("sorry no addition")
-            // console.log(err)
         })
 
     }
@@ -86,7 +89,6 @@ export const Updateitem =({actionFunc,url}) => {
 
         if (e.target.files){
             const fileArray = Array.from(e.target.files).map((file) => URL.createObjectURL(file))
-            // console.log(fileArray);
             setImgs((prevImgs) => prevImgs.concat(fileArray));
 
             Array.from(e.target.files).map(
@@ -95,19 +97,34 @@ export const Updateitem =({actionFunc,url}) => {
         }
     }
 
-    // const removeImg = (e) => {
-    //     console.log(e.target.dataset.value)
-    //     const removeItem = e.target.dataset.value;
-    //     setImgs((prevImgs) => prevImgs.filter(elem => elem !== removeItem))
-    // }
 
     const renderImgs = (source) => {
         return source.map((photo) => {
-            // console.log(photo);
             return (
             <img src={photo} key = {photo} alt=""  />
             )
         })
+    }
+
+    const searchPlaces = (value) => {
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/`;
+        const token = `pk.eyJ1Ijoia2F1c2hhbDAyMyIsImEiOiJja2w4N2c4YWIyeTNzMnBxbzVtZGQwZGpyIn0.wneZVDJgjz_WlJQ40guy_Q`;
+
+        const fullUrl = url + value + '.json?access_token=' + token;
+
+        axios.get(fullUrl)
+        .then((res) => {
+            console.log(res)
+            setSuggestions(res.data.features)
+        })
+        .catch((err)=> {
+            console.log(err)
+        })
+    }
+
+    const getLocation = (e) => {
+        searchPlaces(e.target.value)
+        setLocation(e.target.value);
     }
 
     return (
@@ -145,8 +162,23 @@ export const Updateitem =({actionFunc,url}) => {
                     <option value="land">Land</option>
                 </select>
                 <input name = 'headline' className = "form_input" type="text" placeholder="Headline" autoComplete = 'off' />
-                <input name = 'location' className = "form_input" type="text" placeholder="District" autoComplete = 'off' />
-                <input name = 'city' className = "form_input" type="text" placeholder="City" autoComplete = 'off'/>
+                <input name = 'location' 
+                    className = "form_input" 
+                    type="text" 
+                    placeholder="District" 
+                    value = {location}
+                    onChange = {getLocation}
+                    list = "location"
+                    autoComplete = 'off' />
+                        <datalist id="location">
+                            {
+                                suggestions.map((item,index) => {
+                                    return(
+                                        <option key = {index} value={item.place_name} />
+                                    )
+                                })
+                            }
+                        </datalist>
                 <input name = 'price' className = "form_input" type="number" placeholder="Price" autoComplete = 'off'/>
                 <textarea name="details" className = "form_input" cols="30" rows="10" placeholder ="Details"></textarea>
 
@@ -198,5 +230,3 @@ const mapStateToProps = (state) => {
 }
 
 export default connect (mapStateToProps,null) (AddItem);
-
-// export default AddItem;
