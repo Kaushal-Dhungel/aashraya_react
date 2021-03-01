@@ -8,7 +8,8 @@ import { Default } from 'react-spinners-css';
 
 import Modal from 'react-modal';
 import CancelIcon from '@material-ui/icons/Cancel';
-import ReactMapGL ,{ Marker } from 'react-map-gl';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import ReactMapGL ,{ Marker } from '!react-map-gl';
 import {addCart} from './Auth';
 
 
