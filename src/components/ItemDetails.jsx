@@ -8,9 +8,14 @@ import { Default } from 'react-spinners-css';
 
 import Modal from 'react-modal';
 import CancelIcon from '@material-ui/icons/Cancel';
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import ReactMapGL ,{ Marker } from '!react-map-gl';
 import {addCart} from './Auth';
+
+import ReactMapGL ,{ Marker } from 'react-map-gl';
+import mapboxgl from "mapbox-gl"; // This is a dependency of react-map-gl even if you didn't explicitly install it
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
+
 
 
 Modal.setAppElement('#root');
