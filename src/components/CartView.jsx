@@ -119,7 +119,6 @@ const CartView = ({isAuthenticated}) => {
       };
         try {
             const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/items/cartview`,config);
-            console.log(res.data)
             setItems(res.data);
               setFetching(false)
         } 
@@ -169,7 +168,7 @@ const showPosts = (e) => {
         minHeight: "80vh"
       }}>
         <h3> Please do register before using this feature. Click below to register. </h3> 
-        <Link className="btn btn-outline-success" to={'/register'}>Register</Link>
+        <Link className="btn btn-outline-secondary" to={'/register'}>Register</Link>
       </div>
       :
         <>
@@ -180,7 +179,7 @@ const showPosts = (e) => {
                   <Link className="btn btn-outline-success" to={'/shop'}>Shop</Link>
               </div> */}
                 
-                <div className="col-lg-12">
+                <div className="col-lg-12 mt-5">
                   <div className="box-element">
                     {/* <Link  className="btn btn-outline-dark" to="/shop">&#x2190; Continue Shopping</Link> */}
                     

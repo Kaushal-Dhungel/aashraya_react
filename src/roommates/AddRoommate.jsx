@@ -146,7 +146,7 @@ export const UpdateRoomie =({url}) => {
                     </div>:
                     null   
                 }
-                <div className="container">
+                <div className="container mt-5">
                     <form onSubmit={handleSubmit} className = "contact_form" action="#">
                         <select name="category" className = "form_input">
                             <option value="room">Room</option>

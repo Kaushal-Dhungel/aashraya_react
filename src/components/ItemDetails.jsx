@@ -44,7 +44,6 @@ const ItemDetail = (props)=> {
         const fetchData = async () => {
             try {
                 const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}`);
-                console.log(res.data)
                 setItem(res.data);
                 setViewport((prevValue)=> {
                    return {
@@ -90,22 +89,22 @@ const ItemDetail = (props)=> {
         setShowPic(true)
     }
 
-    const getWidth = () => {
+    // const getWidth = () => {
 
-            const width = parseInt(window.screen.width)
-             if (width < 321)
-                 return "280px"
+    //         const width = parseInt(window.screen.width)
+    //          if (width < 321)
+    //              return "280px"
              
-             else if ( width >= 321 && width < 376)
-                return "310px"
+    //          else if ( width >= 321 && width < 376)
+    //             return "310px"
      
-             else if (width >= 376 && width < 426)
-                 return "380px"
+    //          else if (width >= 376 && width < 426)
+    //              return "380px"
      
-             else 
-                 return "450px"
+    //          else 
+    //              return "450px"
 
-    }
+    // }
 
     return (
         <>
@@ -202,8 +201,12 @@ const ItemDetail = (props)=> {
                                     <ReactMapGL
                                         {...viewport}
                                         mapboxApiAccessToken = {token}
-                                        width = {getWidth()}
+                                        width = "290px"
                                         height = "300px"
+                                        style = {{
+                                            width : "290px",
+                                            height : "300px"
+                                        }}
                                         mapStyle = 'mapbox://styles/kaushal023/cklgwa17c009a18rxu3mdies2'
                                         onViewportChange={(viewport) => setViewport(viewport)}
                                         >

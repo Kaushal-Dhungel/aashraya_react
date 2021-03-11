@@ -46,7 +46,6 @@ const UserProfilee = ({ isAuthenticated, onAuthLogout }) => {
             config
           );
           setItem(res.data);
-          console.log(res.data)
           setFetching(false);
         } 
         catch (error) {
@@ -147,7 +146,7 @@ const UserProfilee = ({ isAuthenticated, onAuthLogout }) => {
                                 <img
                                   src={`${item.avatar}`}
                                   alt="..."
-                                  width="180"
+
                                   className="rounded mb-2 img-thumbnail"
                                 />
                                 <div className="btnssss" style = {{display:"flex",gap:"1rem"}}>

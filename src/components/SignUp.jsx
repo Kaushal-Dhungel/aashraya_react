@@ -25,17 +25,17 @@ function Signup({ onAuthSignup }) {
         <form onSubmit={handleSubmit} className="contact_form" action="#">
 
           <input name="username" className="form_input" type="text"
-            placeholder="Username" autoComplete="off"/>
+            placeholder="Username" autoComplete="off" required/>
 
           <input name="email" className="form_input" type="email"
-            placeholder="Email" autoComplete="off"/>
+            placeholder="Email" autoComplete="off" required/>
 
           <input name="password1" className="form_input" type="password"
-            placeholder="Password" autoComplete="off"/>
+            placeholder="Password" autoComplete="off"required/>
           <input name="password2" className="form_input" type="password"
-            placeholder="Confirm Password" autoComplete="off"/>
+            placeholder="Confirm Password" autoComplete="off" required/>
 
-          <button className="contact_button">Signup</button>
+          <button className="btn btn-secondary">Signup</button>
         </form>
       </div>
     </>
@@ -62,7 +62,7 @@ function Login({ onAuthLogin }) {
           <input name="password" className="form_input" type="password"
             placeholder="Password" autoComplete="off"/>
 
-          <button className="contact_button">Sign In</button>
+          <button className="btn btn-secondary">Sign In</button>
         </form>
       </div>
     </>
@@ -128,7 +128,7 @@ const Register = ({
 
       {isLoading ?
         <div className="loading_loading">
-          <Facebook color="rgb(230, 43, 83)" size={200} />
+          <Facebook color="#343a40" size={200} />
         </div>
       :
         <>
@@ -156,7 +156,7 @@ const Register = ({
             }
             <div className="social_login">
               <FacebookLogin
-                appId="710285926273589"
+                appId={`${process.env.REACT_APP_FB_APP_ID}`}
                 fields="name,email,picture"
                 callback={responseFacebook}
               />

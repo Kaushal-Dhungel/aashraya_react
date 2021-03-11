@@ -194,7 +194,7 @@ const ProfileEdit = ( {isAuthenticated}) => {
                   }
 
 
-                  <div className="container">
+                  <div className="container mt-5">
                     {formloading ? 
                       <div className="loading_loading">
                         <Default color="rgb(230, 43, 83)" size={200} />

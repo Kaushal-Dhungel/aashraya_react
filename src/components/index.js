@@ -1,4 +1,4 @@
-import Home ,{Footer} from './Home';
+import Home from './Home';
 import Item from './Items';
 import ItemDetail from './ItemDetails'
 import Profile from './Profile'
@@ -11,6 +11,8 @@ import ProfileEdit from './ProfileEdit';
 import DetailsEdit from './DetailsEdit';
 import Registration from './SignUp';
 import CartView from './CartView';
+import { Footer } from './Components';
+
 
 export {
     MainNav,

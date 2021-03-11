@@ -266,7 +266,7 @@ const RDetailsEdit = (props) => {
                             <Facebook color = "rgb(230, 43, 83)" size = {200} />
                         </div>
                     :
-                    <div className="container">
+                    <div className="container mt-5">
                     {     
                         formloading? 
                         

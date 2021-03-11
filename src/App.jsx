@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 const App = ({onTryAutoSignup}) => {
 
     useEffect(()=> {
-        console.log("loaded");
         onTryAutoSignup();
     },[onTryAutoSignup])
 

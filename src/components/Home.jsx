@@ -4,54 +4,26 @@ import {Link} from "react-router-dom";
 import homeImg from '../imgs/home2.png';
 import homeImgTwo from '../imgs/home1.png';
 import roomieImg from '../imgs/roomie2.png';
-import Modal from 'react-modal';
 import {hideModal} from '../store/actions/auth';
 import { connect } from "react-redux";
-import CancelIcon from '@material-ui/icons/Cancel';
 import axios from 'axios'
 import SearchIcon from '@material-ui/icons/Search';
 
-export function Footer(){
-    return (
-        <div className="footer">
-                <p>Aashraya Ⓒ 2020. All Rights Reserved. </p>
-        </div>
-    )
-}
+import { Grid } from "react-spinners-css";
 
-const Belowlanding = ({popular}) => {
-    return (
-        <div className = "container mt-5 ">
-            <div className="row team-area">
-                {
-                    popular.map((item,index)=>{
-                        return(
-                            <div key = {index} className="col-6 col-sm-4 col-md-3 mt-5">
-                                <div className="single-team">
-                                    <img src={`${item.image}`} alt=""/>
-                                    <div className="team-text">
-                                        <h2>{item.city.split(",")[0]}</h2>
-                                        {/* <p> Look Cool In Summer</p> */}
-                                        <Link className="btn btn-outline-secondary small-btn" to={`/items/${item.city_slug}`}>See Items</Link>
-                                    </div>
-                                </div>
-                            </div>
- 
-                        )
-                    })
-                }
+import { Belowlanding } from './Components';
 
-            </div>
-        </div>
-    )}
-
-Modal.setAppElement('#root');
+import { Slide, Bounce, JackInTheBox, Rotate } from "react-awesome-reveal";
 
 const Home = ({showModal,hidemodal})=> {
     const [searchValue,setSearchValue] = useState('');
     const [popular,setPopular] = useState([]);
     const [testi,setTesti] = useState([]);
     const [suggestions,setSuggestions] = useState([]);
+    const [fetching,setFetching] = useState({
+        popular:true,
+        testi : true,
+    })
     const history = useHistory()
     // const[modalIsOpen,setModalIsOpen] = useState(true);
 
@@ -60,7 +32,14 @@ const Home = ({showModal,hidemodal})=> {
             try {
                 const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/core/popular/`);
                 setPopular(res.data);
-            } catch (error) {
+                setFetching((prevVal)=> {
+                    return {
+                        ...prevVal,
+                        popular:false
+                    }
+                })
+            } 
+            catch (error) {
                 console.log(error)
             }
         }
@@ -69,6 +48,12 @@ const Home = ({showModal,hidemodal})=> {
             try {
                 const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/core/testimonial/`);
                 setTesti(res.data);
+                setFetching((prevVal)=> {
+                    return {
+                        ...prevVal,
+                        testi:false
+                    }
+                })
             } catch (error) {
                 console.log(error)
             }
@@ -108,131 +93,115 @@ const Home = ({showModal,hidemodal})=> {
     }
 
     return (
+        fetching.popular & fetching.testi ?
+            <div className="loading_loading">
+                <JackInTheBox duration = "2500">
+                    <Grid color="#343a40" size={200} />
+                </JackInTheBox>
+        </div>
+      :
         <>
+            <div className="landing bg-dark">
+                <JackInTheBox>
+                    <div className="text_part">
+                        <h2> Find great places and people to live with. </h2>
+                        <div className="search">
+                            <input 
+                            className = "formStyle bg-dark"
+                            type="search"
+                            value = {searchValue}
+                            onChange={handleChange}
+                            list="cityname"
+                            placeholder = "Search your city. Example:- Haldibari "
+                            required
+                            />
+                            <datalist id="cityname">
+                                {
+                                    suggestions.map((item,index) => {
+                                        return(
+                                            <option key = {index} value={item.place_name} />
+                                        )
+                                    })
+                                }
+                            </datalist>
+                            <button className = "btn btn-secondary mt-4 ml-3" 
+                                disabled = {searchValue === ''}
+                                onClick = {mySubmitHandler}>
+                                search <SearchIcon />
+                            </button>
 
-        <Modal 
-        isOpen = {showModal}
-        style={{
-            overlay: {
-              backgroundColor: 'rgba(17, 13, 14, 0.507)',
-                height:'100vh',
-                // width:'500px',
+                        </div>
 
-            },
-            content: {
-            color: 'black'
-            }
-        }}
-        >
-            <h4 style = {{textAlign:"center",textDecoration:"underline"}}>Important</h4>
-            <h6> Welcome to Aashraya. This is a web platform to search for rooms,hostel,flat,home,land and roommate. 
-            Use Keyword "Haldibari" to see the results.  
-            <br/> <br/>
-            This app is still in development mode. The frontend is written in React and is hosted in netlify. 
-            I am unable to add some features like google maps, places auto complete, suggestions, 
-            because google cloud doesn't support card from Nepal. 
-            <br/> <br/>
-            Similarly, the backend is written in Django Rest Framework and is hosted in heroku. 
-            The media files (images) are not shown because heroku automatically removes the media files. 
-            I wanted to use Amazon S3 to serve those media files but once again Amazon didn't accept the card 
+                    </div>
+                </JackInTheBox>
 
-            <br/> <br/>
-            Facebook Login works well for my account but doesn't work for others yet. So better not use it.
-            <br/> <br/>
-            Hopefully All these issues will be solved in the coming days.
-            </h6>
-            <div className="close_btn" style = {{display:"flex",alignItems:"center",justifyContent:"center"}}>
-                <button onClick = {()=> hidemodal()}> <CancelIcon/> </button>
-            </div>
-        </Modal>
-
-
-        <div className="landing">
-            <div className="text_part">
-                <h3> Find great places and people to live with. </h3>
-                <div className="search">
-                    <input 
-                    className = "form_input"
-                    type="search"
-                    value = {searchValue}
-                    onChange={handleChange}
-                    list="cityname"
-                    placeholder = "Search your city. Example:- Haldibari "
-                    required
-                    />
-                    <datalist id="cityname">
-                        {
-                            suggestions.map((item,index) => {
-                                return(
-                                    <option key = {index} value={item.place_name} />
-                                )
-                            })
-                        }
-                    </datalist>
-                    <button onClick = {mySubmitHandler}>
-                        search <SearchIcon />
-                    </button>
-
-                </div>
+                <Bounce>
+                    <div className="logo_part">
+                        <img src={homeImg} alt="" height= "400px" width = "400px"/>
+                    </div>
+                </Bounce>
             </div>
 
-            <div className="logo_part">
-                <img src={homeImg} alt="" height= "400px" width = "400px"/>
-            </div>
-        </div>
+            <div className="container create_listing_room">
+                    <Slide>
+                        <div className="img_part">
+                            <img src={homeImgTwo} alt="" height= "300px" width = "300px"/>
+                        </div>
+                    </Slide>
 
-        <div className="container create_listing_room">
-                <div className="img_part">
-                    <img src={homeImgTwo} alt="" height= "300px" width = "300px"/>
-                </div>
-
-                <div className="listing_part">
-                    <h4> List Your Room So Others Can Rent It </h4>
-                    <Link to = '/additem' className="btn btn-primary">Add new Item </Link>
-
-                </div>
-        </div>
-
-        <div className="container create_listing_room">
-                
-                <div className="listing_part">
-                    <h4> Make Yourself Available As A Roomie </h4>
-                    <Link to = '/addroomie' className="btn btn-primary">List yourself </Link>
-                </div>
-
-                <div className="img_part">
-                    <img src={roomieImg} alt="" height= "300px" width = "300px"/>
-                </div>
-        </div>
-
-        <div className="popular_places" style = {{marginTop:"40vh"}}>
-            <h4 className = "testi_heading"> Popular Places </h4>
-            <Belowlanding popular = {popular} />
-        </div>
-
-        <div className="testimonial_section">
-            <h4 className = "testi_heading"> What Users Are Saying </h4>
-
-            <div className="testi">
-                {
-                    testi.map((item,index)=> {
-                        return (
-                            <div className="testi_box" key = {index}>
-                                <span className="top">
-                                    <img src={`${item.pic}`} alt=""/>
-                                    <h4> {item.name} </h4>
-                                    <p> {item.position} </p>
-                                </span>
-                                <span className="bottom">
-                                    <p>{item.words}</p>
-                                </span>
-                            </div>
-                        )
-                    })
-                }
+                    <Slide direction = "right">
+                        <div className="listing_part">
+                                <h4> List Your Room So Others Can Rent It </h4>
+                                <Link to = '/additem' className="btn btn-secondary">Add new Item </Link>
+                        </div>
+                    </Slide>
 
             </div>
-        </div>
+
+            <div className="container create_listing_room">
+                    <Rotate>
+                        <div className="listing_part">
+                            <h4> Make Yourself Available As A Roomie </h4>
+                            <Link to = '/addroomie' className="btn btn-secondary">List yourself </Link>
+                        </div>
+                    </Rotate>
+
+                    <Rotate>
+                        <div className="img_part">
+                            <img src={roomieImg} alt="" height= "300px" width = "300px"/>
+                        </div>
+                    </Rotate>
+                    
+            </div>
+
+            <div className="popular_places" style = {{marginTop:"40vh"}}>
+                <h4 className = "testi_heading"> Popular Places </h4>
+                    <Belowlanding popular = {popular} />
+            </div>
+
+            <div className="testimonial_section">
+                <h4 className = "testi_heading"> What Users Are Saying </h4>
+
+                <div className="testi">
+                    {
+                        testi.map((item,index)=> {
+                            return (
+                                <div className="testi_box" key = {index}>
+                                    <span className="top">
+                                        <img src={`${item.pic}`} alt=""/>
+                                        <h4> {item.name} </h4>
+                                        <p> {item.position} </p>
+                                    </span>
+                                    <span className="bottom">
+                                        <p>{item.words}</p>
+                                    </span>
+                                </div>
+                            )
+                        })
+                    }
+
+                </div>
+            </div>
 
         </>
     )
