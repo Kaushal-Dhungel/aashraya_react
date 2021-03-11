@@ -37,7 +37,7 @@ const Rdetail = (props)=> {
         zoom: 8
       });
 
-    const token = `pk.eyJ1Ijoia2F1c2hhbDAyMyIsImEiOiJja2w4N2c4YWIyeTNzMnBxbzVtZGQwZGpyIn0.wneZVDJgjz_WlJQ40guy_Q`;
+    const token = `${process.env.REACT_APP_MAPBOX_TOKEN}`;
 
     const slug = props.match.params.id 
 
@@ -95,7 +95,7 @@ const Rdetail = (props)=> {
             {
                 fetching ? 
                     <div className="loading_loading">
-                        <Default color = "rgb(230, 43, 83)" size = {200} />
+                        <Default color = "#343a40" size = {200} />
                     </div>
                 :
                 <>
@@ -189,8 +189,8 @@ const Rdetail = (props)=> {
                                         <ReactMapGL
                                             {...viewport}
                                             mapboxApiAccessToken = {token}
-                                            // width="100%"
-                                            // height="100%"
+                                            width = "290px"
+                                            height = "300px"
                                             mapStyle = 'mapbox://styles/kaushal023/cklgwa17c009a18rxu3mdies2'
                                             onViewportChange={(viewport) => setViewport(viewport)}
                                             >

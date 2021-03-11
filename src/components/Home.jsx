@@ -64,7 +64,7 @@ const Home = ({showModal,hidemodal})=> {
 
     const searchPlaces = (value) => {
         const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/`;
-        const token = `pk.eyJ1Ijoia2F1c2hhbDAyMyIsImEiOiJja2w4N2c4YWIyeTNzMnBxbzVtZGQwZGpyIn0.wneZVDJgjz_WlJQ40guy_Q`;
+        const token = `${process.env.REACT_APP_MAPBOX_TOKEN}`;
 
         const fullUrl = url + value + '.json?access_token=' + token;
 
