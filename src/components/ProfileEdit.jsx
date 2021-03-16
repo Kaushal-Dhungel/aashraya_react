@@ -171,21 +171,21 @@ const ProfileEdit = ( {isAuthenticated}) => {
           {
             fetching ? 
             <div className="loading_loading">
-              <Default color="rgb(230, 43, 83)" size={200} />
+              <Default color="#343a40" size={200} />
             </div>
             : 
             <>
               {
                 item === undefined ? 
                   <div className="loading_loading">
-                    <Facebook color="rgb(230, 43, 83)" size={200} />
+                    <Facebook color="#343a40" size={200} />
                   </div>
                 : 
                 <>
-                  {item.phone ? null : 
+                  { !item.phone ? null : 
 
                     <div className="container" style = {{marginTop : "10vh"}}>
-                      <div className="roomie_link_wrapper">
+                      <div className="box-element">
                           <div className="roomie_link_inside">
                               <h5> PLease update your phone so that it'd be easier for the potential client to contact you .</h5>
                           </div>
@@ -194,13 +194,15 @@ const ProfileEdit = ( {isAuthenticated}) => {
                   }
 
 
-                  <div className="container mt-5">
+                  <div className="container mt-5 box-element">
                     {formloading ? 
                       <div className="loading_loading">
-                        <Default color="rgb(230, 43, 83)" size={200} />
+                        <Default color="#343a40" size={200} />
                       </div>
                     :
                       <>
+                        <h4 className = "testi_heading"> Edit Your Profile </h4>
+
                         <form
                           onSubmit={handleSubmit}
                           className="contact_form"
@@ -227,7 +229,7 @@ const ProfileEdit = ( {isAuthenticated}) => {
                           <input name="instagram_link" className="form_input" type="text"
                             value={item.instagram_link} onChange={changeFn} placeholder="Instagram Link" autoComplete="off"/>
 
-                          <button className="contact_button">Update</button>
+                          <button className="btn btn-danger">Update</button>
                         </form>
                       </>
                     }
@@ -236,7 +238,7 @@ const ProfileEdit = ( {isAuthenticated}) => {
                       <div className="pp">
                         {
                           item.avatar === undefined ? 
-                            <Default color="rgb(230, 43, 83)" size={100} />
+                            <Default color="#343a40" size={100} />
                           :
                             <img
                               src={`${item.avatar}`}
@@ -258,19 +260,19 @@ const ProfileEdit = ( {isAuthenticated}) => {
                       >
                         {
                         done.isDelLoading ? 
-                          <Default color="rgb(230, 43, 83)" size={70} />
+                          <Default color="#343a40" size={70} />
                         : null
                         }
 
                         <input type="text" hidden />
                           {
                             done.isDelLoading ?
-                              <button className="contact_button" disabled>
+                              <button className="btn btn-danger" disabled>
                                 
                                 <DeleteIcon />
                               </button>
                             : 
-                              <button className="contact_button">
+                              <button className="btn btn-danger">
                                 
                                 <DeleteIcon />
                               </button>
@@ -287,7 +289,7 @@ const ProfileEdit = ( {isAuthenticated}) => {
                       >
                         {
                           done.isAddLoading ?
-                          <Default color="rgb(230, 43, 83)" size={70} />
+                          <Default color="#343a40" size={70} />
                           : null
                         }
                         <input
@@ -297,16 +299,11 @@ const ProfileEdit = ( {isAuthenticated}) => {
                           onChange={imgChange}
                         />
                         <div className="pics">{renderImgs(imgs)}</div>
-                        {
-                          done.isAddLoading || imgs.length === 0 ?
-                          <button className="contact_button mt-3" disabled>
-                            Change Pic
-                          </button>
-                          :
-                          <button className="contact_button mt-3">
-                            Change Pic
-                          </button>
-                        }
+
+                        <button className="btn btn-danger mt-3" 
+                          disabled = {done.isAddLoading || imgs.length === 0 ? true : false}
+                        > Change Pic </button>
+
                       </form>
                     </div>
                     <br />

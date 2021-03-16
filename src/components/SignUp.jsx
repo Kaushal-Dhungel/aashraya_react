@@ -21,7 +21,7 @@ function Signup({ onAuthSignup }) {
 
   return (
     <>
-      <div className="container">
+      <div className="container box-element">
         <form onSubmit={handleSubmit} className="contact_form" action="#">
 
           <input name="username" className="form_input" type="text"
@@ -54,7 +54,7 @@ function Login({ onAuthLogin }) {
 
   return (
     <>
-      <div className="container">
+      <div className="container box-element">
         <form onSubmit={handleSubmit} className="contact_form" action="#">
           <input name="username" className="form_input" type="text"
             placeholder="Username" autoComplete="off"/>
@@ -105,6 +105,8 @@ const Register = ({
     :
     <>
       <div className="container mt-3">
+        <h4 className = "testi_heading"> Register Here </h4>
+
         <div className="categories_profile">
           <div className="btn-group btn-group-toggle" data-toggle="buttons">
             <label className="btn btn-outline-dark active">

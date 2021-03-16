@@ -132,36 +132,38 @@ export const Updateitem =({actionFunc,url}) => {
        {
            done.isLoading?  
            <div className="loading_loading">
-           <Facebook color = "rgb(230, 43, 83)" size = {200} />
+           <Facebook color = "#343a40" size = {200} />
             </div>:
         <>
         {
             done.isSuccess ? 
-            <div className="container" >
+            <div className="container mt-5 box-element" >
                 <h3> Addition successful </h3>
-                <Link className = "btn btn-primary" to = {`/items/details/${done.slug}`} >See the post</Link>
+                <Link className = "btn btn-danger" to = {`/items/details/${done.slug}`} >See the post</Link>
             </div>:
             null   
         }
 
         {
             done.isError?
-            <div className="container">
-                <h3 style= {{textAlign:'center',margin: "4vh 0vh"}}> An unknown error occured. Please try later. </h3>
+            <div className="container mt-5 box-element">
+                <h3 style= {{textAlign:'center'}}> An unknown error occured. Please try later. </h3>
             </div>:
             null   
         }
 
-        <div className="container mt-5">
+        <div className="container mt-5 box-element">
+            <h4 className = "testi_heading"> Add an Item </h4>
+
             <form onSubmit={handleSubmit} className = "contact_form" action="#">
-                <select name="category" className = "form_input">
+                <select name="category" className = "form_input" >
                     <option value="room">Room</option>
                     <option value="flat">Flat</option>
                     <option value="house">House</option>
                     <option value="hostel">Hostel</option>
                     <option value="land">Land</option>
                 </select>
-                <input name = 'headline' className = "form_input" type="text" placeholder="Headline" autoComplete = 'off' />
+                <input name = 'headline' className = "form_input" type="text" placeholder="Headline" autoComplete = 'off' required />
                 <input name = 'location' 
                     className = "form_input" 
                     type="text" 
@@ -169,7 +171,7 @@ export const Updateitem =({actionFunc,url}) => {
                     value = {location}
                     onChange = {getLocation}
                     list = "location"
-                    autoComplete = 'off' />
+                    autoComplete = 'off' required/>
                         <datalist id="location">
                             {
                                 suggestions.map((item,index) => {
@@ -179,12 +181,12 @@ export const Updateitem =({actionFunc,url}) => {
                                 })
                             }
                         </datalist>
-                <input name = 'price' className = "form_input" type="number" placeholder="Price" autoComplete = 'off'/>
-                <textarea name="details" className = "form_input" cols="30" rows="10" placeholder ="Details"></textarea>
+                <input name = 'price' className = "form_input" type="number" placeholder="Price" autoComplete = 'off' required/>
+                <textarea name="details" className = "form_input" cols="30" rows="10" placeholder ="Details" required></textarea>
 
 
                 <label htmlFor="photos">Add Pictures:</label>
-                <input type="file" name="photos" className = "form_input" multiple onChange = {imgChange}  />
+                <input type="file" name="photos" className = "form_input" multiple onChange = {imgChange}  required/>
 
                 <div className="pics">
                     {
@@ -192,7 +194,7 @@ export const Updateitem =({actionFunc,url}) => {
                     }
                 </div>
 
-                <button className = "contact_button mt-3">Add</button>
+                <button className = "btn btn-secondary mt-3">Add</button>
             </form>
             <br/>
             <br/> <br/> <br/> <br/> <br/> <br/>

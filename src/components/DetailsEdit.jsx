@@ -268,160 +268,162 @@ const DetailsEdit = (props) => {
         {
         fetching ? 
             <div className="loading_loading">
-                <Default color = "rgb(230, 43, 83)" size = {200} />
+                <Default color = "#343a40" size = {200} />
             </div>
             :
             <>
             {
                 item === undefined ?
                     <div className="loading_loading">
-                    <Facebook color = "rgb(230, 43, 83)" size = {200} />
+                    <Facebook color = "#343a40" size = {200} />
                     </div>
                 :
-                <div className="container mt-5">
-                    {
-                        formloading? 
-                        <div className="loading_loading">
-                            <Default color = "rgb(230, 43, 83)" size = {200} />
-                        </div>
-                        :
-                        <>
-                            <Link className = "btn btn-danger" to = {`/items/details/${item.slug}`}>Go back to the post</Link>
-                            <form onSubmit={handleSubmit} className = "contact_form" action="#">
-                                <select name="category" className = "form_input" value = {item.category} onChange = {myFunc} >
-                                    <option value="room">Room</option>
-                                    <option value="flat">Flat</option>
-                                    <option value="house">House</option>
-                                    <option value="hostel">Hostel</option>
-                                    <option value="land">Land</option>
-                                </select>
-                                <input name = 'headline'
-                                className = "form_input" type="text" value = {item.headline} 
-                                onChange = {myFunc} placeholder="Headline" autoComplete = 'off' />
+                <>
 
-                                <input name = 'location' 
-                                className = "form_input" 
-                                type="text" 
-                                placeholder="District" 
-                                value = {item.location}
-                                onChange = {getLocation}
-                                list = "location"
-                                autoComplete = 'off' />
-                                    <datalist id="location">
-                                        {
-                                            suggestions.map((item,index) => {
-                                                return(
-                                                    <option key = {index} value={item.place_name} />
-                                                )
-                                            })
-                                        }
-                                    </datalist>
-
-                                <input name = 'price' className = "form_input" type="number" 
-                                value = {item.price} onChange = {myFunc} placeholder="Price" autoComplete = 'off'/>
-
-                                <textarea name="details" className = "form_input" cols="30" rows="10" 
-                                value = {item.details} onChange = {myFunc} placeholder ="Details"></textarea>
-                                <button className = "contact_button">Add</button>
-                            </form>
-                        </>
-                    }
-
-                    <div className="img_update">
-                            {   
-
-                                done.imgsUpload ? <h4> Pic updated successfully </h4> : null
-                            }
-
-                            {
-                                // done.imgDelete? <h4> Pic deleted successfully</h4> : null
-                            }
+                    <div className="container mt-5 box-element">
+                        <Link className = "btn btn-danger" to = {`/items/details/${item.slug}`}>Go back to the post</Link>
                     </div>
 
-                        <div className="image_area">
-
-                            <div className="image_area_backend">
-
-                                {
-                                    item.images === undefined ?
-                                    <Default color = "rgb(230, 43, 83)" size = {100} />
-                                    :
-                                    item.images.map((img,index) => {
-                                        return(
-                                            <div key = {index}>
-                                                <div className="pp">
-                                                    <img  src={`${img.image}`} alt="img" srcSet="" height = '300px' width = '300px'/>
-                                                </div>
-
-                                                <form onSubmit={(e) => 
-                                                    {   
-                                                        e.preventDefault();
-                                                        swal({
-                                                            title: "Are you sure?",
-                                                            text: "Are you sure that you want to delete this?",
-                                                            icon: "warning",
-                                                            dangerMode: true,
-                                                        })
-                                                        .then(willLogOut => {
-                                                            if (willLogOut) {
-                                                                deleteFunc(e,img.id,img.item)
-                                                            }
-                                                        })
-                                                    
-                                                    }} 
-                                                
-                                                    className = "contact_form" action="#" style ={{height:"10%"}}>
-
-                                                    <input type="text" hidden/> 
-                                                
-                                                    {
-                                                    done.isDelLoading ? 
-                                                    <button className = "contact_button" disabled> <DeleteIcon /> </button>
-                                                    :
-                                                    <button className = "contact_button" > <DeleteIcon /> </button>
-                                                    }
-
-                                                </form>
-                                        
-                                            </div>
-                                        )
-                                    })
-                                
-                                }
-
-
+                    <div className="container mt-5 box-element">
+                        {
+                            formloading? 
+                            <div className="loading_loading">
+                                <Default color = "#343a40" size = {200} />
                             </div>
+                            :
+                            <>
+                                <h4 className = "testi_heading"> Edit Details </h4>
 
-                            <form onSubmit={(e)=>{e.preventDefault(); addFunc(e,item.id)}} className = "contact_form" action="#">
-                                {
-                                    done.isAddLoading? <Default color = "rgb(230, 43, 83)" size = {70} /> : null
+                                <form onSubmit={handleSubmit} className = "contact_form" action="#">
+                                    <select name="category" className = "form_input" value = {item.category} onChange = {myFunc} >
+                                        <option value="room">Room</option>
+                                        <option value="flat">Flat</option>
+                                        <option value="house">House</option>
+                                        <option value="hostel">Hostel</option>
+                                        <option value="land">Land</option>
+                                    </select>
+                                    <input name = 'headline'
+                                    className = "form_input" type="text" value = {item.headline} 
+                                    onChange = {myFunc} placeholder="Headline" autoComplete = 'off' />
+
+                                    <input name = 'location' 
+                                    className = "form_input" 
+                                    type="text" 
+                                    placeholder="District" 
+                                    value = {item.location}
+                                    onChange = {getLocation}
+                                    list = "location"
+                                    autoComplete = 'off' />
+                                        <datalist id="location">
+                                            {
+                                                suggestions.map((item,index) => {
+                                                    return(
+                                                        <option key = {index} value={item.place_name} />
+                                                    )
+                                                })
+                                            }
+                                        </datalist>
+
+                                    <input name = 'price' className = "form_input" type="number" 
+                                    value = {item.price} onChange = {myFunc} placeholder="Price" autoComplete = 'off'/>
+
+                                    <textarea name="details" className = "form_input" cols="30" rows="10" 
+                                    value = {item.details} onChange = {myFunc} placeholder ="Details"></textarea>
+                                    <button className = "btn btn-danger">Add</button>
+                                </form>
+                            </>
+                        }
+
+                        <div className="img_update">
+                                {   
+
+                                    done.imgsUpload ? <h4> Pic updated successfully </h4> : null
                                 }
-                                <input type="file" name="photos" 
-                                className = "form_input" 
-                                // accept="image/png, image/jpeg"
-                                multiple 
-                                onChange = {imgChange}/> 
-                                
-                                <div className="pics">
-                                    {
-                                        renderImgs(imgs)
-                                    }
-                                </div>
-                                    {
-                                        done.isAddLoading || imgs.length === 0 ? 
-                                        <button className = "contact_button mt-3" disabled >Add</button>
-                                        :
-                                        <button className = "contact_button mt-3"  >Add</button>
-                                    }
-                            </form>
 
-                        
+                                {
+                                    // done.imgDelete? <h4> Pic deleted successfully</h4> : null
+                                }
                         </div>
 
-                    <br/>
-                    <br/> <br/> <br/> <br/> <br/> <br/>
+                            <div className="image_area">
 
-                </div>
+                                <div className="image_area_backend">
+
+                                    {
+                                        item.images === undefined ?
+                                        <Default color = "#343a40" size = {100} />
+                                        :
+                                        item.images.map((img,index) => {
+                                            return(
+                                                <div key = {index}>
+                                                    <div className="pp">
+                                                        <img  src={`${img.image}`} alt="img" srcSet="" height = '300px' width = '300px'/>
+                                                    </div>
+
+                                                    <form onSubmit={(e) => 
+                                                        {   
+                                                            e.preventDefault();
+                                                            swal({
+                                                                title: "Are you sure?",
+                                                                text: "Are you sure that you want to delete this?",
+                                                                icon: "warning",
+                                                                dangerMode: true,
+                                                            })
+                                                            .then(willLogOut => {
+                                                                if (willLogOut) {
+                                                                    deleteFunc(e,img.id,img.item)
+                                                                }
+                                                            })
+                                                        
+                                                        }} 
+                                                    
+                                                        className = "contact_form" action="#" style ={{height:"10%"}}>
+
+                                                        <input type="text" hidden/> 
+                                                    
+                                                        <button className = "btn btn-danger" disabled ={done.isDelLoading} > <DeleteIcon /> </button>
+
+                                                    </form>
+                                            
+                                                </div>
+                                            )
+                                        })
+                                    
+                                    }
+
+
+                                </div>
+
+                                <form onSubmit={(e)=>{e.preventDefault(); addFunc(e,item.id)}} className = "contact_form" action="#">
+                                    {
+                                        done.isAddLoading? <Default color = "#343a40" size = {70} /> : null
+                                    }
+                                    <input type="file" name="photos" 
+                                    className = "form_input" 
+                                    // accept="image/png, image/jpeg"
+                                    multiple 
+                                    onChange = {imgChange}/> 
+                                    
+                                    <div className="pics">
+                                        {
+                                            renderImgs(imgs)
+                                        }
+                                    </div>
+
+                                    <button className = "btn btn-danger mt-3" 
+                                    disabled = {done.isAddLoading || imgs.length === 0 ? true : false}
+                                    >Add</button>
+
+                                </form>
+
+                            
+                            </div>
+
+                        <br/>
+                        <br/> <br/> <br/> <br/> <br/> <br/>
+
+                    </div>
+                </>
 
             }        
             </>

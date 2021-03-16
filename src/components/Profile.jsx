@@ -139,7 +139,7 @@ const Profile = (props)=> {
                 </div>
                 
 
-                <div className=" container">
+                <div className=" container box-element">
                     <div className="categories">
                         <div className="btn-group btn-group-toggle" data-toggle="buttons">
                             <label className="btn btn-outline-dark active">

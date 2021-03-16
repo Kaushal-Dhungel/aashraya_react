@@ -93,7 +93,7 @@ const Rnav = (props) => {
         {
             fetching ? 
             <div className="loading_loading">
-                <Default color = "rgb(230, 43, 83)" size = {150} />
+                <Default color = "#343a40" size = {150} />
             </div>
             :
             <Results items = {items} 

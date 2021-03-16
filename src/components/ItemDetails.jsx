@@ -89,22 +89,6 @@ const ItemDetail = (props)=> {
         setShowPic(true)
     }
 
-    // const getWidth = () => {
-
-    //         const width = parseInt(window.screen.width)
-    //          if (width < 321)
-    //              return "280px"
-             
-    //          else if ( width >= 321 && width < 376)
-    //             return "310px"
-     
-    //          else if (width >= 376 && width < 426)
-    //              return "380px"
-     
-    //          else 
-    //              return "450px"
-
-    // }
 
     return (
         <>

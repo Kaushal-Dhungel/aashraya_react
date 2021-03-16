@@ -173,6 +173,7 @@ const showPosts = (e) => {
       :
         <>
           <div className="container">
+            <h4 className = "testi_heading"> Cart Items </h4>
             <div className="row">
               {/* <div className="container info">
                   <h3> Your Cart is empty. Click below to go to the shop. </h3> 
@@ -218,7 +219,7 @@ const showPosts = (e) => {
                         </div>
 
                   : 
-                    <div style = {{width:"100%"}}>
+                    <div style = {{width:"100%"}} className = "box-element mt-5">
                         {
                           condn ? 
                           <CartItems items={roomiePost} 

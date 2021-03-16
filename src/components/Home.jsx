@@ -13,7 +13,7 @@ import { Grid } from "react-spinners-css";
 
 import { Belowlanding } from './Components';
 
-import { Slide, Bounce, JackInTheBox, Rotate } from "react-awesome-reveal";
+import { Slide, Bounce, JackInTheBox, } from "react-awesome-reveal";
 
 const Home = ({showModal,hidemodal})=> {
     const [searchValue,setSearchValue] = useState('');
@@ -124,7 +124,7 @@ const Home = ({showModal,hidemodal})=> {
                                     })
                                 }
                             </datalist>
-                            <button className = "btn btn-secondary mt-4 ml-3" 
+                            <button className = "btn btn-danger mt-4 ml-3" 
                                 disabled = {searchValue === ''}
                                 onClick = {mySubmitHandler}>
                                 search <SearchIcon />
@@ -159,18 +159,18 @@ const Home = ({showModal,hidemodal})=> {
             </div>
 
             <div className="container create_listing_room">
-                    <Rotate>
+                    <JackInTheBox>
                         <div className="listing_part">
                             <h4> Make Yourself Available As A Roomie </h4>
                             <Link to = '/addroomie' className="btn btn-secondary">List yourself </Link>
                         </div>
-                    </Rotate>
+                    </JackInTheBox>
 
-                    <Rotate>
+                    <Bounce>
                         <div className="img_part">
                             <img src={roomieImg} alt="" height= "300px" width = "300px"/>
                         </div>
-                    </Rotate>
+                    </Bounce>
                     
             </div>
 

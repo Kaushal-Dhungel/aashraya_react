@@ -128,7 +128,7 @@ const UserProfilee = ({ isAuthenticated, onAuthLogout }) => {
 
                     <div className="container" style = {{marginTop : "10vh"}}>
                       <div className="roomie_link_wrapper">
-                          <div className="roomie_link_inside">
+                          <div className="box-element">
                               <h5> PLease update your profile to provide some required informations .</h5>
                               <Link to = {`/profile/edit`} className = "btn btn-primary" > Update Profile </Link>
                           </div>
@@ -230,7 +230,7 @@ const UserProfilee = ({ isAuthenticated, onAuthLogout }) => {
                     </div>
                   </div>
 
-                  <div className=" container">
+                  <div className=" container box-element">
                     <div className="categories_profile">
                       <div className="btn-group btn-group-toggle" data-toggle="buttons">
 
@@ -245,7 +245,6 @@ const UserProfilee = ({ isAuthenticated, onAuthLogout }) => {
                             data-action="roomie" onClick={showPosts} readOnly
                           /> Roomie <PeopleAltIcon />
                         </label>
-                        
                       </div>
                     </div>
 
