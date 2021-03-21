@@ -175,12 +175,16 @@ const Home = ({showModal,hidemodal})=> {
             </div>
 
             <div className="popular_places" style = {{marginTop:"40vh"}}>
-                <h4 className = "testi_heading"> Popular Places </h4>
+                <Bounce>
+                    <h4 className = "testi_heading"> Popular Places </h4>
+                </Bounce>
                     <Belowlanding popular = {popular} />
             </div>
 
             <div className="testimonial_section">
-                <h4 className = "testi_heading"> What Users Are Saying </h4>
+                <Bounce>
+                    <h4 className = "testi_heading"> What Users Are Saying </h4>
+                </Bounce>
 
                 <div className="testi">
                     {

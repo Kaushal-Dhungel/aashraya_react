@@ -217,7 +217,12 @@ const AddItem = ({isAuthenticated}) => {
             />
             : 
             <div className="container logout_page">
-            <h3> You need to be logged in to perform this operation </h3>
+                <div className="box-element">
+                    <h3 className = "mt-4"> You need to be registered in to perform this operation. Click below to Register. </h3>
+                    <center>
+                        <Link className="btn btn-secondary mt-4" to={'/register'}>Register</Link>
+                    </center>
+                </div>
             </div>
         }
         </>

@@ -10,7 +10,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* background-color: #343a40; */
+  background-color: rgb(245, 245, 245);
 }
 
 code {
@@ -43,9 +43,7 @@ code {
     font-size: 1em;
 	font-size: 20px;
     color: #ffffff;
-	
   }
-  
   
 /*To remove the outline that appears on clicking the input textbox*/
 input:focus {
@@ -155,12 +153,37 @@ input[type=radio]:focus {
 	display: flex;
 	margin: 5% 10%;
 	overflow-x: scroll;
+	/* background-color: rgb(231, 231, 231); */
+	gap: 1.5rem;
+
 }
 
+.testi::-webkit-scrollbar {
+	/* width: 0px; */
+	height: 20px;
+}
+
+/* .testi::-webkit-scrollbar-track {
+
+} */
+
+.testi::-webkit-scrollbar-thumb {
+	background:linear-gradient(
+		45deg,
+		/* transparent, */
+		#06dee1,
+		#79ff6c
+		/* transparent */
+	);
+
+	border-radius: 10px;
+}
 
 .testi_box {
 	min-width: 350px;
-
+	border-radius: 10px;
+	background-color: #343a40;
+	margin-bottom: 1.5vh;
 }
 
 .top {
@@ -170,8 +193,13 @@ input[type=radio]:focus {
 	align-items: center;
 }
 
+.top p, .top h4 {
+	color: rgb(235, 235, 235);
+}
+
 .bottom p{
 	padding: 0 5%;
+	color: rgb(194, 194, 194);
 }
 
 .top img {
@@ -179,6 +207,7 @@ input[type=radio]:focus {
 	height: 100px;
 	width: 100px;
 	border-radius: 50px;
+	padding: 10px 0;
 }
 
 .footer {
@@ -220,9 +249,9 @@ input[type=radio]:focus {
 		margin: 5% 5%;
 	}
 
-	.testi::-webkit-scrollbar {
+	/* .testi::-webkit-scrollbar {
 		overflow: hidden;
-	}
+	} */
 
 	.testi_box {
 		margin-top: 4vh;
@@ -314,13 +343,28 @@ input[type=radio]:focus {
 }
 
 .img_slider_wrapper::-webkit-scrollbar{
-	overflow: hidden;
+	/* overflow: hidden; */
+	height: 20px;
+
+}
+
+.img_slider_wrapper::-webkit-scrollbar-thumb {
+	background:linear-gradient(
+		45deg,
+		/* transparent, */
+		#06dee1,
+		#79ff6c
+		/* transparent */
+	);
+
+	border-radius: 10px;
 }
 
 
 .img_slider_wrapper img {
 	height: 400px;
 	cursor: pointer;
+	margin-bottom: 1.5vh;
 }
 
 .modal_img_wrapper img{
@@ -650,6 +694,7 @@ form {
 
 .box-element{
 	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+	box-shadow:hsl(0, 1%, 48%) 0 0 16px;
 	background-color: #fff;
 	border-radius: 4px;
 	padding: 10px;

@@ -164,11 +164,13 @@ const showPosts = (e) => {
 };
     return (
       !isAuthenticated ? 
-      <div className="container info" style = {{
-        minHeight: "80vh"
-      }}>
-        <h3> Please do register before using this feature. Click below to register. </h3> 
-        <Link className="btn btn-outline-secondary" to={'/register'}>Register</Link>
+      <div className="container logout_page">
+        <div className="box-element">
+            <h3 className = "mt-4"> Please do register before . Click below to Register. </h3>
+            <center>
+                <Link className="btn btn-secondary mt-4" to={'/register'}>Register</Link>
+            </center>
+        </div>
       </div>
       :
         <>
