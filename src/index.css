@@ -319,6 +319,7 @@ input[type=radio]:focus {
 @media screen and (max-width: 780px) {
 	.custom_row {
 		flex-direction: column;
+		gap: 1rem;
 	}
 	.card {
 		width: 100%;

@@ -28,8 +28,6 @@ const ItemDetail = (props)=> {
     const[showPic, setShowPic] = useState(false);
     const [popupImg, setPopupImg] = useState();
 
-    // const 
-
     const [viewport, setViewport] = useState({    
         latitude: 37.7577,
         longitude: -122.4376,
@@ -99,116 +97,116 @@ const ItemDetail = (props)=> {
                 </div>
                 :
                 <>
-                {
-                
-                    item !== undefined ? 
+                    {
+                    
+                        item !== undefined ? 
 
-                    <>
+                        <>
 
-                        <Modal 
-                        isOpen = {showPic}
-                        style={{
-                            overlay: {
-                            backgroundColor: 'rgba(17, 13, 14, 0.507)',
+                            <Modal 
+                            isOpen = {showPic}
+                            style={{
+                                overlay: {
+                                backgroundColor: 'rgba(17, 13, 14, 0.507)',
 
-                            },
-                            content: {
-                            top :'50%',
-                            left :'50%',
-                            right : 'auto',
-                            bottom : 'auto',
-                            marginRight : '-50%',
-                            transform : 'translate(-50%, -50%)',
-                            }
-                        }}
-                        >   
-                            <div className="modal_img_wrapper" >
-                                <img src={popupImg} alt=".." srcSet=""/>
-                                <div className="close_btn" style = {{display:"flex",alignItems:"center",justifyContent:"center"}}>
-                                    <CancelIcon style = {{fontSize: 40, cursor:'pointer'}} onClick = {()=> setShowPic(false)} />
+                                },
+                                content: {
+                                top :'50%',
+                                left :'50%',
+                                right : 'auto',
+                                bottom : 'auto',
+                                marginRight : '-50%',
+                                transform : 'translate(-50%, -50%)',
+                                }
+                            }}
+                            >   
+                                <div className="modal_img_wrapper" >
+                                    <img src={popupImg} alt=".." srcSet=""/>
+                                    <div className="close_btn" style = {{display:"flex",alignItems:"center",justifyContent:"center"}}>
+                                        <CancelIcon style = {{fontSize: 40, cursor:'pointer'}} onClick = {()=> setShowPic(false)} />
+                                    </div>
                                 </div>
+
+                            </Modal>    
+
+                            <div className="container img_slider_wrapper">
+                                {   
+                                    item.images !== undefined ?
+                                        item.images.map((imgs,index) => {
+                                                return(
+                                                    <img key = {index} onClick = {imgFunc}
+                                                    src={`${imgs.image}`} alt="First slide"/>
+                                                )
+                                            })
+                                        : null
+                                }
                             </div>
 
-                        </Modal>    
+                            <div className="details_of_items container">
+                                <div className="details_left">
+                                    <span className="location_icon">
+                                        <LocationOnIcon />
+                                        <h5> {item.location.split(",")[0]} </h5>
+                                    </span>
 
-                        <div className="container img_slider_wrapper">
-                            {   
-                                item.images !== undefined ?
-                                    item.images.map((imgs,index) => {
-                                            return(
-                                                <img key = {index} onClick = {imgFunc}
-                                                src={`${imgs.image}`} alt="First slide"/>
-                                            )
-                                        })
-                                    : null
-                            }
-                        </div>
+                                    <span className="location_icon">
+                                        <AttachMoneyIcon />
+                                        <p> {item.price} </p>
+                                    </span>
+                                    <h3> {item.headline} </h3>
+                                    <p>
+                                        {item.details}
+                                    </p>
+                                </div>
 
-                        <div className="details_of_items container">
-                            <div className="details_left">
-                                <span className="location_icon">
-                                    <LocationOnIcon />
-                                    <h5> {item.location.split(",")[0]} </h5>
-                                </span>
-
-                                <span className="location_icon">
-                                    <AttachMoneyIcon />
-                                    <p> {item.price} </p>
-                                </span>
-                                <h3> {item.headline} </h3>
-                                <p>
-                                    {item.details}
-                                </p>
-                            </div>
-
-                            <div className="details_right">
-                                <div className="above_map">
-                                    <>
-                                    {
-                                        id === item.profile?
-                                            <>
-                                            <Link to= {`/profile`} className="btn btn-primary">See Profile</Link>
-                                            <Link to= {`/details/edit/${slug}`} className="btn btn-primary">Edit Post</Link>
-                                            </>
-                                        :
-                                            <Link to= {`/items/profile/${item.profile_slug}`} className="btn btn-primary">See Profile</Link>     
-                                    }
-                                    </>
-                                    <button onClick = {addCart} className="btn btn-secondary"
-                                        data-set= "items"
-                                        data-id = {`${item.id}`}
-                                        data-action = "add"
-                                        >Add To Cart</button>
-                                </div>                      
-                                <div className="map_area">
-                                    <ReactMapGL
-                                        {...viewport}
-                                        mapboxApiAccessToken = {token}
-                                        width = "290px"
-                                        height = "300px"
-                                        mapStyle = 'mapbox://styles/kaushal023/cklgwa17c009a18rxu3mdies2'
-                                        onViewportChange={(viewport) => setViewport(viewport)}
-                                        >
-                                            <Marker
-                                            latitude = {viewport.latitude}
-                                            longitude = {viewport.longitude}
+                                <div className="details_right">
+                                    <div className="above_map">
+                                        <>
+                                        {
+                                            id === item.profile?
+                                                <>
+                                                <Link to= {`/profile`} className="btn btn-primary">See Profile</Link>
+                                                <Link to= {`/details/edit/${slug}`} className="btn btn-primary">Edit Post</Link>
+                                                </>
+                                            :
+                                                <Link to= {`/items/profile/${item.profile_slug}`} className="btn btn-primary">See Profile</Link>     
+                                        }
+                                        </>
+                                        <button onClick = {addCart} className="btn btn-secondary"
+                                            data-set= "items"
+                                            data-id = {`${item.id}`}
+                                            data-action = "add"
+                                            >Add To Cart</button>
+                                    </div>                      
+                                    <div className="map_area">
+                                        <ReactMapGL
+                                            {...viewport}
+                                            mapboxApiAccessToken = {token}
+                                            width = "290px"
+                                            height = "300px"
+                                            mapStyle = 'mapbox://styles/kaushal023/cklgwa17c009a18rxu3mdies2'
+                                            onViewportChange={(viewport) => setViewport(viewport)}
                                             >
-                                                <LocationOnIcon
-                                                style = {{fontSize: 40 }}
-                                                color="secondary"
-                                                />
-                                            </Marker>
-                                    </ReactMapGL>
+                                                <Marker
+                                                latitude = {viewport.latitude}
+                                                longitude = {viewport.longitude}
+                                                >
+                                                    <LocationOnIcon
+                                                    style = {{fontSize: 40 }}
+                                                    color="secondary"
+                                                    />
+                                                </Marker>
+                                        </ReactMapGL>
+                                    </div>
+
                                 </div>
 
                             </div>
 
-                        </div>
-
-                    </>
-                    : 
-                    <h4> Undefined </h4>
-                }
+                        </>
+                        : 
+                        <h4> Undefined </h4>
+                    }
                 </>
             }
         </>

@@ -182,7 +182,7 @@ const ProfileEdit = ( {isAuthenticated}) => {
                   </div>
                 : 
                 <>
-                  { !item.phone ? null : 
+                  { item.phone ? null : 
 
                     <div className="container" style = {{marginTop : "10vh"}}>
                       <div className="box-element">

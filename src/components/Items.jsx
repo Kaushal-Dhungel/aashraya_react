@@ -62,12 +62,14 @@ const Item = (props) => {
                     </form>
                 </div>
             </div>
+
+            <Navbar city = {finalStr}
+                minPrice = {priceRange.minPrice}
+                maxPrice = {priceRange.maxPrice}
+            />
         </div>
         {/* <Rnav /> */}
-        <Navbar city = {finalStr}
-        minPrice = {priceRange.minPrice}
-        maxPrice = {priceRange.maxPrice}
-        />
+
         </>
     )
 }
