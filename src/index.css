@@ -198,7 +198,7 @@ input[type=radio]:focus {
 }
 
 .bottom p{
-	padding: 0 5%;
+	padding: 3% 5%;
 	color: rgb(194, 194, 194);
 }
 
@@ -206,7 +206,7 @@ input[type=radio]:focus {
 
 	height: 100px;
 	width: 100px;
-	border-radius: 50px;
+	border-radius: 47px;
 	padding: 10px 0;
 }
 
@@ -802,4 +802,11 @@ form {
 		padding: 0.2em 0.2rem;
 	}
 
+}
+
+
+.services_box {
+	border-radius: 10px;
+	background-color: #343a40;
+	min-height: 280px;
 }

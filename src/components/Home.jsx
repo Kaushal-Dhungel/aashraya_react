@@ -8,12 +8,14 @@ import {hideModal} from '../store/actions/auth';
 import { connect } from "react-redux";
 import axios from 'axios'
 import SearchIcon from '@material-ui/icons/Search';
+import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 
 import { Grid } from "react-spinners-css";
 
-import { Belowlanding } from './Components';
+import { Belowlanding, Services } from './Components';
 
-import { Slide, Bounce, JackInTheBox, } from "react-awesome-reveal";
+import { Slide, Bounce, JackInTheBox,Zoom} from "react-awesome-reveal";
+
 
 const Home = ({showModal,hidemodal})=> {
     const [searchValue,setSearchValue] = useState('');
@@ -102,7 +104,7 @@ const Home = ({showModal,hidemodal})=> {
       :
         <>
             <div className="landing bg-dark">
-                <JackInTheBox>
+                <Zoom>
                     <div className="text_part">
                         <h2> Find great places and people to live with. </h2>
                         <div className="search">
@@ -133,12 +135,22 @@ const Home = ({showModal,hidemodal})=> {
                         </div>
 
                     </div>
-                </JackInTheBox>
+                </Zoom>
 
-                <Bounce>
+                <Slide direction= "down">
                     <div className="logo_part">
                         <img src={homeImg} alt="" height= "400px" width = "400px"/>
                     </div>
+                </Slide>
+            </div>
+            
+
+            <Services />
+
+
+            <div style = {{marginTop:"35vh"}}>
+                <Bounce>
+                    <h4 className = "testi_heading"> How It Works ?? </h4>
                 </Bounce>
             </div>
 
@@ -151,26 +163,27 @@ const Home = ({showModal,hidemodal})=> {
 
                     <Slide direction = "right">
                         <div className="listing_part">
-                                <h4> List Your Room So Others Can Rent It </h4>
-                                <Link to = '/additem' className="btn btn-secondary">Add new Item </Link>
+                                <h4> List Your Properties So Others Can Rent/Buy It </h4>
+                                <p> Have a property like room, flat, home, land that you want to sell/buy?? </p>
+                                <Link to = '/additem' className="btn btn-secondary">Add new Item <ArrowRightAltIcon fontSize = "large"/> </Link>
                         </div>
                     </Slide>
-
             </div>
 
             <div className="container create_listing_room">
-                    <JackInTheBox>
+                    <Slide direction = "up" >
                         <div className="listing_part">
-                            <h4> Make Yourself Available As A Roomie </h4>
-                            <Link to = '/addroomie' className="btn btn-secondary">List yourself </Link>
+                            <h4> Make Yourself Available As A Roommate </h4>
+                            <p> Are you looking for a roommate to live together?? Well, You are only one step away. </p>
+                            <Link to = '/addroomie' className="btn btn-secondary">List yourself <ArrowRightAltIcon fontSize = "large"/> </Link>
                         </div>
-                    </JackInTheBox>
+                    </Slide >
 
-                    <Bounce>
+                    <Zoom>
                         <div className="img_part">
                             <img src={roomieImg} alt="" height= "300px" width = "300px"/>
                         </div>
-                    </Bounce>
+                    </Zoom>
                     
             </div>
 
