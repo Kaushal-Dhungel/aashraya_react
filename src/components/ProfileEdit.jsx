@@ -5,9 +5,12 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { Facebook, Default } from "react-spinners-css";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import * as actions from '../store/actions/auth';
+
+import swal from 'sweetalert';
 
 
-const ProfileEdit = ( {isAuthenticated}) => {
+const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
   const [item, setItem] = useState({});
   const [imgs, setImgs] = useState([]);
   const [update, setUpdate] = useState(false);
@@ -161,6 +164,46 @@ const ProfileEdit = ( {isAuthenticated}) => {
     });
   };
 
+  const deleteProfile = () => {
+    swal({
+      title: "Are you sure?",
+      text: "Are you sure that you want to delete your profile?",
+      icon: "warning",
+      dangerMode: true,
+    })
+
+    .then(willDelete => {
+      if (willDelete) {
+
+          const token = localStorage.getItem('token');
+  
+          const config = {
+              headers: {
+                  "Content-Type" : "application/json",
+                  Authorization : `Bearer ${token}`
+          }
+          }
+      
+          axios.delete(`${process.env.REACT_APP_HEROKU_URL}/profile/`,config)
+          
+          .then(res => {
+              swal("Deleted!", "Your profile has been deleted", "success")
+
+              .then(okay => {
+                onAuthLogout();
+                history.push('/');
+              })
+          })
+
+          .catch (err => {
+              swal("Sorry!", "Your profile can not be deleted right now. PLease try later.", "warning")
+
+          })
+      }
+    })
+
+}
+
   return (
     <>
       {
@@ -306,8 +349,13 @@ const ProfileEdit = ( {isAuthenticated}) => {
 
                       </form>
                     </div>
-                    <br />
-                    <br /> <br /> <br /> <br /> <br /> <br />
+
+                      <center>
+                          <div className="delete_button" style = {{margin :"7vh 0"}}>
+                              <button className = "btn btn-danger" onClick = {deleteProfile}> Delete Your Profile</button>
+                          </div>
+                      </center>
+
                   </div>
                 </>
               }
@@ -325,4 +373,11 @@ const mapStateToProps = (state) => {
     };
   };
 
-export default connect(mapStateToProps) (ProfileEdit);
+  const mapDispatchToProps =(dispatch) => {
+    return {
+        onAuthLogout: () => dispatch(actions.logout()),
+        
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps) (ProfileEdit);

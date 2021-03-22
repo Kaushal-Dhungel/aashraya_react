@@ -262,6 +262,43 @@ const DetailsEdit = (props) => {
         })
     }
 
+    const deletePost = () => {
+        swal({
+            title: "Are you sure?",
+            text: "Are you sure that you want to delete this post?",
+            icon: "warning",
+            dangerMode: true,
+          })
+
+          .then(willDelete => {
+            if (willDelete) {
+
+                const token = localStorage.getItem('token');
+        
+                const config = {
+                    headers: {
+                        "Content-Type" : "application/json",
+                        Authorization : `Bearer ${token}`
+                }
+                }
+            
+                axios.delete(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}/`,config)
+                
+                .then(res => {
+                    swal("Deleted!", "The post has been deleted", "success")
+
+                    .then(okay => {
+                      history.push('/');
+                    })
+                })
+
+                .catch (err => {
+                    swal("Sorry!", "The post can not be deleted right now. PLease try later.", "warning")
+
+                })
+            }
+          })
+    }
 
     return (
         <>
@@ -418,9 +455,12 @@ const DetailsEdit = (props) => {
 
                             
                             </div>
-
-                        <br/>
-                        <br/> <br/> <br/> <br/> <br/> <br/>
+                            
+                            <center>
+                                <div className="delete_button" style = {{margin :"7vh 0"}}>
+                                    <button className = "btn btn-danger" onClick = {deletePost}> Delete This Post</button>
+                                </div>
+                            </center>
 
                     </div>
                 </>

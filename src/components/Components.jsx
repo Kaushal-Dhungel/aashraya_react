@@ -1,18 +1,18 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import {Slide, Bounce, Rotate} from "react-awesome-reveal";
+import {Zoom, Bounce, Rotate} from "react-awesome-reveal";
 
 import { servicesData } from './index';
 
 export function Footer(){
     return (
-        <Slide direction = "down">
+        <Zoom>
             <div className="footer">
                 <a href="https://www.freeprivacypolicy.com/live/9056f756-0e8d-44e4-99a9-193ff7d306a7"> Privacy Policy </a>
 
                 <p> nepalikaushal1@gmail.com || Aashraya Ⓒ 2021. All Rights Reserved.  </p>
             </div>
-        </Slide>
+        </Zoom>
 
     )
 }

@@ -9,6 +9,9 @@ import PersonIcon from '@material-ui/icons/Person';
 
 import roomieImg from '../imgs/roomie.svg';
 
+import { Flip } from "react-awesome-reveal";
+
+
 const MainNav = ({isAuthenticated}) => {
 
     const navStyle = {
@@ -21,11 +24,9 @@ const MainNav = ({isAuthenticated}) => {
         <>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <NavLink className="navbar-brand" exact to="/">
-                <img src={roomieImg} alt="" height= "50px" width = "50px" 
-                // style = {{
-                //     filter: 'invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)'
-                // }}
-                />
+                <Flip>
+                    <img src={roomieImg} alt="" height= "50px" width = "50px" />
+                </Flip>
             </NavLink>
 
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

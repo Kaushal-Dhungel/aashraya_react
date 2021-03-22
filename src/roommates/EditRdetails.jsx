@@ -251,6 +251,44 @@ const RDetailsEdit = (props) => {
         })
     }
 
+    const deletePost = () => {
+        swal({
+            title: "Are you sure?",
+            text: "Are you sure that you want to delete this post?",
+            icon: "warning",
+            dangerMode: true,
+          })
+
+          .then(willDelete => {
+            if (willDelete) {
+
+                const token = localStorage.getItem('token');
+        
+                const config = {
+                    headers: {
+                        "Content-Type" : "application/json",
+                        Authorization : `Bearer ${token}`
+                }
+                }
+            
+                axios.delete(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,config)
+                
+                .then(res => {
+                    swal("Deleted!", "The post has been deleted", "success")
+
+                    .then(okay => {
+                      history.push('/');
+                    })
+                })
+
+                .catch (err => {
+                    swal("Sorry!", "The post can not be deleted right now. PLease try later.", "warning")
+
+                })
+            }
+          })
+    }
+
     return (
         <>
             {
@@ -364,33 +402,26 @@ const RDetailsEdit = (props) => {
                                                     <img  src={`${img.image}`} alt="img" srcSet="" height = '300px' width = '300px'/>
                                                 </div>
 
-                                                <form onSubmit={(e) => 
-                                                { e.preventDefault();  
-                                                    swal({
-                                                        title: "Are you sure?",
-                                                        text: "Are you sure that you want to delete this?",
-                                                        icon: "warning",
-                                                        dangerMode: true,
-                                                    })
-                                                    .then(willLogOut => {
-                                                        if (willLogOut) {
-                                                            deleteFunc(e,img.id,img.roomie)
-                                                        }
-                                                    })
-                                                    // deleteFunc(e,img.id,img.roomie)
-                                                }} 
-                                                className = "contact_form" action="#" style ={{height:"10%"}}>
-                                                    {/* {
-                                                        done.isDelLoading? <Default color = "#343a40" size = {70} /> : null
-                                                    } */}
-                                                    <input type="text" hidden/> 
-                                                
-                                                    <button className = "btn btn-danger" disabled = {done.isDelLoading}> <DeleteIcon /> </button>
-                                                    :
-                                                    <button className = "btn btn-danger" > <DeleteIcon /> </button>
+                                                    <form onSubmit={(e) => 
+                                                    { e.preventDefault();  
+                                                        swal({
+                                                            title: "Are you sure?",
+                                                            text: "Are you sure that you want to delete this?",
+                                                            icon: "warning",
+                                                            dangerMode: true,
+                                                        })
+                                                        .then(willLogOut => {
+                                                            if (willLogOut) {
+                                                                deleteFunc(e,img.id,img.roomie)
+                                                            }
+                                                        })
+                                                    }} 
+                                                    className = "contact_form" action="#" style ={{height:"10%"}}>
+                                                        <input type="text" hidden/> 
+                                                    
+                                                        <button className = "btn btn-danger" disabled = {done.isDelLoading}> <DeleteIcon /> </button>
 
-                                                </form>
-                                                {/* <button className = 'btn btn-primary' data-id = {img.id} data-item = {img.item}  onClick ={deleteFunc} >delete</button> */}
+                                                    </form>
                                                 </div>
                                             )
                                         })
@@ -421,7 +452,11 @@ const RDetailsEdit = (props) => {
                                     </form>
                                 </div>
 
-                            <br/> <br/> <br/> <br/> <br/> <br/> <br/>
+                                <center>
+                                    <div className="delete_button" style = {{margin :"7vh 0"}}>
+                                        <button className = "btn btn-danger" onClick = {deletePost}> Delete This Post</button>
+                                    </div>
+                                </center>
 
                         </div>
                     </>
