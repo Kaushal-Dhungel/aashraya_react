@@ -1,13 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import * as actions from "../store/actions/auth";
 import { connect } from "react-redux";
 import FacebookLogin from "react-facebook-login";
 import { Link } from "react-router-dom";
 import { Facebook } from "react-spinners-css";
 import {Redirect} from 'react-router-dom';
-
+import axios from 'axios';
 
 function Signup({ onAuthSignup }) {
+
+  const [emailExists, setEmailExists] = useState(false);
+  const [usernameExists, setUsernameExists] = useState(false);
+  // const [userpassword, setUserpassword] = useState('');
+  const [passwordMissMatch, setPasswordMissMatch] = useState(false);
+  const passwordRef = useRef();
+  const confpasswordRef = useRef();
+
+  const pStyle = {
+    color : "red"
+  }
+
+
   function handleSubmit(e) {
     e.preventDefault();
     const form = new FormData(e.target);
@@ -17,6 +30,74 @@ function Signup({ onAuthSignup }) {
     const password2 = form.get("password2");
 
     onAuthSignup(name, email, password1, password2);
+
+  }
+
+  function handleChange(e) {
+    const whichField = e.target.dataset.item;
+    const value = e.target.value;
+
+    if (whichField === "username") {
+      // setUsername(value)
+      axios.get(`${process.env.REACT_APP_HEROKU_URL}/checkuser/`, {
+        params: {
+          username: value,
+          email : ''
+        }
+      })
+
+      .then(res => {
+        if (res.data[0] === "True") {
+          setUsernameExists(true);
+      }
+
+      else {
+        setUsernameExists(false)
+      }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    }
+
+    else if (whichField === "username") {
+      axios.get(`${process.env.REACT_APP_HEROKU_URL}/checkuser/`, {
+        params: {
+          username: '',
+          email : value
+        }
+      })
+
+      .then(res => {
+        if (res.data[0] === "True") {
+          setEmailExists(true);
+      }
+
+      else {
+        setEmailExists(false)
+      }
+      })
+      
+      .catch(err => {
+        console.log(err);
+      })
+    }
+
+    else {
+      const pass1 = passwordRef.current.value;
+      const pass2 = confpasswordRef.current.value;
+
+      if (pass1 === pass2 || pass1 === "" || pass2 === "" ){
+        setPasswordMissMatch(false)
+        return
+      }
+
+      if (pass1 !== pass2){
+        setPasswordMissMatch(true);
+        return
+      }
+
+    }
   }
 
   return (
@@ -25,17 +106,39 @@ function Signup({ onAuthSignup }) {
         <form onSubmit={handleSubmit} className="contact_form" action="#">
 
           <input name="username" className="form_input" type="text"
-            placeholder="Username" autoComplete="off" required/>
+            placeholder="Username" autoComplete="off" required
+            // value = {username}
+            data-item = "username"
+            onChange = {handleChange}
+            />
+            { usernameExists ? <p style = {pStyle}> Username already taken </p> : null}
 
           <input name="email" className="form_input" type="email"
-            placeholder="Email" autoComplete="off" required/>
+            placeholder="Email" autoComplete="off" required
+            // value = {useremail}
+            data-item = "useremail"
+            onChange = {handleChange}
+            />
+            { emailExists ? <p style = {pStyle}> Email already taken</p> : null}
+          
 
           <input name="password1" className="form_input" type="password"
-            placeholder="Password" autoComplete="off"required/>
-          <input name="password2" className="form_input" type="password"
-            placeholder="Confirm Password" autoComplete="off" required/>
+            placeholder="Password" autoComplete="off"required
+            data-item = "password"
+            ref = {passwordRef}
+            onChange = {handleChange}
+            />
 
-          <button className="btn btn-secondary">Signup</button>
+          <input name="password2" className="form_input" type="password"
+            placeholder="Confirm Password" autoComplete="off" required
+            data-item = "confirmPass"
+            ref = {confpasswordRef}
+            onChange = {handleChange}
+            />
+
+            {passwordMissMatch ? <p style = {pStyle}> Password and Confirm Password must be same</p>: null }
+
+          <button className="btn btn-secondary" disabled = {emailExists || usernameExists || passwordMissMatch}>Signup</button>
         </form>
       </div>
     </>
