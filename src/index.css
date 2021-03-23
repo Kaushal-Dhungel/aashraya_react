@@ -507,7 +507,7 @@ body {
 /* ----------- Registration ----------------------- */
 
 .register_area {
-	height: 70vh;
+	min-height: 60vh;
 }
 
 .social_login {
