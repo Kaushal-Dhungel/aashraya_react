@@ -26,7 +26,6 @@ const RDetailsEdit = (props) => {
     useEffect( () => {
         const fetchData = async () => {
 
-            
             const token = localStorage.getItem('token');
 
             const config = {
@@ -78,10 +77,7 @@ const RDetailsEdit = (props) => {
             .catch(err => {
                 isFormloading(false)
             })
-
-
     }
-
 
     const myFunc = (e) => {
         const {name, value} = e.target
@@ -91,7 +87,6 @@ const RDetailsEdit = (props) => {
                 ...intialState,
                 [name] : value
             }
-
         })
     }
 
@@ -206,7 +201,6 @@ const RDetailsEdit = (props) => {
 
         if (e.target.files){
             const fileArray = Array.from(e.target.files).map((file) => URL.createObjectURL(file))
-            // console.log(fileArray);
             setImgs((prevImgs) => prevImgs.concat(fileArray));
 
             Array.from(e.target.files).map(
@@ -217,7 +211,6 @@ const RDetailsEdit = (props) => {
 
     const renderImgs = (source) => {
         return source.map((photo) => {
-            // console.log(photo);
             return (
             <img src={photo} key = {photo} alt=""  />
             )
@@ -373,7 +366,7 @@ const RDetailsEdit = (props) => {
                                     </select>
 
                                     <textarea name="details" className = "form_input" cols="30" rows="10" value = {item.details} onChange = {myFunc} placeholder ="Details"></textarea>
-                                    <button className = "btn btn-danger">Add</button>
+                                    <button className = "btn btn-danger">Update</button>
                                 </form>
                             </>
                             }

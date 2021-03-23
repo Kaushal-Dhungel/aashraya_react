@@ -366,7 +366,7 @@ const DetailsEdit = (props) => {
 
                                     <textarea name="details" className = "form_input" cols="30" rows="10" 
                                     value = {item.details} onChange = {myFunc} placeholder ="Details"></textarea>
-                                    <button className = "btn btn-danger">Add</button>
+                                    <button className = "btn btn-danger">Update</button>
                                 </form>
                             </>
                         }
