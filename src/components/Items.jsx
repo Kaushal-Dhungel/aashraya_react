@@ -44,7 +44,7 @@ const Item = (props) => {
 
                 <div className="roomie_link_wrapper">
                     <div className="roomie_link_inside">
-                        <h5> This page doesn't display the result of Roommates. Click below to see the roommates from {city}.</h5>
+                        <h5> This page doesn't display the result of Roommates. Click below to see the roommates.</h5>
                         <Link to = {`/rnav/${finalStr}`} className = "btn btn-primary" > See Roommates </Link>
                     </div>
                 </div>

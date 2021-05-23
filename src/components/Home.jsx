@@ -114,7 +114,7 @@ const Home = ({showModal,hidemodal})=> {
                             value = {searchValue}
                             onChange={handleChange}
                             list="cityname"
-                            placeholder = "Search your city. Example:- Haldibari "
+                            placeholder = "Search your city. Ex:- Haldibari, Mechi"
                             required
                             />
                             <datalist id="cityname">

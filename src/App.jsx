@@ -9,7 +9,6 @@ import * as actions from './store/actions/auth'
 
 import { connect } from 'react-redux';
 
-
 const App = ({onTryAutoSignup}) => {
 
     useEffect(()=> {
@@ -18,7 +17,6 @@ const App = ({onTryAutoSignup}) => {
 
     return (
         <>
-        
         <BrowserRouter >
         <MainNav />
         <Switch>

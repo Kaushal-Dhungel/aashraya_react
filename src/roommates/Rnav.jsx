@@ -96,11 +96,14 @@ const Rnav = (props) => {
                 <Default color = "#343a40" size = {150} />
             </div>
             :
-            <Results items = {items} 
-            linkSlug = {`rdetails`}
-            btnText = "Add To"
+            <div className="container">
+                <Results items = {items} 
+                linkSlug = {`rdetails`}
+                btnText = "Add To"
 
-            />    
+                />  
+            </div>
+  
         }
         
         </>
