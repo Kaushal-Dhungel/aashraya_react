@@ -1,6 +1,6 @@
 import React, {useState,useEffect} from 'react';
 import axios from 'axios';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 // import { checkUser } from './Auth';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
@@ -9,14 +9,13 @@ import { Default } from 'react-spinners-css';
 
 import Modal from 'react-modal';
 import CancelIcon from '@material-ui/icons/Cancel';
-import {addCart} from '../components/Auth';
+import { addCart } from '../components/utils';
 
 import ReactMapGL ,{ Marker } from 'react-map-gl';
 import mapboxgl from "mapbox-gl"; // This is a dependency of react-map-gl even if you didn't explicitly install it
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
-
 
 
 Modal.setAppElement('#root');
@@ -68,7 +67,7 @@ const Rdetail = (props)=> {
                 headers: {
                     "Content-Type" : "application/json",
                     Authorization : `Bearer ${token}`
-            }
+                }
             }
         
             try {
@@ -78,8 +77,7 @@ const Rdetail = (props)=> {
             } catch (error) {
                 // console.log(error)
             }
-    
-    }
+        }
 
         fetchData();
         checkUser();

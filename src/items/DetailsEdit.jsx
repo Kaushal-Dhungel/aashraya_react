@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Facebook,Default } from 'react-spinners-css';
 import swal from 'sweetalert';
+import { searchPlaces } from '../components/utils';
+
 
 const DetailsEdit = (props) => {
     const[item,setItem] = useState({});
@@ -23,33 +25,31 @@ const DetailsEdit = (props) => {
     const slug = props.match.params.id 
     const history = useHistory();
 
-
     useEffect( () => {
+
+        // fetch the main data to populate the input fields
         const fetchData = async () => {
-
-            
             const token = localStorage.getItem('token');
-
             const config = {
                 headers: {
                     "Content-Type" : "application/json",
                     Authorization : `Bearer ${token}`
+                }
             }
-            }
-        
             try {
                 const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}`,config);
                 setItem(res.data);
+                console.log(res.data)
                 setFetching(false);
-  
-            } catch (error) {
+            } 
+            catch (error) {
                 setFetching(false);
             }
         }
-  
         fetchData();
     },[slug])
 
+    // when update button is clicked
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -60,31 +60,34 @@ const DetailsEdit = (props) => {
         
         const coordinates = suggestions.filter(itm => itm.place_name === item.location)
 
-        form.append("latitude",coordinates[0].center[0])
-        form.append("longitude",coordinates[0].center[1])
+        if (coordinates.length !== 0) {  // this happens when the location is not edited, because suggestions would be empty
+            form.append("latitude",coordinates[0].center[0])
+            form.append("longitude",coordinates[0].center[1])
+        }
+        
+        else {
+            form.append("latitude",item.latitude)
+            form.append("longitude",item.longitude)
+        }
 
         const config = {
             headers: {
                 "Content-Type" : "application/json",
                 Authorization : `Bearer ${token}`
-        }
+            }
         }
     
-            axios.put(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}/`,form,config)
+        axios.put(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}/`,form,config)
 
-            .then(res => {
-                isFormloading(false)
-                history.push(`/items/details/${res.data.slug}`)
-    
-        
-            })
-            .catch(err => {
-                isFormloading(false)
-            })
+        .then(res => {
+            isFormloading(false)
+            history.push(`/items/details/${res.data.slug}`)
 
-
+        })
+        .catch(err => {
+            isFormloading(false)
+        })
     }
-
 
     const myFunc = (e) => {
         const {name, value} = e.target
@@ -94,12 +97,11 @@ const DetailsEdit = (props) => {
                 ...intialState,
                 [name] : value
             }
-
         })
     }
 
+    // this is to delete the IMAGE and not the post
     const deleteFunc = (e,img_id,item_id) => {
-        
         setDone(()=> {
             return {
                 imgsUpload : false,
@@ -114,50 +116,47 @@ const DetailsEdit = (props) => {
         form.append('img_id',img_id)
         form.append('item_id',item_id)
 
-
         const token = localStorage.getItem('token');
 
         const config = {
             headers: {
                 "Content-Type" : "application/json",
                 Authorization : `Bearer ${token}`
-        }
+            }
         }
     
-            axios.post(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}/`,form,config)
+        axios.post(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}/`,form,config)
 
-            .then(res => {
+        .then(res => {
 
-                setItem(res.data)
-                setDone (() => {
-                    return {
-                        imgsUpload: false,
-                        imgDelete : true,
-                        isAddLoading: false,
-                        isDelLoading: false
-                    }
-                })
-                swal("Deleted!", "The picture has been deleted", "success")
-    
-        
+            setItem(res.data)
+            setDone (() => {
+                return {
+                    imgsUpload: false,
+                    imgDelete : true,
+                    isAddLoading: false,
+                    isDelLoading: false
+                }
             })
-            .catch(err => {
+            swal("Deleted!", "The picture has been deleted", "success")
 
-                setDone (() => {
-                    return {
-                        imgsUpload: false,
-                        imgDelete : false,
-                        isAddLoading: false,
-                        isDelLoading : false
-                    }
-                })
-                swal("Failed!", "Can't delete this right now. Try again!!", "error")
+        })
+        .catch(err => {
+
+            setDone (() => {
+                return {
+                    imgsUpload: false,
+                    imgDelete : false,
+                    isAddLoading: false,
+                    isDelLoading : false
+                }
             })
-
-
+            swal("Failed!", "Can't delete this right now. Try again!!", "error")
+        })
     }
 
 
+    // this is to add new images
     const addFunc = (e,item_id) => {
 
         setDone (() => {
@@ -179,39 +178,39 @@ const DetailsEdit = (props) => {
                 // "Content-Type" : "application/json",
                 'content-type': 'multipart/form-data',
                 Authorization : `Bearer ${token}`
-        }
+            }
         }
     
-            axios.post(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}/`,form,config)
+        axios.post(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}/`,form,config)
 
-            .then(res => {
-                setItem(res.data)
-                e.target.reset();
-                setImgs([]);
-                setDone ( ()=> {
-                    return {
-                        imgsUpload :true,
-                        imgDelete : false,
-                        isAddLoading : false,
-                        isDelLoading : false,
-                    }
-                })
-        
+        .then(res => {
+            setItem(res.data)
+            e.target.reset();
+            setImgs([]);
+            setDone ( ()=> {
+                return {
+                    imgsUpload :true,
+                    imgDelete : false,
+                    isAddLoading : false,
+                    isDelLoading : false,
+                }
             })
-            .catch(err => {
-                setDone (() => {
-                    return {
-                        imgsUpload: false,
-                        imgDelete : false,
-                        isAddLoading: false,
-                        isDelLoading: false,
-                    }
-                })
+    
+        })
+        .catch(err => {
+            setDone (() => {
+                return {
+                    imgsUpload: false,
+                    imgDelete : false,
+                    isAddLoading: false,
+                    isDelLoading: false,
+                }
             })
+        })
 
     }
 
-
+    // whenever a new image file is choosen
     const imgChange = (e) => {
         console.log(e.target.files);
 
@@ -236,24 +235,16 @@ const DetailsEdit = (props) => {
         })
     }
 
-    const searchPlaces = (value) => {
-        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/`;
-        const token = `${process.env.REACT_APP_MAPBOX_TOKEN}`;
 
-        const fullUrl = url + value + '.json?access_token=' + token;
-
-        axios.get(fullUrl)
-        .then((res) => {
-            console.log(res)
-            setSuggestions(res.data.features)
-        })
-        .catch((err)=> {
-            console.log(err)
-        })
-    }
-
+    // this calls the searchPlaces function, gets called whenever the location value is changed in the input field
     const getLocation = (e) => {
         searchPlaces(e.target.value)
+        .then (res => {
+            setSuggestions(res)
+        })
+        .catch (err => {
+            console.log(err)
+        })
         setItem((prevValue) => {
             return {
                 ...prevValue,
@@ -262,6 +253,7 @@ const DetailsEdit = (props) => {
         })
     }
 
+    // as the name suggests
     const deletePost = () => {
         swal({
             title: "Are you sure?",
@@ -346,7 +338,7 @@ const DetailsEdit = (props) => {
                                     <input name = 'location' 
                                     className = "form_input" 
                                     type="text" 
-                                    placeholder="District" 
+                                    placeholder="Location" 
                                     value = {item.location}
                                     onChange = {getLocation}
                                     list = "location"

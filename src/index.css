@@ -269,9 +269,9 @@ input[type=radio]:focus {
 
 /* ------ Items and Navbar------------------------- */
 
-.price_filter {
+/* .price_filter {
 	margin-top: 3vh;
-}
+} */	
 
 .filter_form {
 	padding: 10px 5px;

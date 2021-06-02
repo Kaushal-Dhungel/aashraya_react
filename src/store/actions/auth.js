@@ -52,7 +52,6 @@ const repeatedFunc = res => {
     return dispatch => {    
         const expires = parseInt(res.data.expires_in);
         const token = res.data.access_token;
-        // console.log(expires)
         const expirationDate = new Date(new Date().getTime() + expires * 1000);
         localStorage.setItem('token', res.data.access_token);
         localStorage.setItem('refresh_token', res.data.refresh_token);
@@ -73,12 +72,9 @@ return dispatch =>
 
        })
        .then(res => {
-        //    console.log('LOGIN SUCCESSFUL')
-        //    console.log(res)
            dispatch(repeatedFunc(res));
        })
        .catch(err => {
-        //    console.log(err)
            dispatch(authFail(err))
        })
     }
@@ -87,9 +83,7 @@ return dispatch =>
 
 export const checkAuthTimeout = expirationTime => {
     return dispatch => {
-        // console.log("timeout started");
         setTimeout(() => {
-            // dispatch(logout());
             dispatch(reLogin());
         }, 36000 * 1000)
     }
@@ -107,18 +101,12 @@ export const authLogin = (username, password) => {
             client_secret : `${process.env.REACT_APP_CLIENT_SECRET}`,
         })
         .then(res => {
-            // console.log('LOGIN SUCCESSFUL')
-            // console.log(res)
             dispatch(repeatedFunc(res));
     
         })
         .catch(err => {
-            // console.log("sorry no login")
-            // console.log(err.response.data.error_description)
             const msg = err.response.data
-
             dispatch(authFail(`Login Failed. ${msg.error_description}`))
-
         })
     }
 }
@@ -128,28 +116,20 @@ export const authSignup = (username, email, password1,password2) => {
     return dispatch => {
 
         dispatch(authStart());
-
-          
-        axios.post(`${process.env.REACT_APP_HEROKU_URL}/registeruser/`, {
+        axios.post(`${process.env.REACT_APP_HEROKU_URL}/core/registeruser/`, {
                 username: username,
                 email: email,
                 password1: password1,
                 password2: password2,
                 client_id : `${process.env.REACT_APP_CLIENT_ID}`,
                 client_secret : `${process.env.REACT_APP_CLIENT_SECRET}`,    
-            },)
-    
+            })
             .then(res => {
-                // console.log('SIGNUP SUCCESSFUL')
-                // console.log(res.data)
-                
                 dispatch(repeatedFunc(res));
                 
             })
             .catch(err => {
-                // console.log(err.response.data)
                 dispatch(authFail(err.response.data))
-
             })
     }
 }
@@ -173,7 +153,7 @@ export const authCheckState = () => {
 
 export const FbLogin = (accesstoken) => {
 
-return dispatch =>{    
+    return dispatch =>{    
         axios.post(`${process.env.REACT_APP_HEROKU_URL}/auth/convert-token`, {
         token : accesstoken,
         backend : 'facebook',
@@ -183,12 +163,9 @@ return dispatch =>{
 
         })
         .then(res => {
-            // console.log('LOGIN SUCCESSFUL')
-            // console.log(res)
             dispatch(repeatedFunc(res));
         })
         .catch(err => {
-            // console.log(err)
             dispatch(authFail('Unable To Log In Using Facebook. Please Try Later.'))
         })
     }

@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
-import {Results} from '../components/Navbar';
+import Results from '../components/Results';
 import { Default } from 'react-spinners-css';
 import RoomIcon from '@material-ui/icons/Room';
 import HotelIcon from '@material-ui/icons/Hotel';
@@ -55,10 +55,8 @@ const Rnav = (props) => {
             <div className="container" style = {{marginTop : "10vh"}}>
 
                 <div className="box-element">
-
                     <div className="price_filter">
                         <form onSubmit={handleSubmit} className="filter_form" action="#">
-
                             <select name="price_range" className = "form_input" >
                             <option value="">Select Price Range</option>
                                 <option value="0-5000">0-5000</option>
@@ -67,44 +65,44 @@ const Rnav = (props) => {
                                 <option value="15001-20000">15001-20000</option>
                                 <option value="20000+">20000+</option>
                             </select>
-
                             <button className = "btn btn-primary">Apply</button>
                         </form>
                     </div>
                 </div>
             </div>
 
-        <div className="categories">
-        <div className="btn-group btn-group-toggle" data-toggle="buttons">
-            <label className="btn btn-outline-dark active">
-                <input type="radio" name="options" id="room" checked data-action = "room" onClick = {categories} readOnly /> Rooms <HotelIcon />
-            </label>
-            <label className="btn btn-outline-dark">
-                <input type="radio" name="options" id="flat" data-action = "flat" onClick = {categories} readOnly /> Flats <RoomIcon />
-            </label>
+            <div className="container box-element mt-5">
 
-            <label className="btn btn-outline-dark">
-                <input type="radio" name="options" id="hostel" data-action = "hostel" onClick = {categories} readOnly /> Hostels <SchoolIcon />
-            </label>
+                <div className="categories">
+                    <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label className="btn btn-outline-dark active">
+                            <input type="radio" name="options" id="room" checked data-action = "room" onClick = {categories} readOnly /> Rooms <HotelIcon />
+                        </label>
+                        <label className="btn btn-outline-dark">
+                            <input type="radio" name="options" id="flat" data-action = "flat" onClick = {categories} readOnly /> Flats <RoomIcon />
+                        </label>
 
-        </div>
-        </div>
-        
-        {
-            fetching ? 
-            <div className="loading_loading">
-                <Default color = "#343a40" size = {150} />
+                        <label className="btn btn-outline-dark">
+                            <input type="radio" name="options" id="hostel" data-action = "hostel" onClick = {categories} readOnly /> Hostels <SchoolIcon />
+                        </label>
+
+                    </div>
+                </div>
+                
+                {
+                    fetching ? 
+                    <div className="loading_loading">
+                        <Default color = "#343a40" size = {150} />
+                    </div>
+                    :
+                    <div>
+                        <Results items = {items} 
+                        linkSlug = {`rdetails`}
+                        btnText = "Add To"
+                        />  
+                    </div>
+                }
             </div>
-            :
-            <div className="container">
-                <Results items = {items} 
-                linkSlug = {`rdetails`}
-                btnText = "Add To"
-
-                />  
-            </div>
-  
-        }
         
         </>
     )

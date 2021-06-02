@@ -1,5 +1,5 @@
-import React,{useState}  from 'react';
-import Navbar from './Navbar';
+import React,{ useState }  from 'react';
+import Navbar from '../items/ItemNavs';
 // import {Rnav} from '../roommates'
 import {Link} from 'react-router-dom';
 
@@ -16,6 +16,7 @@ const Item = (props) => {
     city.split(",").map(item => firstStr += item.trim())
     firstStr.split(" ").map(item => finalStr += item.trim())
 
+    // this is for the price filter
     const handleSubmit = (e) => {
         e.preventDefault()
         const form = new FormData(e.target);
@@ -40,15 +41,13 @@ const Item = (props) => {
         <>
         <div className="container" style = {{marginTop : "10vh"}}>
 
-            <div className="box-element">
-
+            <div className="box-element my-5 mx-3">
                 <div className="roomie_link_wrapper">
                     <div className="roomie_link_inside">
                         <h5> This page doesn't display the result of Roommates. Click below to see the roommates.</h5>
                         <Link to = {`/rnav/${finalStr}`} className = "btn btn-primary" > See Roommates </Link>
                     </div>
                 </div>
-
 
                 <div className="price_filter">
                     <form onSubmit={handleSubmit} className="filter_form" action="#">

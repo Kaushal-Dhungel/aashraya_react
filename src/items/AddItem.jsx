@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { addItemFunc} from './Auth';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import { Facebook } from 'react-spinners-css';
+import { searchPlaces } from '../components/utils';
 
-
-export const Updateitem =({actionFunc,url}) => {
+export const Updateitem =({url}) => {
 
     const [imgs,setImgs] = useState([]);
     const [location,setLocation] = useState('');
@@ -18,6 +17,7 @@ export const Updateitem =({actionFunc,url}) => {
         isError : false,
     });
 
+    // when add button is clicked
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -48,10 +48,9 @@ export const Updateitem =({actionFunc,url}) => {
             headers: {
                 "Content-Type" : "application/json",
                 Authorization : `Bearer ${token}`
-        }
+            }
         }
         
-    
         axios.post(url, form,config)
     
         .then(res => {
@@ -65,9 +64,7 @@ export const Updateitem =({actionFunc,url}) => {
                     isLoading : false,
                     isError :false,
                 }
-
-            } );
-            
+            });
         })
         .catch(err => {
             setImgs([]);
@@ -106,25 +103,17 @@ export const Updateitem =({actionFunc,url}) => {
         })
     }
 
-    const searchPlaces = (value) => {
-        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/`;
-        const token = `${process.env.REACT_APP_MAPBOX_TOKEN}`;
+    const getLocation = (e) => {
+        setLocation(e.target.value);
 
-        const fullUrl = url + value + '.json?access_token=' + token;
-
-        axios.get(fullUrl)
-        .then((res) => {
-            console.log(res)
-            setSuggestions(res.data.features)
+        searchPlaces(e.target.value)
+        .then (res => {
+            setSuggestions(res)
         })
-        .catch((err)=> {
+        .catch (err => {
             console.log(err)
         })
-    }
 
-    const getLocation = (e) => {
-        searchPlaces(e.target.value)
-        setLocation(e.target.value);
     }
 
     return (
@@ -167,7 +156,7 @@ export const Updateitem =({actionFunc,url}) => {
                 <input name = 'location' 
                     className = "form_input" 
                     type="text" 
-                    placeholder="District" 
+                    placeholder="Location" 
                     value = {location}
                     onChange = {getLocation}
                     list = "location"
@@ -206,13 +195,15 @@ export const Updateitem =({actionFunc,url}) => {
     )
 }
 
+
+//  main function
 const AddItem = ({isAuthenticated}) => {
     return (
         <>
         {
             isAuthenticated ?
             <Updateitem 
-            actionFunc = {addItemFunc}
+            // actionFunc = {addItemFunc}
             url = {`${process.env.REACT_APP_HEROKU_URL}/items/`}
             />
             : 
@@ -226,7 +217,6 @@ const AddItem = ({isAuthenticated}) => {
             </div>
         }
         </>
-        
     )
 }
 

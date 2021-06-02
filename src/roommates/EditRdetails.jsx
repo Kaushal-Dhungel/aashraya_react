@@ -5,6 +5,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { Facebook,Default } from 'react-spinners-css';
 import {Link} from "react-router-dom";
 import swal from 'sweetalert';
+import { searchPlaces } from '../components/utils';
 
 const RDetailsEdit = (props) => {
     const[item,setItem] = useState({});
@@ -50,7 +51,6 @@ const RDetailsEdit = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // console.log('submitted');
         isFormloading(true);
 
         const form = new FormData(e.target);
@@ -58,25 +58,31 @@ const RDetailsEdit = (props) => {
 
         const coordinates = suggestions.filter(itm => itm.place_name === item.location)
 
-        form.append("latitude",coordinates[0].center[0])
-        form.append("longitude",coordinates[0].center[1])
+        if (coordinates.length !== 0) {  // this happens when the location is not edited, because suggestions would be empty
+            form.append("latitude",coordinates[0].center[0])
+            form.append("longitude",coordinates[0].center[1])
+        }
+        else {
+            form.append("latitude",item.latitude)
+            form.append("longitude",item.longitude)
+        }
 
         const config = {
             headers: {
                 "Content-Type" : "application/json",
                 Authorization : `Bearer ${token}`
-        }
+            }
         }
     
-            axios.put(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,form,config)
+        axios.put(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,form,config)
 
-            .then(res => {
-                isFormloading(false)
-                history.push(`/rdetails/${res.data.slug}`);
-            })
-            .catch(err => {
-                isFormloading(false)
-            })
+        .then(res => {
+            isFormloading(false)
+            history.push(`/rdetails/${res.data.slug}`);
+        })
+        .catch(err => {
+            isFormloading(false)
+        })
     }
 
     const myFunc = (e) => {
@@ -111,35 +117,34 @@ const RDetailsEdit = (props) => {
             headers: {
                 "Content-Type" : "application/json",
                 Authorization : `Bearer ${token}`
-        }
+            }
         }
     
-            axios.post(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,form,config)
+        axios.post(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,form,config)
+        .then(res => {
+            setItem(res.data)
+            setDone(()=> {
+                return {
+                    imgsUpload : false,
+                    imgDelete : true,    
+                    isAddLoading : false,
+                    isDelLoading: false,
+                }
+            })
+            swal("Deleted!", "The picture has been deleted", "success")
 
-            .then(res => {
-                setItem(res.data)
-                setDone(()=> {
-                    return {
-                        imgsUpload : false,
-                        imgDelete : true,    
-                        isAddLoading : false,
-                        isDelLoading: false,
-                    }
-                })
-                swal("Deleted!", "The picture has been deleted", "success")
-    
+        })
+        .catch(err => {
+            setDone(()=> {
+                return {
+                    imgsUpload : false,
+                    imgDelete : false,    
+                    isAddLoading : false,
+                    isDelLoading: false,
+                }
             })
-            .catch(err => {
-                setDone(()=> {
-                    return {
-                        imgsUpload : false,
-                        imgDelete : false,    
-                        isAddLoading : false,
-                        isDelLoading: false,
-                    }
-                })
-                swal("Failed!", "Can't delete this right now. Try again!!", "error")
-            })
+            swal("Failed!", "Can't delete this right now. Try again!!", "error")
+        })
     }
 
 
@@ -192,11 +197,9 @@ const RDetailsEdit = (props) => {
                     }
                 })
             })
-
     }
 
     const imgChange = (e) => {
-
         setImgs([]);  // this clears the previously selected imgs
 
         if (e.target.files){
@@ -217,25 +220,17 @@ const RDetailsEdit = (props) => {
         })
     }
 
-    const searchPlaces = (value) => {
-        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/`;
-        const token = `${process.env.REACT_APP_MAPBOX_TOKEN}`;
-
-        const fullUrl = url + value + '.json?access_token=' + token;
-
-        axios.get(fullUrl)
-        .then((res) => {
-            console.log(res)
-            setSuggestions(res.data.features)
-        })
-        .catch((err)=> {
-            console.log(err)
-        })
-    }
 
     const getLocation = (e) => {
+
         searchPlaces(e.target.value)
-        // setLocation(e.target.value);
+        .then (res => {
+            setSuggestions(res)
+        })
+        .catch (err => {
+            console.log(err)
+        })
+
         setItem((prevValue) => {
             return {
                 ...prevValue,
@@ -326,7 +321,7 @@ const RDetailsEdit = (props) => {
                                     <input name = 'location' 
                                         className = "form_input" 
                                         type="text" 
-                                        placeholder="District" 
+                                        placeholder="Location" 
                                         value = {item.location}
                                         onChange = {getLocation}
                                         list = "location"

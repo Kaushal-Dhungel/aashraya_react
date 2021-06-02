@@ -1,58 +1,6 @@
 import axios from 'axios';
 import swal from 'sweetalert';
 
-// ---------- related to updating and adding items ------------
-
-export const addItemFunc = (url,form) => {
-    const token = localStorage.getItem('token');
-
-    const config = {
-        headers: {
-            "Content-Type" : "application/json",
-            Authorization : `Bearer ${token}`
-    }
-    }
-    
-
-    axios.post(url, form,config)
-
-    .then(res => {
-        console.log('Added')
-        console.log(res)
-
-
-    })
-    .catch(err => {
-        console.log("sorry no addition")
-        console.log(err)
-    })
-}
-
-export const updateItemFunc = (url,form) => {
-    const token = localStorage.getItem('token');
-
-    const config = {
-        headers: {
-            "Content-Type" : "application/json",
-            Authorization : `Bearer ${token}`
-    }
-    }
-    
-
-    axios.patch(url, form,config)
-
-    .then(res => {
-        console.log('Item has been updated')
-        console.log(res)
-
-
-    })
-    .catch(err => {
-        console.log("sorry no updating")
-        console.log(err)
-    })
-}
-
 export const addCart = (e) => {
 
     const token = localStorage.getItem('token');
@@ -79,7 +27,6 @@ export const addCart = (e) => {
     }
     
     axios.post(url, data,config)
-
     .then(res => {
         console.log(res.data)
         if (res.data[0] === "Already exists")
@@ -100,4 +47,21 @@ export const addCart = (e) => {
 
     })
 
+}
+
+
+export const searchPlaces = (value) => {
+    return new Promise((resolve,reject) => {
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/`;
+        const token = `${process.env.REACT_APP_MAPBOX_TOKEN}`;
+    
+        const fullUrl = url + value + '.json?access_token=' + token;
+        axios.get(fullUrl)
+        .then((res) => {
+             resolve (res.data.features)
+        })
+        .catch((err)=> {
+            reject (err)
+        })
+    }) 
 }

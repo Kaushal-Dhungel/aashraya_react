@@ -1,14 +1,6 @@
 import Home from './Home';
-import Item from './Items';
-import ItemDetail from './ItemDetails'
-import Profile from './Profile'
-// import Login from './Login';
-import Additem from './AddItem';
-import MainNav from './MainNav';
-import UserProfile from './UserProfile';
-import Logout from './LogOut';
-import ProfileEdit from './ProfileEdit';
-import DetailsEdit from './DetailsEdit';
+import SearchResults from './SearchResults';
+import Navbar from './Navbar';
 import Registration from './SignUp';
 import CartView from './CartView';
 import { Footer } from './Components';
@@ -66,18 +58,10 @@ const iconStyle = {
 ]
 
 export {
-    MainNav, 
+    Navbar, 
     Home,
     Footer,
-    Item,
-    ItemDetail,
-    Profile,
-    Additem,
-    // Login,
-    UserProfile,
-    Logout,
-    ProfileEdit,
-    DetailsEdit,
+    SearchResults,
     Registration,
     CartView
 }

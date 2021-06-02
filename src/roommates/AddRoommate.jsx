@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import { Facebook } from 'react-spinners-css';
+import { searchPlaces } from '../components/utils';
 
 export const UpdateRoomie =({url}) => {
 
@@ -41,12 +42,10 @@ export const UpdateRoomie =({url}) => {
             headers: {
                 "Content-Type" : "application/json",
                 Authorization : `Bearer ${token}`
-        }
+            }
         }
         
-    
         axios.post(url, form,config)
-    
         .then(res => {
             e.target.reset();
             setImgs([]);
@@ -57,9 +56,7 @@ export const UpdateRoomie =({url}) => {
                     isLoading : false,
                     isError :false,
                 }
-
-            } );
-            
+            });
         })
         .catch(err => {
             setImgs([]);
@@ -71,8 +68,6 @@ export const UpdateRoomie =({url}) => {
                 }
             } )
         })
-    
-
     }
 
     const imgChange = (e) => {
@@ -90,7 +85,6 @@ export const UpdateRoomie =({url}) => {
         }
     }
 
-
     const renderImgs = (source) => {
         return source.map((photo) => {
             return (
@@ -99,25 +93,16 @@ export const UpdateRoomie =({url}) => {
         })
     }
 
-    const searchPlaces = (value) => {
-        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/`;
-        const token = `${process.env.REACT_APP_MAPBOX_TOKEN}`;
+    const getLocation = (e) => {
+        setLocation(e.target.value);
 
-        const fullUrl = url + value + '.json?access_token=' + token;
-
-        axios.get(fullUrl)
-        .then((res) => {
-            console.log(res)
-            setSuggestions(res.data.features)
+        searchPlaces(e.target.value)
+        .then (res => {
+            setSuggestions(res)
         })
-        .catch((err)=> {
+        .catch (err => {
             console.log(err)
         })
-    }
-
-    const getLocation = (e) => {
-        searchPlaces(e.target.value)
-        setLocation(e.target.value);
     }
 
 
@@ -159,7 +144,7 @@ export const UpdateRoomie =({url}) => {
                         </select>
                         <input name = 'headline' className = "form_input" type="text" placeholder="Headline" autoComplete = 'off' required/>
 
-                        <input name = 'location' className = "form_input" type="text" placeholder="District" 
+                        <input name = 'location' className = "form_input" type="text" placeholder="Location" 
                             value = {location} onChange = {getLocation} list = "location" autoComplete = 'off' required/>
                             <datalist id="location">
                                 {

@@ -1,178 +1,93 @@
-import React, { useState,useEffect } from 'react';
-import {Link} from "react-router-dom";
-import axios from 'axios';
-
+import React from 'react';
+import { connect } from 'react-redux';
+import {NavLink} from "react-router-dom";
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import HomeIcon from '@material-ui/icons/Home';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import RoomIcon from '@material-ui/icons/Room';
-import HotelIcon from '@material-ui/icons/Hotel';
-import HouseIcon from '@material-ui/icons/House';
-import LandscapeIcon from '@material-ui/icons/Landscape';
-import SchoolIcon from '@material-ui/icons/School';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import PersonIcon from '@material-ui/icons/Person';
+import roomieImg from '../imgs/roomie.svg';
 
-import { Default } from 'react-spinners-css';
+import { Flip } from "react-awesome-reveal";
 
-import {addCart} from './Auth';
 
-const Navbar = ({city,minPrice,maxPrice}) => {
+const MainNav = ({isAuthenticated}) => {
 
-    const[items,setItems] = useState([]);
-    const[cat,setCat] = useState('room')
-    const[fetching,setFetching] = useState(true)
-
-    useEffect( () => {
-        const fetchData = async () => {
-            try {
-                const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/items/${cat}`,{
-                    params: {
-                      city,
-                      minPrice,
-                      maxPrice
-                    }
-                  });
-                setItems(res.data);
-                setFetching(false)
-  
-            } catch (error) {
-            setFetching(false)
-            }
-        }
-  
-        fetchData();
-    },[cat,city,minPrice,maxPrice]);
- 
-
-    const categories = (e) => {
-        setCat(e.target.dataset.action)
-
+    const navStyle = {
+        color:"white",
+        display:"flex",
+        gap:"0.5rem"
     }
 
-    return (
+    return(
         <>
-            <div className="categories">
-                <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label className="btn btn-outline-dark active">
-                        <input type="radio" name="options" id="room" checked data-action = "room" onClick = {categories} readOnly /> Rooms <HotelIcon />
-                    </label>
+            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                <NavLink className="navbar-brand" exact to="/">
+                    <Flip>
+                        <img src={roomieImg} alt="" height= "50px" width = "50px" />
+                    </Flip>
+                </NavLink>
 
-                    <label className="btn btn-outline-dark">
-                        <input type="radio" name="options" id="flat" data-action = "flat" onClick = {categories} readOnly /> Flats <RoomIcon />
-                    </label>
+                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
 
-                    <label className="btn btn-outline-dark">
-                        <input type="radio" name="options" id="house" data-action = "house" onClick = {categories} readOnly /> Homes <HouseIcon />
-                    </label>
-
-                    <label className="btn btn-outline-dark">
-                        <input type="radio" name="options" id="hostel" data-action = "hostel" onClick = {categories} readOnly /> Hostels <SchoolIcon />
-                    </label>
-                    
-                    <label className="btn btn-outline-dark">
-                        <input type="radio" name="options" id="land" data-action = "land" onClick = {categories} readOnly /> Lands <LandscapeIcon />
-                    </label>
+                <div className="collapse navbar-collapse" id="navbarNav">
+                    <ul className="navbar-nav ml-auto mr-5">
+                        <li className="nav-item">
+                            <NavLink className="nav-link" exact to="/"
+                            activeStyle={navStyle}
+                            >
+                            Home 
+                            <HomeIcon  
+                                style = {{ fontSize : "30px"}}
+                                />
+                            <span className="sr-only">(current)</span></NavLink>
+                        </li>
+                        {
+                            isAuthenticated?
+                            
+                            <li className="nav-item ">
+                                <NavLink className="nav-link" exact to="/profile"
+                                activeStyle={navStyle}
+                                >Profile
+                                    <PersonIcon  
+                                    style = {{ fontSize : "30px"}}
+                                    />
+                                </NavLink>
+                            </li>
+                            :
+                            <li className="nav-item ">
+                                <NavLink className="nav-link" exact to="/register"
+                                activeStyle={navStyle}
+                                >Register
+                                    <LockOpenIcon  
+                                    style = {{ fontSize : "30px"}}
+                                    />
+                                </NavLink>
+                            </li>     
+                        }
+                        
+                        <li>
+                            <NavLink className="nav-link" exact to="/cart"
+                            activeStyle={navStyle}
+                            >Cart
+                            <ShoppingCartIcon  
+                            style = {{ fontSize : "30px"}}
+                            />
+                            </NavLink>
+                        </li>
+                        
+                    </ul>
                 </div>
-            </div>
-        
-            {
-                fetching ? 
-                <div className="loading_loading">
-                    <Default color = "#343a40" size = {150} />
-                </div>
-                :
-                <Results items = {items} 
-                linkSlug = {`items/details`}
-                btnText = "Add To"
-                />    
-            }
-    
-        
+            </nav>
         </>
     )
 }
 
-export const Results = ({items,linkSlug,btnText}) => {
-
-
-    const GetBlogs = () => {
-        let list = [];
-        let result = [];
-        
-        items === undefined ? 
-        <h2> Loading </h2>
-        :
-        items.map(item => {
-            return list.push(
-                <div className="card" >
-                    {
-                        item.images.length === 0 ?
-                    <img className="card-img-top" src={`https://images.unsplash.com/photo-1606474165573-2fa973b42c21?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80`} alt = "" />
-                        :
-                    <img className="card-img-top" src={`${item.images[0].image}`} alt = "" height = "300px"  />
-                    }
-                    <div className="card-body">
-                        <span className="card_location">
-                            <LocationOnIcon />
-                        <p>{item.location.split(",")[0]}</p> 
-                        </span>
-
-                        <span className="card_location">
-                            <HomeIcon />
-                            <p>{item.category}</p>
-                        </span>
-
-                        <span className="card_location">
-                            <AttachMoneyIcon />
-                            <p>{item.price? item.price : item.price_range}</p>
-                        </span>
-                        <h4 className="card-title"> {item.headline} </h4>
-
-                        <div className="card_buttons"
-                        style = {{
-                            display :"flex",
-                            gap : "1rem"
-                        }}
-                        >
-                            <Link to= {`/${linkSlug}/${item.slug}`} className="btn btn-primary">See Details</Link>
-                            <button onClick = {addCart} className="btn btn-secondary"
-                            data-set={linkSlug === "items/details"? "items" : "roomie"}
-                            data-id = {`${item.id}`}
-                            data-action = "add"
-                            >{btnText} Cart</button>
-                        </div>
-                    </div>
-            </div>
-            );
-        });
-
-        for ( let i = 0 ; i < list.length ; i+=3)
-        {
-            result.push(
-                <div key = {i} className = "custom_row">
-                        {list[i]}
-
-                        {list[i+1] ? list[i+1] : null}
-                        {list[i+2] ? list[i+2] : null}
-                </div>
-            )
-        }
-        return result.length === 0 ? 
-        <div className="not_available" style = {{minHeight: "60vh"}}>
-            <h2 style = {{marginTop: "10vh",textAlign : "center"}}> No items posted</h2>
-        </div> :
-        result
-        
+const mapStateToProps = (state) => {
+    return{
+        isAuthenticated : state.token !== null,
     }
-
-
-    return (
-        <>
-            {
-                GetBlogs()
-            }
-        </>
-    )
-    
 }
 
-export default Navbar;
+export default connect (mapStateToProps,null) (MainNav);

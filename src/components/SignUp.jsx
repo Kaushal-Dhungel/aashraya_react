@@ -20,7 +20,6 @@ function Signup({ onAuthSignup }) {
     color : "red"
   }
 
-
   function handleSubmit(e) {
     e.preventDefault();
     const form = new FormData(e.target);
@@ -30,7 +29,6 @@ function Signup({ onAuthSignup }) {
     const password2 = form.get("password2");
 
     onAuthSignup(name, email, password1, password2);
-
   }
 
   function handleChange(e) {
@@ -39,7 +37,7 @@ function Signup({ onAuthSignup }) {
 
     if (whichField === "username") {
       // setUsername(value)
-      axios.get(`${process.env.REACT_APP_HEROKU_URL}/checkuser/`, {
+      axios.get(`${process.env.REACT_APP_HEROKU_URL}/core/checkuser/`, {
         params: {
           username: value,
           email : ''
@@ -61,7 +59,7 @@ function Signup({ onAuthSignup }) {
     }
 
     else if (whichField === "username") {
-      axios.get(`${process.env.REACT_APP_HEROKU_URL}/checkuser/`, {
+      axios.get(`${process.env.REACT_APP_HEROKU_URL}/core/checkuser/`, {
         params: {
           username: '',
           email : value
@@ -290,8 +288,4 @@ const mapStateToPropsFacebook = (state) => {
   };
 };
 
-const Registration = connect(
-  mapStateToPropsFacebook,
-  mapDispatchToPropsFacebook
-)(Register);
-export default Registration;
+export default connect(mapStateToPropsFacebook,mapDispatchToPropsFacebook) (Register);

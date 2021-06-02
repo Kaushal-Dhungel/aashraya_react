@@ -1,6 +1,6 @@
 import React from 'react';
-import {Link} from "react-router-dom";
-import {Zoom, Bounce, Rotate} from "react-awesome-reveal";
+import { Link } from "react-router-dom";
+import {Zoom, Bounce } from "react-awesome-reveal";
 
 import { servicesData } from './index';
 
@@ -9,15 +9,14 @@ export function Footer(){
         <Zoom>
             <div className="footer">
                 <a href="https://www.freeprivacypolicy.com/live/9056f756-0e8d-44e4-99a9-193ff7d306a7"> Privacy Policy </a>
-
                 <p> nepalikaushal1@gmail.com || Aashraya Ⓒ 2021. All Rights Reserved.  </p>
             </div>
         </Zoom>
-
     )
 }
 
-export const Belowlanding = ({popular}) => {
+// for popular places
+export const PopularSection = ({popular}) => {
     return (
         <div className = "container mt-5 ">
             <div className="row team-area">
@@ -34,16 +33,15 @@ export const Belowlanding = ({popular}) => {
                                     </div>
                                 </div>
                             </div>
- 
                         )
                     })
                 }
-
             </div>
         </div>
     )}
 
 
+//  for services, below the landing
 export const Services = () => {
     return (
         <div className="container">
@@ -58,23 +56,20 @@ export const Services = () => {
                                 <div key = {index} className="col-12 col-sm-6 col-md-4 mt-3" >
                                     <div className="services_box">
                                         <span className="top">
-                                            <Rotate>
+                                            <Zoom>
                                                 {item.icon}
-                                            </Rotate>
+                                            </Zoom>
                                             <h4> {item.service} </h4>
                                         </span>
                                         <span className="bottom">
                                             <p> {item.data} </p>
                                         </span>
                                     </div>
-                                    
                                 </div>
                             )
                         })
                     }
-
             </div>
-
     </div>
     )
 }

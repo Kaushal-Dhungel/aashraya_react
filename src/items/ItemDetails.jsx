@@ -1,22 +1,21 @@
 import React, {useState,useEffect} from 'react';
 import axios from 'axios';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 import { Default } from 'react-spinners-css';
-
 import Modal from 'react-modal';
-import CancelIcon from '@material-ui/icons/Cancel';
-import {addCart} from './Auth';
+import { addCart } from '../components/utils';
+
 
 import ReactMapGL ,{ Marker } from 'react-map-gl';
 import mapboxgl from "mapbox-gl"; // This is a dependency of react-map-gl even if you didn't explicitly install it
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
-
-
 
 Modal.setAppElement('#root');
 const ItemDetail = (props)=> {
@@ -28,6 +27,7 @@ const ItemDetail = (props)=> {
     const[showPic, setShowPic] = useState(false);
     const [popupImg, setPopupImg] = useState();
 
+    // setting some default value 
     const [viewport, setViewport] = useState({    
         latitude: 37.7577,
         longitude: -122.4376,
@@ -35,10 +35,11 @@ const ItemDetail = (props)=> {
       });
 
     const token = `${process.env.REACT_APP_MAPBOX_TOKEN}`;
-
     const slug = props.match.params.id 
 
     useEffect( () => {
+
+        // fetch the main data to display
         const fetchData = async () => {
             try {
                 const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/items/details/${slug}`);
@@ -51,42 +52,42 @@ const ItemDetail = (props)=> {
                    }
                 })
                 setFetching(false);
-            } catch (error) {
+            } 
+            catch (error) {
                 setFetching(false);
             }
         }
 
+        // this is to check to which user the post belongs and based on that show the buttons
         const checkUser = async () => {
             
             const token = localStorage.getItem('token');
-    
             const config = {
                 headers: {
                     "Content-Type" : "application/json",
                     Authorization : `Bearer ${token}`
-            }
+                }
             }
         
             try {
                 const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/profile/`,config);
                setId(res.data.id)
     
-            } catch (error) {
+            } 
+            catch (error) {
                 console.log(error)
-
             }
-    
-    }
+        }
 
         fetchData();
         checkUser();
     },[slug]);
 
+    //  for showing the image if clicked
     const imgFunc = (e) => {
         setPopupImg(e.target.src)
         setShowPic(true)
     }
-
 
     return (
         <>

@@ -8,7 +8,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import HouseIcon from '@material-ui/icons/House';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import { Default } from "react-spinners-css";
-import {addCart} from './Auth';
+import { addCart } from './utils';
 import swal from 'sweetalert';
 import { connect } from "react-redux";
 
@@ -108,6 +108,8 @@ const CartView = ({isAuthenticated}) => {
 
 
   useEffect( () => {
+
+    // firstly,fetch the Items
     const fetchData = async () => {
       const token = localStorage.getItem("token");
 
@@ -131,6 +133,7 @@ const CartView = ({isAuthenticated}) => {
     fetchData();
 },[]);
 
+// for fetching the roomie items if the 'roomie' button is clicked
 const fetchRoomie = async () => {
   const token = localStorage.getItem("token");
 
@@ -153,6 +156,7 @@ const fetchRoomie = async () => {
   }
 };
 
+// show either items or roomies, decided by this function
 const showPosts = (e) => {
   const abc = e.target.dataset.action;
   if (abc === "items") {

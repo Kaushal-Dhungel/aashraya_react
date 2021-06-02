@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import homeImg from '../imgs/home2.png';
 import homeImgTwo from '../imgs/home1.png';
 import roomieImg from '../imgs/roomie2.png';
-import {hideModal} from '../store/actions/auth';
-import { connect } from "react-redux";
 import axios from 'axios'
 import SearchIcon from '@material-ui/icons/Search';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
-
 import { Grid } from "react-spinners-css";
-
-import { Belowlanding, Services } from './Components';
-
 import { Slide, Bounce, JackInTheBox,Zoom} from "react-awesome-reveal";
+import { PopularSection, Services } from './Components';
+import { searchPlaces } from './utils';
 
-
-const Home = ({showModal,hidemodal})=> {
+const Home = ()=> {
     const [searchValue,setSearchValue] = useState('');
     const [popular,setPopular] = useState([]);
     const [testi,setTesti] = useState([]);
@@ -27,9 +22,10 @@ const Home = ({showModal,hidemodal})=> {
         testi : true,
     })
     const history = useHistory()
-    // const[modalIsOpen,setModalIsOpen] = useState(true);
 
     useEffect( () => {
+
+        // fethes the popular items
         const fetchPopular = async () => {
             try {
                 const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/core/popular/`);
@@ -46,6 +42,7 @@ const Home = ({showModal,hidemodal})=> {
             }
         }
 
+        // fetches the testimonial
         const fetchTesti = async () => {
             try {
                 const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/core/testimonial/`);
@@ -64,26 +61,21 @@ const Home = ({showModal,hidemodal})=> {
         fetchTesti();
     },[])
 
-    const searchPlaces = (value) => {
-        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/`;
-        const token = `${process.env.REACT_APP_MAPBOX_TOKEN}`;
+    const handleChange = (e)=> {
+        const place = e.target.value;
+        setSearchValue(place);
 
-        const fullUrl = url + value + '.json?access_token=' + token;
-
-        axios.get(fullUrl)
-        .then((res) => {
-            setSuggestions(res.data.features)
+        searchPlaces(place)
+        .then (res => {
+            setSuggestions(res)
         })
-        .catch((err)=> {
+        .catch (err => {
             console.log(err)
         })
-    }
-    const handleChange = (e)=> {
-        searchPlaces(e.target.value)
 
-        setSearchValue(e.target.value);
     }
 
+    // when the search button is clicked
     const mySubmitHandler = (e)=> {
         e.preventDefault();
         let firstStr = ""
@@ -191,7 +183,7 @@ const Home = ({showModal,hidemodal})=> {
                 <Bounce>
                     <h4 className = "testi_heading"> Popular Places </h4>
                 </Bounce>
-                    <Belowlanding popular = {popular} />
+                    <PopularSection popular = {popular} />
             </div>
 
             <div className="testimonial_section">
@@ -224,17 +216,5 @@ const Home = ({showModal,hidemodal})=> {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-      showModal : state.showModal
-    };
-  };
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-      hidemodal: () => dispatch(hideModal()),
-    };
-  };
-
-export default connect(mapStateToProps,mapDispatchToProps) (Home);
+export default Home;
 

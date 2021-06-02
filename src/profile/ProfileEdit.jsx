@@ -9,7 +9,6 @@ import * as actions from '../store/actions/auth';
 
 import swal from 'sweetalert';
 
-
 const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
   const [item, setItem] = useState({});
   const [imgs, setImgs] = useState([]);
@@ -52,6 +51,7 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
     fetchData();
   }, []);
 
+  // for submit button
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -79,6 +79,7 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
       });
   };
 
+  // when the values in input fields are changes
   const changeFn = (e) => {
     const { name, value } = e.target;
 
@@ -90,6 +91,7 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
     });
   };
 
+  // deleting the profile picture
   const deleteFunc = (e, action) => {
     setDone(() => {
       return {
@@ -164,6 +166,7 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
     });
   };
 
+  // for deleting the profile
   const deleteProfile = () => {
     swal({
       title: "Are you sure?",
