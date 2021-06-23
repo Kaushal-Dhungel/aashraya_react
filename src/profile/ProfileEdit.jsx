@@ -260,7 +260,7 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
                           <input name="last_name" className="form_input" type="text"
                           value={item.last_name} onChange={changeFn} placeholder="Last Name" autoComplete="off"/>
 
-                          <input name="email" className="form_input"type="text"
+                          <input name="get_email" className="form_input"type="text"
                             value={item.get_email} onChange={changeFn} placeholder="email" autoComplete="off"/>
 
                           <input name="phone" className="form_input" type="number"
