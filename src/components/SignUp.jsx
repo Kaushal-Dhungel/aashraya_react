@@ -33,6 +33,11 @@ function Signup({ onAuthSignup }) {
     onAuthSignup(name, email, password1, password2);
   }
 
+  function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/ 
+    return re.test(email)
+  }
+
   // for input fields of signup form 
   function handleChange(e) {
     const whichField = e.target.dataset.item;
@@ -63,7 +68,12 @@ function Signup({ onAuthSignup }) {
     }
 
     // any changes in useremail field means check if the email already exists or not
-    else if (whichField === "username") {
+    else if (whichField === "useremail") {
+
+      // let the user type a valid email first before making request to the backend
+      if (validateEmail(value) === false)
+        return
+
       axios.get(`${process.env.REACT_APP_HEROKU_URL}/core/checkuser/`, {
         params: {
           username: '',

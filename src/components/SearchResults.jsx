@@ -1,5 +1,5 @@
 import React,{ useState }  from 'react';
-import Navbar from '../items/ItemNavs';
+import ItemNavs from '../items/ItemNavs';
 // import {Rnav} from '../roommates'
 import {Link} from 'react-router-dom';
 
@@ -62,7 +62,7 @@ const Item = (props) => {
                 </div>
             </div>
 
-            <Navbar city = {finalStr}
+            <ItemNavs city = {finalStr}
                 minPrice = {priceRange.minPrice}
                 maxPrice = {priceRange.maxPrice}
             />

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import {Zoom, Bounce } from "react-awesome-reveal";
 
-import { servicesData } from './index';
+import { servicesData } from './utils';
 
 export function Footer(){
     return (
