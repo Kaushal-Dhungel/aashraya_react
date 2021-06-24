@@ -46,25 +46,25 @@ const MainNav = ({isAuthenticated}) => {
                         {
                             isAuthenticated?
                             
-                            <li className="nav-item ">
-                                <NavLink className="nav-link" exact to="/profile"
-                                activeStyle={navStyle}
-                                >Profile
-                                    <PersonIcon  
-                                    style = {{ fontSize : "30px"}}
-                                    />
-                                </NavLink>
-                            </li>
+                                <li className="nav-item ">
+                                    <NavLink className="nav-link" exact to="/profile"
+                                    activeStyle={navStyle}
+                                    >Profile
+                                        <PersonIcon  
+                                        style = {{ fontSize : "30px"}}
+                                        />
+                                    </NavLink>
+                                </li>
                             :
-                            <li className="nav-item ">
-                                <NavLink className="nav-link" exact to="/register"
-                                activeStyle={navStyle}
-                                >Register
-                                    <LockOpenIcon  
-                                    style = {{ fontSize : "30px"}}
-                                    />
-                                </NavLink>
-                            </li>     
+                                <li className="nav-item ">
+                                    <NavLink className="nav-link" exact to="/register"
+                                    activeStyle={navStyle}
+                                    >Register
+                                        <LockOpenIcon  
+                                        style = {{ fontSize : "30px"}}
+                                        />
+                                    </NavLink>
+                                </li>     
                         }
                         
                         <li>

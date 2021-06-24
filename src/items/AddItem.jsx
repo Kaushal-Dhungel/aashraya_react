@@ -69,19 +69,17 @@ export const Updateitem =({url}) => {
         .catch(err => {
             setImgs([]);
             setDone((prevstate)=> {
-                return{
+                return {
                     ...prevstate,
                     isLoading : false,
                     isError: true
                 }
             } )
         })
-
     }
 
+    // whenever new images are selected to upload
     const imgChange = (e) => {
-        // console.log(e.target.files);
-
         setImgs([]);  // this clears the previously selected imgs
 
         if (e.target.files){
@@ -94,7 +92,7 @@ export const Updateitem =({url}) => {
         }
     }
 
-
+    // display the selected images
     const renderImgs = (source) => {
         return source.map((photo) => {
             return (
@@ -103,6 +101,7 @@ export const Updateitem =({url}) => {
         })
     }
 
+    //  get locations for auto suggestion
     const getLocation = (e) => {
         setLocation(e.target.value);
 
@@ -113,85 +112,84 @@ export const Updateitem =({url}) => {
         .catch (err => {
             console.log(err)
         })
-
     }
 
     return (
        <>
-       {
-           done.isLoading?  
-           <div className="loading_loading">
-           <Facebook color = "#343a40" size = {200} />
-            </div>:
-        <>
-        {
-            done.isSuccess ? 
-            <div className="container mt-5 box-element" >
-                <h3> Addition successful </h3>
-                <Link className = "btn btn-danger" to = {`/items/details/${done.slug}`} >See the post</Link>
-            </div>:
-            null   
-        }
-
-        {
-            done.isError?
-            <div className="container mt-5 box-element">
-                <h3 style= {{textAlign:'center'}}> An unknown error occured. Please try later. </h3>
-            </div>:
-            null   
-        }
-
-        <div className="container mt-5 box-element">
-            <h4 className = "testi_heading"> Add an Item </h4>
-
-            <form onSubmit={handleSubmit} className = "contact_form" action="#">
-                <select name="category" className = "form_input" >
-                    <option value="room">Room</option>
-                    <option value="flat">Flat</option>
-                    <option value="house">House</option>
-                    <option value="hostel">Hostel</option>
-                    <option value="land">Land</option>
-                </select>
-                <input name = 'headline' className = "form_input" type="text" placeholder="Headline" autoComplete = 'off' required />
-                <input name = 'location' 
-                    className = "form_input" 
-                    type="text" 
-                    placeholder="Location" 
-                    value = {location}
-                    onChange = {getLocation}
-                    list = "location"
-                    autoComplete = 'off' required/>
-                        <datalist id="location">
-                            {
-                                suggestions.map((item,index) => {
-                                    return(
-                                        <option key = {index} value={item.place_name} />
-                                    )
-                                })
-                            }
-                        </datalist>
-                <input name = 'price' className = "form_input" type="number" placeholder="Price" autoComplete = 'off' required/>
-                <textarea name="details" className = "form_input" cols="30" rows="10" placeholder ="Details" required></textarea>
-
-
-                <label htmlFor="photos">Add Pictures:</label>
-                <input type="file" name="photos" className = "form_input" multiple onChange = {imgChange}  required/>
-
-                <div className="pics">
+            {
+                done.isLoading?  
+                    <div className="loading_loading">
+                        <Facebook color = "#343a40" size = {200} />
+                    </div>
+                :
+                <>
                     {
-                        renderImgs(imgs)
+                        done.isSuccess ? 
+                        <div className="container mt-5 box-element" >
+                            <h3> Addition successful </h3>
+                            <Link className = "btn btn-danger" to = {`/items/details/${done.slug}`} >See the post</Link>
+                        </div>:
+                        null   
                     }
-                </div>
 
-                <button className = "btn btn-secondary mt-3">Add</button>
-            </form>
-            <br/>
-            <br/> <br/> <br/> <br/> <br/> <br/>
+                    {
+                        done.isError?
+                        <div className="container mt-5 box-element">
+                            <h3 style= {{textAlign:'center'}}> An unknown error occured. Please try later. </h3>
+                        </div>:
+                        null   
+                    }
 
-        </div>
-    </>
-    }
-    </>
+                    <div className="container mt-5 box-element">
+                        <h4 className = "testi_heading"> Add an Item </h4>
+
+                        <form onSubmit={handleSubmit} className = "contact_form" action="#">
+                            <select name="category" className = "form_input" >
+                                <option value="room">Room</option>
+                                <option value="flat">Flat</option>
+                                <option value="house">House</option>
+                                <option value="hostel">Hostel</option>
+                                <option value="land">Land</option>
+                            </select>
+                            <input name = 'headline' className = "form_input" type="text" placeholder="Headline" autoComplete = 'off' required />
+                            <input name = 'location' 
+                                className = "form_input" 
+                                type="text" 
+                                placeholder="Location" 
+                                value = {location}
+                                onChange = {getLocation}
+                                list = "location"
+                                autoComplete = 'off' required/>
+                                    <datalist id="location">
+                                        {
+                                            suggestions.map((item,index) => {
+                                                return(
+                                                    <option key = {index} value={item.place_name} />
+                                                )
+                                            })
+                                        }
+                                    </datalist>
+                            <input name = 'price' className = "form_input" type="number" placeholder="Price" autoComplete = 'off' required/>
+                            <textarea name="details" className = "form_input" cols="30" rows="10" placeholder ="Details" required></textarea>
+
+                            <label htmlFor="photos">Add Pictures:</label>
+                            <input type="file" name="photos" className = "form_input" multiple onChange = {imgChange}  required/>
+
+                            <div className="pics">
+                                {
+                                    renderImgs(imgs)
+                                }
+                            </div>
+
+                            <button className = "btn btn-secondary mt-3">Add</button>
+                        </form>
+                        
+                        <br/> <br/> <br/> <br/> <br/> <br/> <br/>
+
+                    </div>
+                </>
+            }
+        </>
     )
 }
 
@@ -200,22 +198,22 @@ export const Updateitem =({url}) => {
 const AddItem = ({isAuthenticated}) => {
     return (
         <>
-        {
-            isAuthenticated ?
-            <Updateitem 
-            // actionFunc = {addItemFunc}
-            url = {`${process.env.REACT_APP_HEROKU_URL}/items/`}
-            />
-            : 
-            <div className="container logout_page">
-                <div className="box-element">
-                    <h3 className = "mt-4"> You need to be registered in to perform this operation. Click below to Register. </h3>
-                    <center>
-                        <Link className="btn btn-secondary mt-4" to={'/register'}>Register</Link>
-                    </center>
-                </div>
-            </div>
-        }
+            {
+                isAuthenticated ?
+                    <Updateitem 
+                    // actionFunc = {addItemFunc}
+                    url = {`${process.env.REACT_APP_HEROKU_URL}/items/`}
+                    />
+                : 
+                    <div className="container logout_page">
+                        <div className="box-element">
+                            <h3 className = "mt-4"> You need to be registered in to perform this operation. Click below to Register. </h3>
+                            <center>
+                                <Link className="btn btn-secondary mt-4" to={'/register'}>Register</Link>
+                            </center>
+                        </div>
+                    </div>
+            }
         </>
     )
 }

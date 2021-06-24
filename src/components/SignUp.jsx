@@ -7,6 +7,7 @@ import { Facebook } from "react-spinners-css";
 import {Redirect} from 'react-router-dom';
 import axios from 'axios';
 
+//  this is for SIGNUP form
 function Signup({ onAuthSignup }) {
 
   const [emailExists, setEmailExists] = useState(false);
@@ -20,6 +21,7 @@ function Signup({ onAuthSignup }) {
     color : "red"
   }
 
+  // when submitted, signup/register
   function handleSubmit(e) {
     e.preventDefault();
     const form = new FormData(e.target);
@@ -31,10 +33,12 @@ function Signup({ onAuthSignup }) {
     onAuthSignup(name, email, password1, password2);
   }
 
+  // for input fields of signup form 
   function handleChange(e) {
     const whichField = e.target.dataset.item;
     const value = e.target.value;
 
+    // any changes in username field means check if the username already exists or not
     if (whichField === "username") {
       // setUsername(value)
       axios.get(`${process.env.REACT_APP_HEROKU_URL}/core/checkuser/`, {
@@ -47,17 +51,18 @@ function Signup({ onAuthSignup }) {
       .then(res => {
         if (res.data[0] === "True") {
           setUsernameExists(true);
-      }
+        }
 
-      else {
-        setUsernameExists(false)
-      }
+        else {
+          setUsernameExists(false)
+        }
       })
       .catch(err => {
         console.log(err);
       })
     }
 
+    // any changes in useremail field means check if the email already exists or not
     else if (whichField === "username") {
       axios.get(`${process.env.REACT_APP_HEROKU_URL}/core/checkuser/`, {
         params: {
@@ -69,11 +74,11 @@ function Signup({ onAuthSignup }) {
       .then(res => {
         if (res.data[0] === "True") {
           setEmailExists(true);
-      }
+        }
 
-      else {
-        setEmailExists(false)
-      }
+        else {
+          setEmailExists(false)
+        }
       })
       
       .catch(err => {
@@ -81,6 +86,7 @@ function Signup({ onAuthSignup }) {
       })
     }
 
+    // check if password1 and password2 matches or not
     else {
       const pass1 = passwordRef.current.value;
       const pass2 = confpasswordRef.current.value;
@@ -143,6 +149,8 @@ function Signup({ onAuthSignup }) {
   );
 }
 
+
+//  This is for LOGIN form
 function Login({ onAuthLogin }) {
   function handleSubmit(e) {
     e.preventDefault();
@@ -181,13 +189,15 @@ const mapDispatchToProps = (dispatch) => {
 const NewSignup = connect(null, mapDispatchToProps)(Signup);
 const NewLogin = connect(null, mapDispatchToProps)(Login);
 
+
+//  This wraps both above SIGNUP and LOGIN functions/forms and renders then conditionally
 const Register = ({
   errormsg,
   isAuthenticated,
   isLoading,
   onFBLogin,
   clearError,
-}) => {
+  }) => {
   const [whichRender, setWhichRender] = useState("signup");
 
   useEffect(() => {
@@ -199,77 +209,78 @@ const Register = ({
   };
 
   return (
-      <>
-    {
-    isAuthenticated ?
-    <Redirect to = '/' />
-    :
     <>
-      <div className="container mt-3">
-        <h4 className = "testi_heading"> Register Here </h4>
-
-        <div className="categories_profile">
-          <div className="btn-group btn-group-toggle" data-toggle="buttons">
-            <label className="btn btn-outline-dark active">
-              <input type="radio" name="options" checked
-                onClick={() => {
-                  setWhichRender("signup");
-                  clearError();
-                }}
-                readOnly/> Signup </label>
-
-            <label className="btn btn-outline-dark">
-              <input type="radio" name="options"
-                onClick={() => {
-                  setWhichRender("login");
-                  clearError();
-                }}
-                readOnly/> Login </label>
-          </div>
-        </div>
-      </div>
-
-      {isLoading ?
-        <div className="loading_loading">
-          <Facebook color="#343a40" size={200} />
-        </div>
-      :
+      {
+        isAuthenticated ?
+          <Redirect to = '/' />
+        :
         <>
-          <div className="register_messages ">
-              {
-                errormsg !== null ?
-                <p>{errormsg}</p>
-                :
-                <>
-                  <p>
-                    Registration Successful. Please visit your profile to provide
-                    some informations.
-                  </p>
+          <div className="container mt-3">
+            <h4 className = "testi_heading"> Register Here </h4>
 
-                  <Link to="/profile" className="btn btn-primary">
-                    Visit Profile
-                  </Link>
-                </>
-              }
-          </div>
+            <div className="categories_profile">
+              <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                <label className="btn btn-outline-dark active">
+                  <input type="radio" name="options" checked
+                    onClick={() => {
+                      setWhichRender("signup");
+                      clearError();
+                    }}
+                    readOnly/> Signup </label>
 
-          <div className="register_area container">
-            {
-              whichRender === "signup" ? <NewSignup /> : <NewLogin />
-            }
-            <div className="social_login">
-              <FacebookLogin
-                appId={`${process.env.REACT_APP_FB_APP_ID}`}
-                fields="name,email,picture"
-                callback={responseFacebook}
-              />
+                <label className="btn btn-outline-dark">
+                  <input type="radio" name="options"
+                    onClick={() => {
+                      setWhichRender("login");
+                      clearError();
+                    }}
+                    readOnly/> Login </label>
+              </div>
             </div>
           </div>
+
+          {
+          isLoading ?
+            <div className="loading_loading">
+              <Facebook color="#343a40" size={200} />
+            </div>
+          :
+            <>
+              <div className="register_messages ">
+                  {
+                    errormsg !== null ?
+                    <p>{errormsg}</p>
+                    :
+                    <>
+                      <p>
+                        Registration Successful. Please visit your profile to provide
+                        some informations.
+                      </p>
+
+                      <Link to="/profile" className="btn btn-primary">
+                        Visit Profile
+                      </Link>
+                    </>
+                  }
+              </div>
+
+              <div className="register_area container">
+                {
+                  whichRender === "signup" ? <NewSignup /> : <NewLogin />
+                }
+                <div className="social_login">
+                  <FacebookLogin
+                    appId={`${process.env.REACT_APP_FB_APP_ID}`}
+                    fields="name,email,picture"
+                    callback={responseFacebook}
+                  />
+                </div>
+              </div>
+            </>
+          }
         </>
       }
     </>
-}
-</>
   );
 };
 

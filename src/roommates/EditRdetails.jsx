@@ -25,10 +25,10 @@ const RDetailsEdit = (props) => {
     const history = useHistory();
 
     useEffect( () => {
+
+        // fetch data to populate input fields
         const fetchData = async () => {
-
             const token = localStorage.getItem('token');
-
             const config = {
                 headers: {
                     "Content-Type" : "application/json",
@@ -40,8 +40,8 @@ const RDetailsEdit = (props) => {
                 const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}`,config);
                 setItem(res.data);
                 setFetching(false);
-  
-            } catch (error) {
+            } 
+            catch (error) {
                 setFetching(false);
             }
         }
@@ -49,6 +49,7 @@ const RDetailsEdit = (props) => {
         fetchData();
     },[slug])
 
+    // when submitted
     const handleSubmit = (e) => {
         e.preventDefault();
         isFormloading(true);
@@ -58,7 +59,7 @@ const RDetailsEdit = (props) => {
 
         const coordinates = suggestions.filter(itm => itm.place_name === item.location)
 
-        if (coordinates.length !== 0) {  // this happens when the location is not edited, because suggestions would be empty
+        if (coordinates.length !== 0) {  // this happens when the location is edited, and hence suggestions would not be empty
             form.append("latitude",coordinates[0].center[0])
             form.append("longitude",coordinates[0].center[1])
         }
@@ -75,7 +76,6 @@ const RDetailsEdit = (props) => {
         }
     
         axios.put(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,form,config)
-
         .then(res => {
             isFormloading(false)
             history.push(`/rdetails/${res.data.slug}`);
@@ -85,6 +85,7 @@ const RDetailsEdit = (props) => {
         })
     }
 
+    // when any input field is updated
     const myFunc = (e) => {
         const {name, value} = e.target
 
@@ -96,6 +97,7 @@ const RDetailsEdit = (props) => {
         })
     }
 
+    // for deleting the pictures
     const deleteFunc = (e,img_id,item_id) => {
         setDone(()=> {
             return {
@@ -132,7 +134,6 @@ const RDetailsEdit = (props) => {
                 }
             })
             swal("Deleted!", "The picture has been deleted", "success")
-
         })
         .catch(err => {
             setDone(()=> {
@@ -147,9 +148,8 @@ const RDetailsEdit = (props) => {
         })
     }
 
-
+    // for adding the pictures
     const addFunc = (e,item_id) => {
-
         setDone(()=> {
             return {
                 imgsUpload : false,
@@ -169,7 +169,7 @@ const RDetailsEdit = (props) => {
                 // "Content-Type" : "application/json",
                 'content-type': 'multipart/form-data',
                 Authorization : `Bearer ${token}`
-        }
+            }
         }
             axios.post(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,form,config)
 
@@ -199,6 +199,7 @@ const RDetailsEdit = (props) => {
             })
     }
 
+    // when new image is selected
     const imgChange = (e) => {
         setImgs([]);  // this clears the previously selected imgs
 
@@ -220,9 +221,8 @@ const RDetailsEdit = (props) => {
         })
     }
 
-
+    // get suggestions list
     const getLocation = (e) => {
-
         searchPlaces(e.target.value)
         .then (res => {
             setSuggestions(res)
@@ -239,6 +239,7 @@ const RDetailsEdit = (props) => {
         })
     }
 
+    // delete post
     const deletePost = () => {
         swal({
             title: "Are you sure?",
@@ -256,22 +257,18 @@ const RDetailsEdit = (props) => {
                     headers: {
                         "Content-Type" : "application/json",
                         Authorization : `Bearer ${token}`
+                    }
                 }
-                }
-            
+
                 axios.delete(`${process.env.REACT_APP_HEROKU_URL}/mates/details/${slug}/`,config)
-                
                 .then(res => {
                     swal("Deleted!", "The post has been deleted", "success")
-
                     .then(okay => {
                       history.push('/');
                     })
                 })
-
                 .catch (err => {
                     swal("Sorry!", "The post can not be deleted right now. PLease try later.", "warning")
-
                 })
             }
           })
@@ -281,139 +278,139 @@ const RDetailsEdit = (props) => {
         <>
             {
                 fetching ? 
-                <div className="loading_loading">
-                    <Default color = "#343a40" size = {200} />
-                </div>
+                    <div className="loading_loading">
+                        <Default color = "#343a40" size = {200} />
+                    </div>
                 :
                 <>
-                {
-                    item === undefined ?
-                        <div className="loading_loading">
-                            <Facebook color = "#343a40" size = {200} />
-                        </div>
-                    :
-                    <>
-
-                        <div className="container mt-5 box-element">
-                            <Link className = "btn btn-danger" to = {`/rdetails/${item.slug}`}>Go back to the post</Link>
-                        </div>
-
-                        <div className="container mt-5 box-element">
-                            {     
-                                formloading? 
-                                
-                                <div className="loading_loading">
-                                    <Default color = "#343a40" size = {200} />
-                                </div>
-                            :
-                            <>  
-                                <h4 className = "testi_heading"> Edit Roomie Details </h4>
-                            
-                                <form onSubmit={handleSubmit} className = "contact_form" action="#">
-                                    <select name="category" className = "form_input" value = {item.category} onChange = {myFunc} >
-                                        <option value="room">Room</option>
-                                        <option value="flat">Flat</option>
-                                        <option value="house">House</option>
-                                        <option value="hostel">Hostel</option>
-                                        <option value="land">Land</option>
-                                    </select>
-                                    <input name = 'headline' className = "form_input" type="text" value = {item.headline} onChange = {myFunc} placeholder="Headline" autoComplete = 'off' />
-                                    <input name = 'location' 
-                                        className = "form_input" 
-                                        type="text" 
-                                        placeholder="Location" 
-                                        value = {item.location}
-                                        onChange = {getLocation}
-                                        list = "location"
-                                        autoComplete = 'off' />
-                                            <datalist id="location">
-                                                {
-                                                    suggestions.map((item,index) => {
-                                                        return(
-                                                            <option key = {index} value={item.place_name} />
-                                                        )
-                                                    })
-                                                }
-                                            </datalist>
-
-                                    
-                                    <select name="price_range" className = "form_input" value = {item.price_range} onChange = {myFunc} >
-                                        <option value="0-5000">0-5000</option>
-                                        <option value="5001-10,000">5001-10,000</option>
-                                        <option value="10001-15000">10001-15000</option>
-                                        <option value="15001-20000">15001-20000</option>
-                                        <option value="20000+">20000+</option>
-                                    </select>
-
-                                    <select name="sex_pref" className = "form_input" value = {item.sex_pref} onChange = {myFunc} >
-                                        <option value="male">male</option>
-                                        <option value="female">female</option>
-                                        <option value="male/female">male/female</option>
-                                    </select>
-
-                                    <select name="age_pref" className = "form_input" value = {item.age_pref} onChange = {myFunc} >
-                                        <option value="15-20">15-20</option>
-                                        <option value="21-25">21-25</option>
-                                        <option value="26-30">26-30</option>
-                                        <option value="31-35">31-35</option>
-                                        <option value="36-40">36-40</option>
-                                        <option value="40+">40+</option>
-                                    </select>
-
-                                    <textarea name="details" className = "form_input" cols="30" rows="10" value = {item.details} onChange = {myFunc} placeholder ="Details"></textarea>
-                                    <button className = "btn btn-danger">Update</button>
-                                </form>
-                            </>
-                            }
-
-                            <div className="img_update">
-                                    {   
-
-                                        done.imgsUpload ? <h4> Pic updated successfully </h4> : null
-                                    }
-
-                                    {
-                                        // done.imgDelete? <h4> Pic deleted successfully</h4> : null
-                                    }
+                    {
+                        item === undefined ?
+                            <div className="loading_loading">
+                                <Facebook color = "#343a40" size = {200} />
                             </div>
+                        :
+                        <>
+
+                            <div className="container mt-5 box-element">
+                                <Link className = "btn btn-danger" to = {`/rdetails/${item.slug}`}>Go back to the post</Link>
+                            </div>
+
+                            <div className="container mt-5 box-element">
+                                {     
+                                    formloading? 
+                                        <div className="loading_loading">
+                                            <Default color = "#343a40" size = {200} />
+                                        </div>
+                                    :
+                                    <>  
+                                        <h4 className = "testi_heading"> Edit Roomie Details </h4>
+                                    
+                                        <form onSubmit={handleSubmit} className = "contact_form" action="#">
+                                            <select name="category" className = "form_input" value = {item.category} onChange = {myFunc} >
+                                                <option value="room">Room</option>
+                                                <option value="flat">Flat</option>
+                                                <option value="house">House</option>
+                                                <option value="hostel">Hostel</option>
+                                                <option value="land">Land</option>
+                                            </select>
+                                            <input name = 'headline' className = "form_input" type="text" value = {item.headline} onChange = {myFunc} placeholder="Headline" autoComplete = 'off' />
+                                            <input name = 'location' 
+                                                className = "form_input" 
+                                                type="text" 
+                                                placeholder="Location" 
+                                                value = {item.location}
+                                                onChange = {getLocation}
+                                                list = "location"
+                                                autoComplete = 'off' />
+                                                    <datalist id="location">
+                                                        {
+                                                            suggestions.map((item,index) => {
+                                                                return(
+                                                                    <option key = {index} value={item.place_name} />
+                                                                )
+                                                            })
+                                                        }
+                                                    </datalist>
+
+                                            
+                                            <select name="price_range" className = "form_input" value = {item.price_range} onChange = {myFunc} >
+                                                <option value="0-5000">0-5000</option>
+                                                <option value="5001-10,000">5001-10,000</option>
+                                                <option value="10001-15000">10001-15000</option>
+                                                <option value="15001-20000">15001-20000</option>
+                                                <option value="20000+">20000+</option>
+                                            </select>
+
+                                            <select name="sex_pref" className = "form_input" value = {item.sex_pref} onChange = {myFunc} >
+                                                <option value="male">male</option>
+                                                <option value="female">female</option>
+                                                <option value="male/female">male/female</option>
+                                            </select>
+
+                                            <select name="age_pref" className = "form_input" value = {item.age_pref} onChange = {myFunc} >
+                                                <option value="15-20">15-20</option>
+                                                <option value="21-25">21-25</option>
+                                                <option value="26-30">26-30</option>
+                                                <option value="31-35">31-35</option>
+                                                <option value="36-40">36-40</option>
+                                                <option value="40+">40+</option>
+                                            </select>
+
+                                            <textarea name="details" className = "form_input" cols="30" rows="10" value = {item.details} onChange = {myFunc} placeholder ="Details"></textarea>
+                                            <button className = "btn btn-danger">Update</button>
+                                        </form>
+                                    </>
+                                }
+
+                                <div className="img_update">
+                                        {   
+
+                                            done.imgsUpload ? <h4> Pic updated successfully </h4> : null
+                                        }
+
+                                        {
+                                            // done.imgDelete? <h4> Pic deleted successfully</h4> : null
+                                        }
+                                </div>
 
                                 <div className="image_area">
                                     <div className="image_area_backend">
-                                    {
-                                        item.images === undefined ?
-                                        <Default color = "#343a40" size = {100} />
-                                        :
-                                        item.images.map((img,index) => {
-                                            return(
-                                                <div key = {index}>
-                                                    <div className="pp">
-                                                    <img  src={`${img.image}`} alt="img" srcSet="" height = '300px' width = '300px'/>
-                                                </div>
+                                        {
+                                            item.images === undefined ?
+                                                <Default color = "#343a40" size = {100} />
+                                            :
+                                            item.images.map((img,index) => {
+                                                return(
+                                                    <div key = {index}>
+                                                        <div className="pp">
+                                                            <img  src={`${img.image}`} alt="img" srcSet="" height = '300px' width = '300px'/>
+                                                        </div>
 
-                                                    <form onSubmit={(e) => 
-                                                    { e.preventDefault();  
-                                                        swal({
-                                                            title: "Are you sure?",
-                                                            text: "Are you sure that you want to delete this?",
-                                                            icon: "warning",
-                                                            dangerMode: true,
-                                                        })
-                                                        .then(willLogOut => {
-                                                            if (willLogOut) {
-                                                                deleteFunc(e,img.id,img.roomie)
-                                                            }
-                                                        })
-                                                    }} 
-                                                    className = "contact_form" action="#" style ={{height:"10%"}}>
-                                                        <input type="text" hidden/> 
-                                                    
-                                                        <button className = "btn btn-danger" disabled = {done.isDelLoading}> <DeleteIcon /> </button>
+                                                        <form onSubmit={(e) => 
+                                                        { 
+                                                            e.preventDefault();  
+                                                            swal({
+                                                                title: "Are you sure?",
+                                                                text: "Are you sure that you want to delete this?",
+                                                                icon: "warning",
+                                                                dangerMode: true,
+                                                            })
+                                                            .then(willLogOut => {
+                                                                if (willLogOut) {
+                                                                    deleteFunc(e,img.id,img.roomie)
+                                                                }
+                                                            })
+                                                        }} 
+                                                        className = "contact_form" action="#" style ={{height:"10%"}}>
+                                                            <input type="text" hidden/> 
+                                                        
+                                                            <button className = "btn btn-danger" disabled = {done.isDelLoading}> <DeleteIcon /> </button>
 
-                                                    </form>
-                                                </div>
-                                            )
-                                        })
-                                    }
+                                                        </form>
+                                                    </div>
+                                                )
+                                            })
+                                        }
                                     </div>
 
 
@@ -446,9 +443,9 @@ const RDetailsEdit = (props) => {
                                     </div>
                                 </center>
 
-                        </div>
-                    </>
-                }        
+                            </div>
+                        </>
+                    }        
                 </>
             }
         </>

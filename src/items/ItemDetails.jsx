@@ -10,7 +10,6 @@ import { Default } from 'react-spinners-css';
 import Modal from 'react-modal';
 import { addCart } from '../components/utils';
 
-
 import ReactMapGL ,{ Marker } from 'react-map-gl';
 import mapboxgl from "mapbox-gl"; // This is a dependency of react-map-gl even if you didn't explicitly install it
 
@@ -20,11 +19,11 @@ mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worke
 Modal.setAppElement('#root');
 const ItemDetail = (props)=> {
 
-    const[item,setItem] = useState({});
-    const[id,setId] = useState();
-    const[fetching,setFetching] = useState(true);
+    const [item,setItem] = useState({});
+    const [id,setId] = useState();
+    const [fetching,setFetching] = useState(true);
 
-    const[showPic, setShowPic] = useState(false);
+    const [showPic, setShowPic] = useState(false);
     const [popupImg, setPopupImg] = useState();
 
     // setting some default value 
@@ -60,7 +59,6 @@ const ItemDetail = (props)=> {
 
         // this is to check to which user the post belongs and based on that show the buttons
         const checkUser = async () => {
-            
             const token = localStorage.getItem('token');
             const config = {
                 headers: {
@@ -72,7 +70,6 @@ const ItemDetail = (props)=> {
             try {
                 const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/profile/`,config);
                setId(res.data.id)
-    
             } 
             catch (error) {
                 console.log(error)
@@ -93,17 +90,14 @@ const ItemDetail = (props)=> {
         <>
             {
                 fetching ? 
-                <div className="loading_loading">
-                    <Default color = "#343a40" size = {200} />
-                </div>
+                    <div className="loading_loading">
+                        <Default color = "#343a40" size = {200} />
+                    </div>
                 :
                 <>
                     {
-                    
                         item !== undefined ? 
-
                         <>
-
                             <Modal 
                             isOpen = {showPic}
                             style={{
@@ -178,7 +172,8 @@ const ItemDetail = (props)=> {
                                             data-id = {`${item.id}`}
                                             data-action = "add"
                                             >Add To Cart</button>
-                                    </div>                      
+                                    </div>  
+                                                        
                                     <div className="map_area">
                                         <ReactMapGL
                                             {...viewport}

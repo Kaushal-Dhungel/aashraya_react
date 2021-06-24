@@ -1,3 +1,6 @@
+// These are Actions and Not Action Creators.
+// The name of this page must be updated to actions.js but not now
+
 // actions
 export const AUTH_START = 'AUTH_START';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';

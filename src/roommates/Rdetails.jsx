@@ -75,7 +75,7 @@ const Rdetail = (props)=> {
                setId(res.data.id)
     
             } catch (error) {
-                // console.log(error)
+                console.log(error)
             }
         }
 
@@ -206,8 +206,8 @@ const Rdetail = (props)=> {
                                 </div>
                             </div>
                         </>
-                    : 
-                    <h4> Undefined </h4>
+                        : 
+                        <h4> Undefined </h4>
                     }  
                 </>
             }

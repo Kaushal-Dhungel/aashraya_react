@@ -115,7 +115,6 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
 
     axios
       .post(`${process.env.REACT_APP_HEROKU_URL}/profile/`, form, config)
-
       .then((res) => {
         setItem(res.data);
         e.target.reset();
@@ -143,16 +142,14 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
       });
   };
 
+  // when a new image/display picture is selected
   const imgChange = (e) => {
-    console.log(e.target.files);
-
     setImgs([]); // this clears the previously selected imgs
 
     if (e.target.files) {
       const fileArray = Array.from(e.target.files).map((file) =>
         URL.createObjectURL(file)
       );
-      // console.log(fileArray);
       setImgs((prevImgs) => prevImgs.concat(fileArray));
 
       Array.from(e.target.files).map((file) => URL.revokeObjectURL(file));
@@ -161,7 +158,6 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
 
   const renderImgs = (source) => {
     return source.map((photo) => {
-      // console.log(photo);
       return <img src={photo} key={photo} alt="" />;
     });
   };
@@ -179,19 +175,16 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
       if (willDelete) {
 
           const token = localStorage.getItem('token');
-  
           const config = {
               headers: {
                   "Content-Type" : "application/json",
                   Authorization : `Bearer ${token}`
-          }
+            }
           }
       
           axios.delete(`${process.env.REACT_APP_HEROKU_URL}/profile/`,config)
-          
           .then(res => {
               swal("Deleted!", "Your profile has been deleted", "success")
-
               .then(okay => {
                 onAuthLogout();
                 history.push('/');
@@ -200,25 +193,23 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
 
           .catch (err => {
               swal("Sorry!", "Your profile can not be deleted right now. PLease try later.", "warning")
-
           })
       }
     })
-
 }
 
   return (
     <>
       {
         isAuthenticated !== true ? 
-        <Redirect to = "/" />
+          <Redirect to = "/" />
         :
         <>
           {
             fetching ? 
-            <div className="loading_loading">
-              <Default color="#343a40" size={200} />
-            </div>
+              <div className="loading_loading">
+                <Default color="#343a40" size={200} />
+              </div>
             : 
             <>
               {
@@ -228,8 +219,8 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
                   </div>
                 : 
                 <>
-                  { item.phone ? null : 
-
+                  { 
+                    item.phone ? null : 
                     <div className="container" style = {{marginTop : "10vh"}}>
                       <div className="box-element">
                           <div className="roomie_link_inside">
@@ -241,11 +232,12 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
 
 
                   <div className="container mt-5 box-element">
-                    {formloading ? 
-                      <div className="loading_loading">
-                        <Default color="#343a40" size={200} />
-                      </div>
-                    :
+                    {
+                      formloading ? 
+                        <div className="loading_loading">
+                          <Default color="#343a40" size={200} />
+                        </div>
+                      :
                       <>
                         <h4 className = "testi_heading"> Edit Your Profile </h4>
 
@@ -279,8 +271,12 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
                         </form>
                       </>
                     }
+
                     <div className="profile_img">
-                      {update ? <h3 style = {{textAlign:"center", margin:"3vh"}}> Profile pic updated </h3> : null}
+                      {
+                        update ? <h3 style = {{textAlign:"center", margin:"3vh"}}> Profile pic updated </h3> : null
+                      }
+
                       <div className="pp">
                         {
                           item.avatar === undefined ? 
@@ -311,18 +307,19 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
                         }
 
                         <input type="text" hidden />
-                          {
-                            done.isDelLoading ?
-                              <button className="btn btn-danger" disabled>
-                                
-                                <DeleteIcon />
-                              </button>
-                            : 
-                              <button className="btn btn-danger">
-                                
-                                <DeleteIcon />
-                              </button>
-                          }
+                        
+                        {
+                          done.isDelLoading ?
+                            <button className="btn btn-danger" disabled>
+                              
+                              <DeleteIcon />
+                            </button>
+                          : 
+                            <button className="btn btn-danger">
+                              
+                              <DeleteIcon />
+                            </button>
+                        }
                       </form>
 
                       <form
@@ -353,11 +350,11 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
                       </form>
                     </div>
 
-                      <center>
-                          <div className="delete_button" style = {{margin :"7vh 0"}}>
-                              <button className = "btn btn-danger" onClick = {deleteProfile}> Delete Your Profile</button>
-                          </div>
-                      </center>
+                    <center>
+                        <div className="delete_button" style = {{margin :"7vh 0"}}>
+                            <button className = "btn btn-danger" onClick = {deleteProfile}> Delete Your Profile</button>
+                        </div>
+                    </center>
 
                   </div>
                 </>
@@ -365,7 +362,7 @@ const ProfileEdit = ( {isAuthenticated, onAuthLogout}) => {
             </>
           }
         </>
-        }
+      }
     </>
   );
 };

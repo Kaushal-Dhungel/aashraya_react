@@ -30,6 +30,8 @@ const UserProfilee = ({ isAuthenticated, onAuthLogout }) => {
   const history = useHistory();
 
   useEffect(() => {
+
+    // when page is rendered fetch items
     const fetchData = async () => {
       const token = localStorage.getItem("token");
 
@@ -56,6 +58,7 @@ const UserProfilee = ({ isAuthenticated, onAuthLogout }) => {
     fetchData();
   }, []);
 
+  // fetch roomie item if roomie button is selected
   const fetchRoomie = async () => {
     const token = localStorage.getItem("token");
 
@@ -78,6 +81,7 @@ const UserProfilee = ({ isAuthenticated, onAuthLogout }) => {
     }
   };
 
+  // conditionally show items or roomies
   const showPosts = (e) => {
     const abc = e.target.dataset.action;
     if (abc === "items") {
@@ -88,6 +92,7 @@ const UserProfilee = ({ isAuthenticated, onAuthLogout }) => {
     }
   };
 
+  // as the name suggests..
   const logoutFunc = () => {
     swal({
       title: "Are you sure?",
@@ -109,8 +114,8 @@ const UserProfilee = ({ isAuthenticated, onAuthLogout }) => {
   return (
     <>
       {
-        isAuthenticated !== true?
-        <Redirect to = "/"/>
+        isAuthenticated !== true ?
+          <Redirect to = "/"/>
         :
         <>
           {

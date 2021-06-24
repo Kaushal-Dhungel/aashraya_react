@@ -18,12 +18,16 @@ const Results = ({items,linkSlug,btnText}) => {
         items.map(item => {
             return list.push(
                 <div className="card" >
+                    
                     {
                         item.images.length === 0 ?
-                    <img className="card-img-top" src={`https://images.unsplash.com/photo-1606474165573-2fa973b42c21?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80`} alt = "" />
+                            <img className="card-img-top" 
+                            src={`https://images.unsplash.com/photo-1606474165573-2fa973b42c21?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80`} 
+                            alt = "" />
                         :
-                    <img className="card-img-top" src={`${item.images[0].image}`} alt = "" height = "300px"  />
+                            <img className="card-img-top" src={`${item.images[0].image}`} alt = "" height = "300px"  />
                     }
+
                     <div className="card-body">
                         <span className="card_location">
                             <LocationOnIcon />
@@ -59,6 +63,7 @@ const Results = ({items,linkSlug,btnText}) => {
             );
         });
 
+        // to make a row of max 3 cards
         for ( let i = 0 ; i < list.length ; i+=3)
         {
             result.push(
@@ -70,10 +75,12 @@ const Results = ({items,linkSlug,btnText}) => {
                 </div>
             )
         }
+        
         return result.length === 0 ? 
-        <div className="not_available" style = {{minHeight: "60vh"}}>
-            <h2 style = {{marginTop: "10vh",textAlign : "center"}}> No items posted</h2>
-        </div> :
+            <div className="not_available" style = {{minHeight: "60vh"}}>
+                <h2 style = {{marginTop: "10vh",textAlign : "center"}}> No items posted</h2>
+            </div> 
+        :
         result
         
     }

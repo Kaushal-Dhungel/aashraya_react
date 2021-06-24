@@ -23,13 +23,11 @@ const Rnav = (props) => {
                       priceRange
                     }
                   });
-                // console.log(res.data)
                 setItems(res.data);
                   setFetching(false)
             } 
             catch (error) {
                     setFetching(false)
-                // console.log(error)
             }
         }
   
@@ -40,6 +38,8 @@ const Rnav = (props) => {
     const categories = (e) => {
         setCat(e.target.dataset.action)
     }
+
+    // Wwhen filter is applied
     const handleSubmit = (e) => {
         e.preventDefault()
         const form = new FormData(e.target);
@@ -91,16 +91,16 @@ const Rnav = (props) => {
                 
                 {
                     fetching ? 
-                    <div className="loading_loading">
-                        <Default color = "#343a40" size = {150} />
-                    </div>
+                        <div className="loading_loading">
+                            <Default color = "#343a40" size = {150} />
+                        </div>
                     :
-                    <div>
-                        <Results items = {items} 
-                        linkSlug = {`rdetails`}
-                        btnText = "Add To"
-                        />  
-                    </div>
+                        <div>
+                            <Results items = {items} 
+                            linkSlug = {`rdetails`}
+                            btnText = "Add To"
+                            />  
+                        </div>
                 }
             </div>
         

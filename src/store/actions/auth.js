@@ -23,6 +23,7 @@ export const authFail = error => {
     }
 }
 
+// registration error
 export const removeError = () => {
     return {
         type : actions.CLEAR_ERROR
@@ -61,26 +62,27 @@ const repeatedFunc = res => {
     }
 }
 
+// once the access_token expires relogin using the refresh token
 const reLogin = () => {
-return dispatch => 
-   { 
-       axios.post( `${process.env.REACT_APP_HEROKU_URL}/auth/token`, {
-       refresh_token : localStorage.getItem('refresh_token'),
-       grant_type : 'refresh_token',
-       client_id : `${process.env.REACT_APP_CLIENT_ID}`,
-       client_secret : `${process.env.REACT_APP_CLIENT_SECRET}`,
+    return dispatch => 
+        { 
+            axios.post( `${process.env.REACT_APP_HEROKU_URL}/auth/token`, {
+            refresh_token : localStorage.getItem('refresh_token'),
+            grant_type : 'refresh_token',
+            client_id : `${process.env.REACT_APP_CLIENT_ID}`,
+            client_secret : `${process.env.REACT_APP_CLIENT_SECRET}`,
 
-       })
-       .then(res => {
-           dispatch(repeatedFunc(res));
-       })
-       .catch(err => {
-           dispatch(authFail(err))
-       })
-    }
+            })
+            .then(res => {
+                dispatch(repeatedFunc(res));
+            })
+            .catch(err => {
+                dispatch(authFail(err))
+            })
+        }
 }
 
-
+// set time-interval for relogin
 export const checkAuthTimeout = expirationTime => {
     return dispatch => {
         setTimeout(() => {
@@ -89,7 +91,7 @@ export const checkAuthTimeout = expirationTime => {
     }
 }
 
-
+// for login
 export const authLogin = (username, password) => {
     return dispatch => {
         dispatch(authStart());
@@ -102,7 +104,6 @@ export const authLogin = (username, password) => {
         })
         .then(res => {
             dispatch(repeatedFunc(res));
-    
         })
         .catch(err => {
             const msg = err.response.data
@@ -111,7 +112,7 @@ export const authLogin = (username, password) => {
     }
 }
 
-
+// for signup
 export const authSignup = (username, email, password1,password2) => {
     return dispatch => {
 
@@ -134,6 +135,9 @@ export const authSignup = (username, email, password1,password2) => {
     }
 }
 
+// used when the page renders for the first time to check weather the token has expired or not
+// if expired then relogin is done else 
+// new timeout is set for relogin
 export const authCheckState = () => {
     return dispatch => {
         const refresh_token = localStorage.getItem('refresh_token');

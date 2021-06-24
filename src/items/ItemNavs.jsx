@@ -37,10 +37,9 @@ const Navbar = ({city,minPrice,maxPrice}) => {
         fetchData();
     },[cat,city,minPrice,maxPrice]);
  
-
+    // it sets what is clicked, maybe room, maybe flat etc and is then used to render the corresponding data
     const categories = (e) => {
         setCat(e.target.dataset.action)
-
     }
 
     return (

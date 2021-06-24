@@ -36,8 +36,9 @@ const Profile = (props)=> {
         fetchData();
     },[slug]);
 
+
+    // fetch roomie if roomie is clicked,items get fetched when the page is rendered
     const fetchRoomie = async() => {
-    
         try {
             const res = await axios.get(`${process.env.REACT_APP_HEROKU_URL}/mates/roomie/${slug}`);
             setRoomiePost(res.data);
@@ -47,6 +48,7 @@ const Profile = (props)=> {
         }
     }
 
+    // conditionally render items and roomie
     const showPosts = (e) => {
         const abc = e.target.dataset.action;
         if (abc === 'items') {
