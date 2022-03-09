@@ -133,7 +133,7 @@ function Signup({ onAuthSignup }) {
             data-item = "useremail"
             onChange = {handleChange}
             />
-            { emailExists ? <p style = {pStyle}> Email already taken</p> : null}
+            { emailExists ? <p style = {pStyle}> Email already taken </p> : null}
           
 
           <input name="password1" className="form_input" type="password"
@@ -150,7 +150,7 @@ function Signup({ onAuthSignup }) {
             onChange = {handleChange}
             />
 
-            {passwordMissMatch ? <p style = {pStyle}> Password and Confirm Password must be same</p>: null }
+            {passwordMissMatch ? <p style = {pStyle}> Password and Confirm Password must be same </p>: null }
 
           <button className="btn btn-secondary" disabled = {emailExists || usernameExists || passwordMissMatch}>Signup</button>
         </form>
@@ -205,6 +205,7 @@ const Register = ({
   errormsg,
   isAuthenticated,
   isLoading,
+  onGuestLogin,
   onFBLogin,
   clearError,
   }) => {
@@ -217,6 +218,8 @@ const Register = ({
   const responseFacebook = (response) => {
     onFBLogin(response.accessToken);
   };
+
+ 
 
   return (
     <>
@@ -278,13 +281,24 @@ const Register = ({
                 {
                   whichRender === "signup" ? <NewSignup /> : <NewLogin />
                 }
-                <div className="social_login">
-                  <FacebookLogin
-                    appId={`${process.env.REACT_APP_FB_APP_ID}`}
-                    fields="name,email,picture"
-                    callback={responseFacebook}
-                  />
+
+                <div className="button_wrapper">
+                  <div className="social_login">
+                    <FacebookLogin
+                      appId={`${process.env.REACT_APP_FB_APP_ID}`}
+                      fields="name,email,picture"
+                      callback={responseFacebook}
+                    />
+                  </div>
+
+                  <div className="guest_user">
+                    <button className="btn btn-secondary guest_user_btn" onClick={()=> {
+                      onGuestLogin();
+                    }}
+                      > Explore as a Guest </button>
+                  </div>
                 </div>
+
               </div>
             </>
           }
@@ -296,6 +310,8 @@ const Register = ({
 
 const mapDispatchToPropsFacebook = (dispatch) => {
   return {
+    onGuestLogin: () =>
+      dispatch(actions.authLogin(process.env.REACT_APP_GUEST_USERNAME, process.env.REACT_APP_GUEST_PASSWORD)),
     onFBLogin: (accesstoken) => dispatch(actions.FbLogin(accesstoken)),
     clearError: () => dispatch(actions.removeError()),
   };

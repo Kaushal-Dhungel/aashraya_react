@@ -587,10 +587,27 @@ form {
 	width: 100%;
 }
 
+
+.button_wrapper {
+	display: flex;
+	justify-content: space-between;
+	/* gap: 5rem; */
+	align-items: center;
+}
+
+.guest_user_btn {
+	padding: 15px;
+	margin-top: 3rem;
+}
+
 @media screen and (max-width: 780px) {
 
 	form {
 		padding: 0 10px;
+	}
+
+	.button_wrapper {
+		flex-direction: column-reverse;
 	}
 
 }

@@ -77,7 +77,7 @@ const reLogin = () => {
                 dispatch(repeatedFunc(res));
             })
             .catch(err => {
-                dispatch(authFail(err))
+                dispatch(authFail(err.response.data.error))
             })
         }
 }
