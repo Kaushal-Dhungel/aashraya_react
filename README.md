@@ -1,14 +1,16 @@
 # Aashraya
 
+**Update**
+
+*Since, Heroku discontinued it's free tier feature, the backend of this site is no longer live and can not be accessed. Hence, I have uploaded a video on YouTube showing how this works locally. The video is available here:-https://youtu.be/hvudECwNHUA*
+
+
 **Important**
 
 *The frontend and the backend of Aashraya are entirely separated and are kept in different repositories for modularity and scalability.*
 *This is the Frontend of the Aashraya app. It is written using React Js and is hosted on Netlify.*
 *Backend Part is written in Django Rest Frameworkf and is hosted on Heroku.*
 # [Go to the Backend](https://github.com/Kaushal-Dhungel/aashraya)
-
-**Update**
-*Since, Heroku discontinued it's free tier feature, the backend of this site is no longer live and can not be accessed. Hence, I have uploaded a video on YouTube showing how this works locally. The video is available here:-https://youtu.be/hvudECwNHUA*
 
 
 ## About
