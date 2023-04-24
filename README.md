@@ -7,12 +7,15 @@
 *Backend Part is written in Django Rest Frameworkf and is hosted on Heroku.*
 # [Go to the Backend](https://github.com/Kaushal-Dhungel/aashraya)
 
+**Update**
+*Since, Heroku discontinued it's free tier feature, the backend of this site is no longer live and can not be accessed. Hence, I have uploaded a video on YouTube showing how this works locally. The video is available here:-https://youtu.be/hvudECwNHUA*
+
 
 ## About
 
 ![main img](https://github.com/Kaushal-Dhungel/aashraya/blob/master/thumbnails/th.png)
 
-[Click here to visit the app](https://aashraya.netlify.app/)
+[Click here to visit the app](https://aashraya.netlify.app/) (This doesn't work anymore.)
 
 Aashraya is a web platform to search for rooms, hostels,apartments,homes,lands and roommates.
 Users can also advertise their properties, or themselves as roomies.
